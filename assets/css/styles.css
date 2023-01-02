@@ -318,6 +318,33 @@ img {
     margin-bottom: var(--mb-2);
 }
 
+.home_scroll{
+    text-align: center;
+}
+.home_scroll-button {
+    color: var(--first-color);
+    transition: .3s;
+}
+
+.home_scroll-button:hover {
+    transform: translateY(.25rem);
+}
+
+.home_scroll-mouse {
+    font-size: 2rem;
+}
+
+.home_scroll-name {
+    font-size: var(--small-font-size);
+    color: var(--title-color);
+    font-weight: var(--font-medium);
+    margin-right: var(--mb-0-25);
+}
+
+.home_scroll-arrow {
+    font-size: 1.25rem;
+}
+
 /* Скролл */
 .scrollup {
     position: fixed;
@@ -367,13 +394,8 @@ img {
         grid-template-columns: .25fr 3fr;
     }
 
-    .home_data {
-        text-align: center;
-    }
-
     .home_img {
         width: 200px;
-        justify-self: center;
     }
 }
 
@@ -383,7 +405,11 @@ img {
     }
 
     .home_img {
-        width: 400px;
+        width: 320px;
+    }
+
+    .home_scroll{
+        display: none;
     }
 }
 
