@@ -14,7 +14,10 @@
 <body>
     <header class="header" id="header">
         <nav class="nav container">
-            <a href="#home" class="nav_logo">DARK NIGHT</a>
+            <a href="#home" class="nav_logo">
+                <img src="assets/img/icons/logo.png" alt="logo image">
+                DARK NIGHT
+            </a>
 
             <div class="nav_menu" id="nav-menu">
                 <ul class="nav_list">
@@ -26,9 +29,9 @@
                     </li>
 
                     <li class="nav_item">
-                        <a href="#about" class="nav_link">
-                            <i class='uil uil-info-circle nav_icon'></i>
-                            <span class="nav_name">О нас</span>
+                        <a href="#developers" class="nav_link">
+                            <i class='uil uil-users-alt nav_icon'></i>
+                            <span class="nav_name">Разработчики</span>
                         </a>
                     </li>
 
@@ -40,47 +43,80 @@
                     </li>
 
                     <li class="nav_item">
-                        <a href="#developers" class="nav_link">
-                            <i class='uil uil-users-alt nav_icon'></i>
-                            <span class="nav_name">Разработчики</span>
+                        <a href="#donate" class="nav_link">
+                            <i class='uil uil-transaction nav_icon'></i>
+                            <span class="nav_name">Поддержка</span>
                         </a>
                     </li>
 
                     <li class="nav_item">
                         <a href="#contactme" class="nav_link">
                             <i class='uil uil-message nav_icon'></i>
-                            <span class="nav_name">Контакты</span>
+                            <span class="nav_name">Связь с нами</span>
                         </a>
                     </li>
                 </ul>
             </div>
 
             <div class="nav_toggle" id="nav-toggle">
-                <i class='uil uil-moon'></i>
+                <i class='uil uil-moon change-theme' id="theme-buttons"></i>
             </div>
 
         </nav>
     </header>
 
     <main>
-        <section class="container section section_height" id="home">
-            <h2 class="section_title">Главная</h2>
+        <section class="home section" id="home">
+            <div class="home_container container grid">
+                <div class="home_content grid">
+                    <div class="home_social">
+                        <a href="https://github.com/DarkMooNight" target="_blank" class="home_social-icon">
+                            <i class="uil uil-github-alt"></i>
+                        </a>
+                        <a href="https://vk.com/darkmoonight" target="_blank" class="home_social-icon">
+                            <i class="uil uil-vk-alt"></i>
+                        </a>
+                        <a href="https://t.me/darkmoonightX" target="_blank" class="home_social-icon">
+                            <i class="uil uil-telegram-alt"></i>
+                        </a>
+                    </div>
+                    <div class="home_img">
+                        <img src="assets/img/raven.png" alt="mascot">
+                    </div>
+                    <div class="home_data">
+                        <h1 class="home_title">Привет, мы DARK NIGHT</h1>
+                        <h3 class="home_subtitle">Разработчики игр и приложений</h3>
+                        <p class="home_description">Мы - команда разработчиков, которые только начинают свой путь в мире
+                            информационных технологий. У нас нет конкретной цели, но мы создаем игры и приложений,
+                            потому
+                            что нам это нравится, и мы готовы поделиться с вами нашей работой.</p>
+                        <a href="#contactme" class="button button-flex">Свяжитесь с нами<i
+                                class='uil uil-message button_icon'></i></a>
+                    </div>
+                </div>
+                <div class="home_scroll">
+                    <a href="#developers" class="home_scroll-button button-flex">
+                        <i class="uil uil-mouse-alt home_scroll-mouse"></i>
+                        <span class="home_scroll-name">Прокрутите вниз</span>
+                        <i class="uil uil-arrow-down home_scroll-arrow"></i>
+                    </a>
+                </div>
+            </div>
         </section>
 
-        <section class="container section section_height" id="about">
-            <h2 class="section_title">О нас</h2>
-        </section>
-
-        <section class="container section section_height" id="projects">
-            <h2 class="section_title">Проекты</h2>
-        </section>
-
-
-        <section class="container section section_height" id="developers">
+        <section class="developers section" id="developers">
             <h2 class="section_title">Разработчики</h2>
         </section>
 
-        <section class="container section section_height" id="contactme">
+        <section class="projects section" id="projects">
+            <h2 class="section_title">Проекты</h2>
+        </section>
+
+        <section class="donate section" id="donate">
+            <h2 class="section_title">Поддержка</h2>
+        </section>
+
+        <section class="contactme section" id="contactme">
             <h2 class="section_title">Контакты</h2>
         </section>
     </main>
