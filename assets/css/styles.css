@@ -56,6 +56,7 @@
     }
 }
 
+
 body.dark-theme {
     --first-color-second: hsl(var(--hue), 30%, 8%);
     --title-color: hsl(var(--hue), 8%, 95%);
@@ -148,6 +149,7 @@ img {
     transition: .4s;
 }
 
+/* Навигационная панель */
 .nav {
     max-width: 968px;
     height: var(--header-height);
@@ -165,11 +167,6 @@ img {
     display: flex;
     align-items: center;
     column-gap: .5rem;
-}
-
-.nav_logo img {
-    width: 35px;
-    border-radius: 50%;
 }
 
 .nav_logo:hover {
@@ -238,6 +235,42 @@ img {
     box-shadow: 0 1px 12px hsla(var(--hue), var(--sat), 15%, 0.15);
 }
 
+
+/* Кнопки */
+.button {
+    display: inline-block;
+    background-color: var(--first-color);
+    color: #FFF;
+    padding: 1rem;
+    border-radius: .5rem;
+    font-weight: var(--font-medium);
+}
+
+.button:hover {
+    background-color: var(--first-color-alt);
+}
+
+.button_icon {
+    font-size: 1.25rem;
+    margin-left: var(--mb-0-5);
+    transition: .3s;
+}
+
+.button-flex {
+    display: inline-flex;
+    align-items: center;
+}
+
+.button-white {
+    background-color: #FFF;
+    color: var(--first-color);
+}
+
+.button-white:hover {
+    background-color: #FFF;
+}
+
+/* Главная */
 .home_container {
     gap: 1rem;
 }
@@ -285,63 +318,7 @@ img {
     margin-bottom: var(--mb-2);
 }
 
-.home_scroll-button {
-    color: var(--first-color);
-    transition: .3s;
-}
-
-.home_scroll-button:hover {
-    transform: translateY(.25rem);
-}
-
-.home_scroll-mouse {
-    font-size: 2rem;
-}
-
-.home_scroll-name {
-    font-size: var(--small-font-size);
-    color: var(--title-color);
-    font-weight: var(--font-medium);
-    margin-right: var(--mb-0-25);
-}
-
-.home_scroll-arrow {
-    font-size: 1.25rem;
-}
-
-.button {
-    display: inline-block;
-    background-color: var(--first-color);
-    color: #FFF;
-    padding: 1rem;
-    border-radius: .5rem;
-    font-weight: var(--font-medium);
-}
-
-.button:hover {
-    background-color: var(--first-color-alt);
-}
-
-.button_icon {
-    font-size: 1.25rem;
-    margin-left: var(--mb-0-5);
-    transition: .3s;
-}
-
-.button-flex {
-    display: inline-flex;
-    align-items: center;
-}
-
-.button-white {
-    background-color: #FFF;
-    color: var(--first-color);
-}
-
-.button-white:hover {
-    background-color: #FFF;
-}
-
+/* Скролл */
 .scrollup {
     position: fixed;
     right: 1rem;
@@ -376,34 +353,6 @@ img {
     bottom: 5rem;
 }
 
-.project {
-    text-align: center;
-}
-
-.project_bg {
-    background-color: var(--first-color-second);
-    padding-top: 3rem;
-}
-
-.project_title {
-    font-size: var(--h2-font-size);
-    margin-bottom: var(--mb-0-75);
-}
-
-.project_description {
-    margin-bottom: var(--mb-1-5);
-}
-
-.project_title,
-.project_description {
-    color: #FFF;
-}
-
-.project_img {
-    width: 232px;
-    justify-self: center;
-}
-
 @media screen and (max-width: 350px) {
     .container {
         margin-left: var(--mb-1);
@@ -422,20 +371,23 @@ img {
         text-align: center;
     }
 
-    .home_scroll {
-        display: none;
-    }
-
     .home_img {
         width: 200px;
-    }
-
-    .project_img {
-        width: 200px;
+        justify-self: center;
     }
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (max-width: 700px) {
+    .home_data {
+        text-align: center;
+    }
+
+    .home_img {
+        width: 400px;
+    }
+}
+
+@media screen and (min-width: 700px) {
     .nav_list {
         justify-content: center;
         column-gap: 3rem;
@@ -451,12 +403,6 @@ img {
 
     .home_img {
         order: 1;
-        justify-self: center;
-        width: 300px;
-    }
-
-    .project_img {
-        width: 220px;
     }
 }
 
@@ -516,34 +462,6 @@ img {
     .home_img {
         width: 400px;
     }
-
-    .home_scroll{
-        display: block;
-    }
-
-    .home_scroll-button{
-        margin-left: 3rem;
-    }
-
-    .project{
-        text-align: center;
-    }
-
-    .project_bg{
-        background: none;
-    }
-
-    .project_container{
-        background-color: var(--first-color-second);
-        border-radius: 1rem;
-        padding: 3rem 2.5rem 0;
-        grid-template-columns: 1fr max-content;
-        column-gap: 3rem;
-    }
-
-    .project_date{
-        padding-top: .8rem;
-    }
 }
 
 
@@ -553,11 +471,7 @@ img {
         margin-right: auto;
     }
 
-    .home_img{
+    .home_img {
         width: 500px;
-    }
-
-    .home_social{
-        transform: translateX(-6rem);
     }
 }
