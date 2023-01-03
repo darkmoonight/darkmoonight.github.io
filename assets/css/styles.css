@@ -76,6 +76,7 @@ body.dark-theme {
 
 html {
     scroll-behavior: smooth;
+    min-width: 390px;
 }
 
 body {
@@ -318,9 +319,10 @@ img {
     margin-bottom: var(--mb-2);
 }
 
-.home_scroll{
+.home_scroll {
     text-align: center;
 }
+
 .home_scroll-button {
     color: var(--first-color);
     transition: .3s;
@@ -343,6 +345,36 @@ img {
 
 .home_scroll-arrow {
     font-size: 1.25rem;
+}
+
+/* Пожертвования */
+.donate {
+    text-align: center;
+}
+
+.donate_bg {
+    background-color: var(--first-color-second);
+    padding-top: 3rem;
+    width: 100%;
+}
+
+.donate_title {
+    font-size: var(--h2-font-size);
+    margin-bottom: var(--mb-0-75);
+}
+
+.donate_description {
+    margin-bottom: var(--mb-1-5);
+}
+
+.donate_title,
+.donate_description {
+    color: #FFF;
+}
+
+.donate_img {
+    width: 250px;
+    justify-self: center;
 }
 
 /* Скролл */
@@ -408,7 +440,7 @@ img {
         width: 320px;
     }
 
-    .home_scroll{
+    .home_scroll {
         display: none;
     }
 }
@@ -487,6 +519,22 @@ img {
 
     .home_img {
         width: 400px;
+    }
+
+    .donate_bg {
+        background: none;
+    }
+
+    .donate_container {
+        background-color: var(--first-color-second);
+        border-radius: 1rem;
+        padding: 3rem 2.5rem 0;
+        grid-template-columns: 1fr max-content;
+        column-gap: 3rem;
+    }
+
+    .donate_date {
+        padding-top: 1rem;
     }
 }
 
