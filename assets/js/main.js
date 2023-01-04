@@ -53,3 +53,38 @@ themeButton.addEventListener('click', () => {
     localStorage.setItem('selected-theme', getCurrentTheme())
     localStorage.setItem('selected-icon', getCurrentIcon())
 })
+
+const contactForm = document.getElementById('contact-form'),
+    contactName = document.getElementById('contact-name'),
+    contactSubject = document.getElementById('contact-subject'),
+    contactEmail = document.getElementById('contact-email'),
+    contactMessenge = document.getElementById('contact-messenge'),
+    contactMessage = document.getElementById('contact-message')
+
+const sendEmail = (e) => {
+    e.preventDefault()
+
+    if (contactName.value === '' || contactSubject.value === '' || contactEmail.value === '' || contactMessenge.value === '') {
+        contactMessage.classList.remove('color-green')
+        contactMessage.classList.add('color-red')
+
+        contactMessage.textContent = 'Запишите все входные поля'
+    } else {
+        emailjs.sendForm('service_afpnn2t', 'template_49g41lj', '#contact-form', 'KcAEd2ZIMT9neZKjk')
+            .then(() => {
+                contactMessage.classList.add('color-green')
+                contactMessage.textContent = 'Сообщение отправлено'
+
+                setTimeout(() => {
+                    contactMessage.textContent = ''
+                }, 5000)
+            }, (error) => {
+                alert('УПС! ЧТО-ТО ПОШЛО НЕ ТАК...', error)
+            })
+        contactName.value = ''
+        contactSubject.value = ''
+        contactEmail.value = ''
+        contactMessenge.value = ''
+    }
+}
+contactForm.addEventListener('submit', sendEmail)
