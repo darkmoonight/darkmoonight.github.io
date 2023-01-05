@@ -110,6 +110,10 @@ img {
     height: auto;
 }
 
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px var(--input-color) inset;
+}
+
 .section {
     padding: 4rem 0 4rem;
 }
@@ -250,12 +254,13 @@ img {
     padding: 1rem;
     border-radius: .5rem;
     font-weight: var(--font-medium);
+    transition: .3s;
 }
 
 .contact_button:hover {
     background-color: var(--first-color-alt);
     cursor: pointer;
-    transition: .3s;
+    transform: translateY(-.25rem);
 }
 
 .button {
@@ -265,10 +270,12 @@ img {
     padding: 1rem;
     border-radius: .5rem;
     font-weight: var(--font-medium);
+    transition: .3s;
 }
 
 .button:hover {
     background-color: var(--first-color-alt);
+    transform: translateY(-.25rem);
 }
 
 .button_icon {
@@ -280,15 +287,6 @@ img {
 .button-flex {
     display: inline-flex;
     align-items: center;
-}
-
-.button-white {
-    background-color: #FFF;
-    color: var(--first-color);
-}
-
-.button-white:hover {
-    background-color: #FFF;
 }
 
 /* Главная */
@@ -377,6 +375,12 @@ img {
 
 .developer_card {
     text-align: center;
+    border-radius: 2rem;
+    transition: .3s;
+}
+
+.developer_card:hover{
+    transform: translateY(-.5rem);
 }
 
 .developer_img {
@@ -389,7 +393,7 @@ img {
 }
 
 .developer_data {
-    margin: 1rem 2rem 1rem 2rem;
+    margin: 1rem 6rem 1rem 6rem;
 }
 
 .developer_title {
@@ -500,6 +504,11 @@ img {
 
 .contact_message {
     font-size: var(--small-font-size);
+}
+
+.contact_img {
+    width: 250px;
+    justify-self: center;
 }
 
 .hr-line {
