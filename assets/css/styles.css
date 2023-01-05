@@ -367,28 +367,76 @@ input:-webkit-autofill {
     font-size: 1.25rem;
 }
 
+/* Проекты */
+.project_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.project_filter {
+    margin-top: var(--mb-0-75);
+    display: flex;
+    justify-content: center;
+    column-gap: 1.25rem;
+    border: 1px solid rgb(237, 237, 237, 0.6);
+    border-radius: 1rem;
+}
+
+.project_filter-list {
+    font-size: 1.25rem;
+    padding: 5px 20px;
+    cursor: pointer;
+    user-select: none;
+    transition: .3s;
+}
+
+.project_filter-active{
+    background-color: var(--first-color);
+    color: #FFF;
+    border-radius: 1rem;
+}
+
+.project_img{
+    width: 100px;
+    margin: 2rem auto 0 auto;
+}
+
+.project_data {
+    margin: 1rem 2rem 1rem 2rem;
+}
+
+.project_contetnt{
+    margin-top: 1.5rem;
+}
+
+.project_progress {
+    font-weight: var(--font-semi-bold);
+    color: var(--first-color);
+    margin-bottom: var(--mb-1);
+}
+
 /* Разработчики */
 .developers_container {
     gap: 1rem;
     margin-top: 2rem;
 }
 
-.developer_card {
+.developer_card, .project_item {
     text-align: center;
-    border-radius: 2rem;
     transition: .3s;
 }
 
-.developer_card:hover{
+.developer_card:hover, .project_item:hover {
     transform: translateY(-.5rem);
 }
 
-.developer_img {
+.developer_img{
     width: 200px;
     margin: 2rem auto 0 auto;
 }
 
-.developer_img img {
+.developer_img img, .project_img img {
     border-radius: 50%;
 }
 
@@ -396,31 +444,31 @@ input:-webkit-autofill {
     margin: 1rem 6rem 1rem 6rem;
 }
 
-.developer_title {
+.developer_title, .project_title {
     font-size: var(--h2-font-size);
     font-weight: var(--font-semi-bold);
     margin-bottom: var(--mb-0-5);
 }
 
-.developer_role{
+.developer_role, .project_description {
     font-weight: var(--font-semi-bold);
     color: var(--title-color);
     margin-bottom: var(--mb-1);
 }
 
-.developer_social {
+.developer_social, .project_social {
     display: flex;
     justify-content: center;
     column-gap: 1.25rem;
 }
 
-.developer_social-link {
+.developer_social-link, .project_social-link {
     font-size: 1.25rem;
     color: var(--first-color);
     transition: .3s;
 }
 
-.developer_social-link:hover {
+.developer_social-link:hover, .project_social-link:hover {
     transform: translateY(-.15rem);
 }
 
@@ -675,9 +723,17 @@ input:-webkit-autofill {
     .developers_container {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    .project_contetnt {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 @media screen and (max-width: 768px) {
+    .section {
+        padding: 4rem 0 1rem;
+    }
+
     .hr-line {
         margin-top: 1rem;
     }
