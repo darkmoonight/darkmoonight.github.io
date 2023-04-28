@@ -418,8 +418,10 @@ input:-webkit-autofill {
 
 /* Разработчики */
 .developers_container {
-    gap: 1rem;
     margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .developer_card, .project_item {
