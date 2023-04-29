@@ -723,7 +723,7 @@ input:-webkit-autofill {
     }
 
     .developers_container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .project_contetnt {
@@ -738,6 +738,13 @@ input:-webkit-autofill {
 
     .hr-line {
         margin-top: 1rem;
+    }
+
+    .developers_container {
+        margin-top: 2rem;
+        display: grid;
+        justify-content: center;
+        align-items: center;
     }
 }
 
