@@ -1,0 +1,19 @@
+{
+  "eslint.useFlatConfig": true,
+  "eslint.probe": [
+    "astro",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.validate": [
+    "astro",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "css.lint.unknownAtRules": "ignore",
+  "tailwindCSS.experimental.configFile": "./src/styles/global.css"
+}

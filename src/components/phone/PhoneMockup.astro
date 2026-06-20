@@ -1,0 +1,67 @@
+---
+import { useTranslations, type Language } from "../../utils/i18n";
+import { hasProjectMockup } from "../../utils/project-mockup";
+import ZestApp from "./ZestApp.astro";
+import RainApp from "./RainApp.astro";
+import IkmsApp from "./IkmsApp.astro";
+
+interface Props {
+  projectId: string;
+  lang: Language;
+}
+
+const { projectId, lang } = Astro.props;
+const t = useTranslations(lang);
+
+if (!hasProjectMockup(projectId)) return null;
+---
+
+<div class="project-detail-mockup-col">
+  <div class="phone-mockup phone-mockup--detail">
+    <div class="phone-mockup-glare" aria-hidden="true">
+      <div class="phone-mockup-glare__shine"></div>
+    </div>
+    <div class="phone-app-screen">
+      <div class="phone-screen-notch" aria-hidden="true"></div>
+      <div class="phone-app-status">
+        <span>09:41</span>
+        <div class="phone-app-status__icons">
+          <span aria-hidden="true">📶</span>
+          <span aria-hidden="true">🛜</span>
+          <span aria-hidden="true">🔋 100%</span>
+        </div>
+      </div>
+
+      <div class="phone-app-body">
+        {projectId === "zest" && <ZestApp lang={lang} />}
+        {projectId === "rain" && <RainApp lang={lang} />}
+        {projectId === "ikms" && <IkmsApp lang={lang} />}
+      </div>
+
+      <nav class="phone-app-nav" aria-label={t("projectDetail.mockup.navHome")}>
+        <button
+          type="button"
+          class="phone-app-nav-btn is-active"
+          data-nav="home"
+        >
+          <span class="phone-app-nav-btn__icon" aria-hidden="true">🏠</span>
+          <span class="phone-app-nav-btn__label"
+            >{t("projectDetail.mockup.navHome")}</span
+          >
+        </button>
+        <button type="button" class="phone-app-nav-btn" data-nav="stats">
+          <span class="phone-app-nav-btn__icon" aria-hidden="true">📊</span>
+          <span class="phone-app-nav-btn__label"
+            >{t("projectDetail.mockup.navStats")}</span
+          >
+        </button>
+        <button type="button" class="phone-app-nav-btn" data-nav="settings">
+          <span class="phone-app-nav-btn__icon" aria-hidden="true">⚙️</span>
+          <span class="phone-app-nav-btn__label"
+            >{t("projectDetail.mockup.navSettings")}</span
+          >
+        </button>
+      </nav>
+    </div>
+  </div>
+</div>

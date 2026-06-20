@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+import {
+  getLangFromUrl,
+  useTranslations,
+  useLocalizedPath,
+} from "../utils/i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const l = useLocalizedPath(lang);
+---
+
+<Layout title={t("error404.title")} description={t("error404.description")}>
+  <section class="max-w-lg mx-auto font-mono">
+    <div class="md3-panel text-center overflow-hidden">
+      <div class="md3-panel-bar justify-center">
+        <span class="text-accent font-bold">{t("error404.stderrLabel")}</span>
+        <span class="text-text-muted text-[10px]">{t("error404.exitCode")}</span
+        >
+      </div>
+      <div class="md3-panel-body space-y-4 py-10">
+        <div class="text-6xl font-bold text-accent">404</div>
+        <h1 class="text-xl text-text-primary font-bold">
+          {t("error404.heading")}
+        </h1>
+        <p class="prose-content text-sm max-w-md mx-auto">
+          {t("error404.body")}
+        </p>
+        <a
+          href={l("/")}
+          class="md3-btn-tonal inline-flex px-5 py-2 normal-case tracking-normal"
+        >
+          {t("error404.backHome")}
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,9 @@
+---
+import projectsData from "../../data/projects.json";
+
+export function getStaticPaths() {
+  return projectsData.map((p) => ({ params: { id: p.id } }));
+}
+
+return Astro.redirect(`/en/projects/${Astro.params.id}`, 302);
+---

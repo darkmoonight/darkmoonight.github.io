@@ -1,0 +1,223 @@
+---
+import { ClientRouter } from "astro:transitions";
+import ThemeScript from "../components/ThemeScript.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Snackbar from "../components/Snackbar.astro";
+import SiteI18n from "../components/SiteI18n.astro";
+import {
+  getLangFromUrl,
+  useTranslations,
+  pickSection,
+  LANGUAGES,
+  LANGUAGE_STORAGE_KEY,
+} from "../utils/i18n";
+import "../styles/global.css";
+import "../styles/mobile.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const otherLang = lang === "en" ? "ru" : "en";
+
+const langRedirectScript = `(function(){var STORAGE_KEY=${JSON.stringify(LANGUAGE_STORAGE_KEY)};var SUPPORTED=${JSON.stringify(LANGUAGES)};try{var stored=localStorage.getItem(STORAGE_KEY);if(!stored||!SUPPORTED.includes(stored))return;var parts=window.location.pathname.split("/").filter(Boolean);var pathLang=parts[0];if(pathLang===stored)return;if(SUPPORTED.includes(pathLang)){parts[0]=stored;window.location.replace("/"+parts.join("/")+window.location.search);}}catch(e){}})();`;
+const langSyncScript = `(function(){try{localStorage.setItem(${JSON.stringify(LANGUAGE_STORAGE_KEY)},${JSON.stringify(lang)});}catch(e){}})();`;
+
+const { title = t("meta.siteTitle"), description = t("meta.siteDescription") } =
+  Astro.props;
+
+const siteOrigin = (Astro.site ?? Astro.url).origin;
+const faviconBase = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html
+  lang={lang}
+  class="scroll-smooth"
+  data-theme-i18n={JSON.stringify(pickSection(lang, "theme"))}
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <link rel="icon" href={`${faviconBase}favicon.ico`} sizes="any" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href={`${faviconBase}favicon-32x32.png`}
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href={`${faviconBase}favicon-16x16.png`}
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={`${faviconBase}apple-touch-icon.png`}
+    />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="alternate" hreflang={lang} href={`${siteOrigin}/${lang}/`} />
+    <link
+      rel="alternate"
+      hreflang={otherLang}
+      href={`${siteOrigin}/${otherLang}/`}
+    />
+    <link rel="alternate" hreflang="x-default" href={`${siteOrigin}/en/`} />
+    <script is:inline set:html={langRedirectScript} />
+    <ThemeScript />
+    <ClientRouter />
+  </head>
+  <body
+    class="flex min-h-screen flex-col text-text-primary antialiased selection:bg-accent/20 selection:text-accent"
+    style="background: var(--md3-surface-dim);"
+  >
+    <script is:inline set:html={langSyncScript} />
+    <SiteI18n />
+
+    <a href="#main-content" class="skip-link">{t("common.skipToContent")}</a>
+    <div class="fixed inset-0 grid-bg opacity-100 pointer-events-none z-[-2]">
+    </div>
+    <div
+      class="fixed top-0 left-1/2 -translate-x-1/2 w-150 h-75 bg-accent/5 rounded-full blur-[120px] pointer-events-none z-[-1]"
+    >
+    </div>
+    <div
+      id="screensaver-overlay"
+      class="hidden fixed inset-0 z-999999 opacity-0 transition-opacity duration-700 pointer-events-none"
+      style="background: var(--term-screen-bg);"
+      tabindex="-1"
+      role="dialog"
+      aria-modal="true"
+      aria-label={t("layout.screensaver")}
+    >
+      <canvas id="screensaver-canvas" class="w-full h-full block"></canvas>
+      <div
+        class="absolute inset-x-0 bottom-12 text-center font-mono text-[10px] md:text-xs text-text-muted select-none tracking-wider leading-relaxed screensaver-hint"
+      >
+        {t("layout.screensaver")}
+      </div>
+    </div>
+    <Header />
+    <main
+      id="main-content"
+      class="page-main page-main--workspace flex-1 w-full max-w-7xl mx-auto md:pt-14 md:pb-6 flex flex-col md:gap-16"
+    >
+      <slot />
+    </main>
+    <Footer />
+    <Snackbar />
+    <div
+      id="sys-monitor-panel"
+      class="hidden fixed bottom-8 right-4 w-72 md3-panel p-0 font-mono text-text-primary z-99999 select-none overflow-hidden"
+      style="box-shadow: var(--md3-elevation-3);"
+    >
+      <div class="md3-panel-bar">
+        <span class="text-xs font-bold text-accent"
+          >{t("layout.sysMonitorTitle")}</span
+        >
+        <button
+          type="button"
+          id="close-sys-monitor"
+          class="md3-btn-text text-red-500 font-bold">X</button
+        >
+      </div>
+
+      <div class="md3-panel-body space-y-3">
+        <div class="space-y-1 text-[10px]">
+          <div class="flex justify-between">
+            <span>{t("layout.cpuUsage")}</span>
+            <span id="sys-cpu-val" class="font-bold text-accent-secondary"
+              >12%</span
+            >
+          </div>
+          <div
+            class="h-1.5 w-full bg-bg-secondary rounded-full overflow-hidden"
+          >
+            <div
+              id="sys-cpu-bar"
+              class="h-full bg-accent-secondary rounded-full transition-all duration-300"
+              style="width: 12%"
+            >
+            </div>
+          </div>
+          <canvas
+            id="sys-cpu-canvas"
+            class="w-full h-10 bg-bg-secondary/40 border border-border-color/30 rounded mt-1"
+          ></canvas>
+        </div>
+        <div class="space-y-1 text-[10px]">
+          <div class="flex justify-between">
+            <span>{t("layout.ramHeap")}</span>
+            <span id="sys-ram-val" class="font-bold text-accent-success"
+              >245 MB</span
+            >
+          </div>
+          <div
+            class="h-1.5 w-full bg-bg-secondary rounded-full overflow-hidden"
+          >
+            <div
+              id="sys-ram-bar"
+              class="h-full bg-accent-success rounded-full transition-all duration-300"
+              style="width: 35%"
+            >
+            </div>
+          </div>
+        </div>
+        <div
+          class="space-y-1 text-[10px] border-t border-border-color/40 pt-2.5"
+        >
+          <div class="flex justify-between items-center">
+            <span>{t("layout.apiPing")}</span>
+            <span id="sys-ping-val" class="font-bold text-accent-success"
+              >-- ms</span
+            >
+          </div>
+          <div
+            class="flex justify-between items-center text-[9px] text-text-muted"
+          >
+            <span>{t("layout.apiRemaining")}</span>
+            <span
+              ><span id="sys-ratelimit-val" class="font-bold text-text-primary"
+                >--</span
+              > / 60</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      import { initKonamiArcade } from "../utils/arcade";
+      import { initBugsCounter } from "../utils/bugs-storage";
+      import { refreshGitHubLiveData } from "../utils/github-client";
+      import { bindPageBlockingUiReset } from "../utils/page-blocking-ui";
+      import { initScreensaver } from "../utils/screensaver";
+      import { initSysMonitor } from "../utils/sys-monitor";
+      import { onPageInit } from "../utils/page-lifecycle";
+
+      initBugsCounter();
+      initKonamiArcade();
+      initSysMonitor();
+      initScreensaver();
+      bindPageBlockingUiReset();
+
+      onPageInit(
+        () => true,
+        () => {
+          void refreshGitHubLiveData();
+        },
+      );
+    </script>
+  </body>
+</html>

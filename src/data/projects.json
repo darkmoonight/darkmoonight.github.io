@@ -1,0 +1,180 @@
+[
+  {
+    "id": "zest",
+    "name": "Zest",
+    "github": "https://github.com/darkmoonight/Zest",
+    "stars": 444,
+    "forks": 58,
+    "license": "MIT",
+    "languages": { "Dart": 91.8, "C++": 3.3, "CMake": 2.7, "Other": 2.2 },
+    "size": "18.1 MB",
+    "version": "v1.6.0",
+    "color": "#10b981",
+    "en": {
+      "tagline": "A beautiful, feature-rich task management application",
+      "description": "Zest helps you stay in control of daily tasks with powerful organization, advanced statistics, and polished design. Built with Flutter, it supports categories, nested subtasks, productivity heatmaps, reminders, and backups — all without ads or tracking.",
+      "features": [
+        "Color-coded categories, tags, priorities, and hierarchical subtasks",
+        "365-day productivity heatmap with streaks and fl_chart visualizations",
+        "Timezone-aware reminders with Mark Done and Snooze actions",
+        "Manual and automatic backups with GZip compression and SAF support",
+        "Material You dynamic theming, AMOLED black mode, and Google Fonts",
+        "16 languages, home screen quick actions, and screen privacy protection"
+      ],
+      "installation": [
+        {
+          "label": "Clone",
+          "cmd": "git clone https://github.com/darkmoonight/Zest.git\ncd Zest"
+        },
+        { "label": "Dependencies", "cmd": "flutter pub get" },
+        {
+          "label": "Code Generation",
+          "cmd": "dart run build_runner build --delete-conflicting-outputs"
+        },
+        { "label": "Run", "cmd": "flutter run" },
+        { "label": "Release APK", "cmd": "flutter build apk --release" }
+      ]
+    },
+    "ru": {
+      "tagline": "Красивый и функциональный таск-менеджер",
+      "description": "Zest помогает держать задачи под контролем: категории, вложенные подзадачи, статистика продуктивности, напоминания и резервное копирование. Приложение на Flutter без рекламы и трекинга.",
+      "features": [
+        "Категории с цветами, теги, приоритеты и иерархические подзадачи",
+        "Тепловая карта продуктивности за 365 дней, серии выполнения и графики",
+        "Напоминания с учётом часового пояса, кнопки «Готово» и «Отложить»",
+        "Ручное и автоматическое резервное копирование с GZip-сжатием",
+        "Material You, чисто чёрная AMOLED-тема и шрифты Google Fonts",
+        "16 языков, быстрые действия с домашнего экрана и защита экрана"
+      ],
+      "installation": [
+        {
+          "label": "Клонирование",
+          "cmd": "git clone https://github.com/darkmoonight/Zest.git\ncd Zest"
+        },
+        { "label": "Зависимости", "cmd": "flutter pub get" },
+        {
+          "label": "Генерация кода",
+          "cmd": "dart run build_runner build --delete-conflicting-outputs"
+        },
+        { "label": "Запуск", "cmd": "flutter run" },
+        { "label": "Релизный APK", "cmd": "flutter build apk --release" }
+      ]
+    }
+  },
+  {
+    "id": "rain",
+    "name": "Rain",
+    "github": "https://github.com/darkmoonight/Rain",
+    "stars": 1008,
+    "forks": 85,
+    "license": "MIT",
+    "languages": { "Dart": 90.7, "C++": 3.7, "CMake": 3.0, "Other": 2.6 },
+    "size": "13.9 MB",
+    "version": "v1.3.12",
+    "color": "#3b82f6",
+    "en": {
+      "tagline": "A beautiful, feature-rich weather application",
+      "description": "Rain keeps you prepared with accurate forecasts, interactive maps, and elegant design. Built with Flutter, it uses free Open-Meteo and OpenStreetMap APIs — no API key, no ads, and no tracking.",
+      "features": [
+        "Real-time conditions, hourly forecasts (12+ days), and 7-day daily outlooks",
+        "Interactive OpenStreetMap with weather markers and GPS city detection",
+        "Unlimited city watchlist with search, drag-to-reorder, and pull-to-refresh",
+        "Scheduled forecast notifications with custom time windows",
+        "Android home screen widget with auto-update and color customization",
+        "37 languages, Material You/AMOLED themes, metric/imperial units"
+      ],
+      "installation": [
+        {
+          "label": "Clone",
+          "cmd": "git clone https://github.com/darkmoonight/Rain.git\ncd Rain"
+        },
+        { "label": "Dependencies", "cmd": "flutter pub get" },
+        {
+          "label": "Code Generation",
+          "cmd": "dart run build_runner build --delete-conflicting-outputs"
+        },
+        { "label": "Run", "cmd": "flutter run" },
+        { "label": "Release APK", "cmd": "flutter build apk --release" }
+      ]
+    },
+    "ru": {
+      "tagline": "Красивое и функциональное приложение погоды",
+      "description": "Rain помогает быть готовым к любой погоде: точные прогнозы, интерактивная карта и аккуратный интерфейс. Бесплатные API Open-Meteo и OpenStreetMap — без ключей, рекламы и трекинга.",
+      "features": [
+        "Текущая погода, почасовой прогноз (12+ дней) и прогноз на 7 дней",
+        "Интерактивная карта OpenStreetMap с маркерами и GPS-определением",
+        "Неограниченный список городов: поиск, сортировка, pull-to-refresh",
+        "Запланированные уведомления о погоде с настраиваемым окном времени",
+        "Виджет на домашний экран Android с автообновлением",
+        "37 языков, темы Material You/AMOLED, метрическая и имперская системы"
+      ],
+      "installation": [
+        {
+          "label": "Клонирование",
+          "cmd": "git clone https://github.com/darkmoonight/Rain.git\ncd Rain"
+        },
+        { "label": "Зависимости", "cmd": "flutter pub get" },
+        {
+          "label": "Генерация кода",
+          "cmd": "dart run build_runner build --delete-conflicting-outputs"
+        },
+        { "label": "Запуск", "cmd": "flutter run" },
+        { "label": "Релизный APK", "cmd": "flutter build apk --release" }
+      ]
+    }
+  },
+  {
+    "id": "ikms",
+    "name": "IKMS",
+    "github": "https://github.com/darkmoonight/IKMS",
+    "stars": 12,
+    "forks": 0,
+    "license": "MIT",
+    "languages": { "Dart": 82.2, "C++": 8.2, "CMake": 6.7, "Other": 2.9 },
+    "size": "5.4 MB",
+    "version": "v1.3.0",
+    "color": "#8b5cf6",
+    "en": {
+      "tagline": "Class schedule app for DonSTU students",
+      "description": "IKMS helps university students never miss a class. View timetables by group, professor, or classroom, manage homework tasks, receive timely reminders, and access cached schedules offline — with Russian and English localization.",
+      "features": [
+        "View schedule by your group, professor, or classroom",
+        "Browse timetables of other groups at DonSTU (DSTU)",
+        "Built-in task manager with pending and completed sorting",
+        "Edit schedules and tasks with an intuitive interface",
+        "Offline caching for instant access without internet",
+        "Notifications, ru/en localization, and Material Design UI"
+      ],
+      "installation": [
+        {
+          "label": "Clone",
+          "cmd": "git clone https://github.com/darkmoonight/IKMS.git\ncd IKMS"
+        },
+        { "label": "Dependencies", "cmd": "flutter pub get" },
+        { "label": "Run", "cmd": "flutter run" },
+        { "label": "Release APK", "cmd": "flutter build apk --release" }
+      ]
+    },
+    "ru": {
+      "tagline": "Расписание занятий для студентов ДГТУ",
+      "description": "IKMS помогает студентам не пропускать важные пары. Просмотр расписания по группе, преподавателю или аудитории, управление заданиями, напоминания и офлайн-кэш — на русском и английском языках.",
+      "features": [
+        "Расписание вашей группы, преподавателей и аудиторий",
+        "Просмотр расписания других групп ДГТУ (DonSTU)",
+        "Менеджер задач с сортировкой «ожидает» / «выполнено»",
+        "Редактирование расписания и заданий",
+        "Кэширование для работы без подключения к интернету",
+        "Уведомления, локализация ru/en и удобный Material UI"
+      ],
+      "installation": [
+        {
+          "label": "Клонирование",
+          "cmd": "git clone https://github.com/darkmoonight/IKMS.git\ncd IKMS"
+        },
+        { "label": "Зависимости", "cmd": "flutter pub get" },
+        { "label": "Запуск", "cmd": "flutter run" },
+        { "label": "Релизный APK", "cmd": "flutter build apk --release" }
+      ]
+    }
+  }
+]

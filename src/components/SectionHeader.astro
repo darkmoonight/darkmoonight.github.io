@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  label?: string;
+  hint?: string;
+}
+
+const { title, label, hint } = Astro.props;
+const displayTitle = label ?? title;
+const fileHint = label ? title : undefined;
+---
+
+<div class="section-head select-none">
+  <div class="section-head-leading">
+    <span class="section-head-prefix" aria-hidden="true">&gt;_</span>
+    <h2 class="section-head-title">
+      {displayTitle}
+      {fileHint && <span class="section-head-file">{fileHint}</span>}
+      {hint && <span class="section-head-hint">({hint})</span>}
+    </h2>
+  </div>
+  <div class="section-head-rule" aria-hidden="true"></div>
+</div>

@@ -1,0 +1,354 @@
+---
+import { getLangFromUrl, useTranslations } from "../../utils/i18n";
+import { githubBranchRef } from "../../constants/site";
+import { DOM_IDS } from "../../constants/dom-ids";
+import HomeSection from "../HomeSection.astro";
+import NewsCommitRow from "../NewsCommitRow.astro";
+import {
+  NEWS_FEED_LIMIT,
+  NEWS_VISIBLE_ROWS,
+} from "../../utils/github-releases";
+import {
+  getNewsReleases,
+  loadGithubSnapshot,
+  type GitHubSnapshot,
+} from "../../utils/github-snapshot";
+
+interface Props {
+  snapshot?: GitHubSnapshot;
+}
+
+const { snapshot = loadGithubSnapshot() } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const newsReleases = getNewsReleases(snapshot);
+const displayedNews = newsReleases.slice(0, NEWS_FEED_LIMIT);
+---
+
+<HomeSection id="news" label={t("news.sectionHeader")} title={t("news.title")}>
+  <p class="section-subtitle">
+    {t("news.subtitle")}
+  </p>
+
+  <div class="md3-panel md3-panel--terminal-code">
+    <div class="md3-panel-bar news-panel-bar">
+      <p class="news-panel-bar__cmd scroll-x-touch m-0 min-w-0">
+        <span class="text-accent font-bold">{t("news.gitLog")}</span>
+        <span class="text-text-muted">{t("news.gitFlags")}</span>
+      </p>
+      <div
+        class="news-panel-bar__meta text-[10px] text-text-muted"
+        id={DOM_IDS.newsCommitsTotal}
+      >
+        {
+          displayedNews.length > 0
+            ? t("news.totalScrollable")
+                .replace("{visible}", String(NEWS_VISIBLE_ROWS))
+                .replace("{total}", String(displayedNews.length))
+            : ""
+        }
+      </div>
+    </div>
+
+    <div
+      class="news-commits-scroll divide-y divide-border-color/40 relative"
+      id={DOM_IDS.newsCommitsList}
+      style={`--news-visible-rows: ${NEWS_VISIBLE_ROWS}`}
+    >
+      {
+        displayedNews.length > 0 ? (
+          displayedNews.map((news, index) => (
+            <NewsCommitRow
+              news={news}
+              index={index}
+              lang={lang}
+              relPrefix={t("common.relPrefix")}
+            />
+          ))
+        ) : (
+          <div
+            id="news-loading"
+            class="flex items-center justify-center py-12 text-text-muted"
+          >
+            {t("news.loading")}
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  <div
+    id={DOM_IDS.prModal}
+    class="md3-modal-scrim md3-modal-scrim--centered fixed inset-0 z-50 hidden p-4 md:p-6 opacity-0 pointer-events-none transition-opacity duration-300 select-none"
+    aria-hidden="true"
+    role="presentation"
+  >
+    <div
+      id={DOM_IDS.prModalContent}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-pr-title"
+      class="w-full max-w-4xl md3-panel shadow-2xl overflow-hidden flex flex-col max-h-[90vh] scale-95 opacity-0 transition-all duration-300 pointer-events-none"
+    >
+      <div class="md3-panel-bar h-9">
+        <div
+          class="flex items-center space-x-2 text-xs font-mono text-text-secondary select-none"
+        >
+          <span class="text-text-muted">📁 {t("news.prFolder")}</span>
+          <span id="modal-pr-filename">PR_122.md</span>
+        </div>
+        <button
+          id={DOM_IDS.closePrModal}
+          type="button"
+          class="md3-btn-text font-mono text-sm select-none"
+          aria-label={t("news.closePr")}
+        >
+          {t("news.closeEsc")}
+        </button>
+      </div>
+
+      <div
+        class="news-pr-modal__body flex-1 overflow-y-auto p-4 md:p-6 space-y-4 md:space-y-6"
+      >
+        <div class="border-b border-border-color pb-4 space-y-3 font-mono">
+          <div class="news-pr-modal__merge-row select-none text-[11px]">
+            <span
+              class="md3-chip md3-chip--merged news-pr-modal__merged-badge flex items-center gap-1"
+            >
+              <svg
+                class="h-3 w-3 shrink-0"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+                ><path
+                  d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5A2.25 2.25 0 0 0 12.5 6.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-3.5a.75.75 0 0 1-.75-.75v-.878z"
+                ></path></svg
+              >
+              <span>{t("common.merged")}</span>
+            </span>
+            <span class="news-pr-modal__branch-flow text-text-secondary">
+              <span class="font-bold" id="modal-pr-branch"
+                >{githubBranchRef()}</span
+              >
+              <span class="text-text-muted">←</span>
+              <span id="modal-pr-source-branch">patch-122</span>
+            </span>
+          </div>
+
+          <h2
+            class="text-base md:text-xl font-bold text-text-primary leading-snug"
+            id="modal-pr-title"
+          >
+            {t("news.modalTitlePlaceholder")}
+          </h2>
+
+          <div
+            class="flex flex-col sm:flex-row justify-between gap-1 text-xs text-text-secondary"
+          >
+            <div>
+              <span class="text-text-muted" id="modal-pr-meta-author"
+                >by @Leonavichus</span
+              >
+              <span class="text-text-muted mx-1">•</span>
+              <span id="modal-pr-meta-date">2026-02-12</span>
+            </div>
+            <div
+              class="text-accent-success font-semibold"
+              id="modal-pr-meta-badge"
+            >
+              {t("news.mergedIn")}
+            </div>
+          </div>
+        </div>
+
+        <div
+          id="pr-tab-article-content"
+          class="md3-surface-container space-y-4 font-sans text-sm text-text-secondary leading-relaxed p-5"
+        >
+          <div id="modal-pr-summary-block" class="news-modal-section hidden">
+            <h4 class="term-section-label news-modal-section__label">
+              {t("news.summaryTitle")}
+            </h4>
+            <p id="modal-pr-summary" class="news-modal-summary"></p>
+          </div>
+
+          <div id="modal-pr-highlights-block" class="news-modal-section hidden">
+            <h4 class="term-section-label news-modal-section__label">
+              {t("news.highlightsTitle")}
+            </h4>
+            <ul id="modal-pr-highlights" class="news-modal-highlights"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="md3-panel-bar md3-panel-bar--footer md3-panel-bar--footer-end"
+      >
+        <button
+          id={DOM_IDS.closePrModalBtn}
+          type="button"
+          class="md3-btn-outlined"
+        >
+          {t("news.closePr")}
+        </button>
+      </div>
+    </div>
+  </div>
+</HomeSection>
+
+<script>
+  import {
+    clientT,
+    getLangFromDocument,
+    localizedField,
+  } from "../../utils/i18n";
+  import { GITHUB_NEWS_UPDATED_EVENT } from "../../utils/github-client";
+  import type { ReleaseNewsItem } from "../../utils/github-releases";
+  import { githubBranchRef } from "../../constants/site";
+  import { DOM_IDS } from "../../constants/dom-ids";
+  import { bindOverlayPanel } from "../../utils/overlay-panel";
+  import { onPageInit } from "../../utils/page-lifecycle";
+  import { splitReleaseNotesForModal } from "../../utils/release-summary";
+  import { buildNewsCommitRowHtml } from "../../utils/news-commit-row";
+  import {
+    fillNewsModalContent,
+    type NewsModalElements,
+  } from "../../utils/news-modal-ui";
+
+  import {
+    NEWS_FEED_LIMIT,
+    NEWS_VISIBLE_ROWS,
+  } from "../../utils/github-releases";
+  const NEWS_DISPLAY_LIMIT = NEWS_FEED_LIMIT;
+
+  let newsModalOverlay: ReturnType<typeof bindOverlayPanel> | null = null;
+
+  // Modal content is filled from cached or live release rows; click handling uses onPageInit signal.
+  function getNewsModalElements(): NewsModalElements {
+    return {
+      filename: document.getElementById("modal-pr-filename"),
+      title: document.getElementById("modal-pr-title"),
+      branch: document.getElementById("modal-pr-branch"),
+      sourceBranch: document.getElementById("modal-pr-source-branch"),
+      summary: document.getElementById("modal-pr-summary"),
+      summaryBlock: document.getElementById("modal-pr-summary-block"),
+      highlightsBlock: document.getElementById("modal-pr-highlights-block"),
+      highlightsList: document.getElementById("modal-pr-highlights"),
+      metaAuthor: document.getElementById("modal-pr-meta-author"),
+      metaDate: document.getElementById("modal-pr-meta-date"),
+    };
+  }
+
+  function openModal(newsData: ReleaseNewsItem, trigger?: HTMLElement | null) {
+    const localized = localizedField(getLangFromDocument(), newsData);
+    const { intro, bullets } = splitReleaseNotesForModal(
+      localized.summary || "",
+    );
+
+    fillNewsModalContent(getNewsModalElements(), {
+      prNumber: newsData.prNumber,
+      hash: newsData.hash,
+      title: localized.title,
+      branch: githubBranchRef(),
+      author: newsData.author,
+      date: newsData.date,
+      intro,
+      bullets,
+      summaryIsMarkdown: Boolean(newsData.repo),
+    });
+
+    newsModalOverlay?.open(trigger);
+  }
+
+  function closeModal() {
+    newsModalOverlay?.close();
+  }
+
+  function renderReleasesNews(releases: ReleaseNewsItem[]) {
+    const container = document.getElementById(DOM_IDS.newsCommitsList);
+    const totalEl = document.getElementById(DOM_IDS.newsCommitsTotal);
+    if (!container) return;
+
+    const displayed = releases.slice(0, NEWS_DISPLAY_LIMIT);
+    const lang = getLangFromDocument();
+    const relPrefix = clientT("common", "relPrefix");
+
+    if (totalEl) {
+      totalEl.textContent = clientT("news", "totalScrollable")
+        .replace("{visible}", String(NEWS_VISIBLE_ROWS))
+        .replace("{total}", String(displayed.length));
+    }
+
+    container.innerHTML = "";
+
+    displayed.forEach((news, index) => {
+      const nInfo = localizedField(lang, news);
+      const tagLabel = news.tag || `${relPrefix}${news.prNumber}`;
+      const row = document.createElement("button");
+      row.type = "button";
+      row.className = "news-commit-row";
+      row.setAttribute("data-news-commit", JSON.stringify(news));
+      row.setAttribute("aria-haspopup", "dialog");
+      row.setAttribute("aria-label", `${nInfo.title} — ${news.date}`);
+      row.innerHTML = buildNewsCommitRowHtml(
+        news,
+        nInfo.title,
+        tagLabel,
+        index,
+      );
+      container.appendChild(row);
+    });
+  }
+
+  onPageInit(
+    () => Boolean(document.getElementById(DOM_IDS.newsCommitsList)),
+    (signal) => {
+      const scrim = document.getElementById(DOM_IDS.prModal);
+      const panel = document.getElementById(DOM_IDS.prModalContent);
+      if (scrim && panel) {
+        newsModalOverlay = bindOverlayPanel({
+          scrim,
+          panel,
+          closeSelectors: [
+            `#${DOM_IDS.closePrModal}`,
+            `#${DOM_IDS.closePrModalBtn}`,
+          ],
+          signal,
+          transitionMs: 300,
+        });
+      }
+
+      closeModal();
+
+      document.addEventListener(
+        "click",
+        (event) => {
+          const target = event.target as HTMLElement | null;
+          const commit = target?.closest?.(
+            "[data-news-commit]",
+          ) as HTMLElement | null;
+          if (!commit) return;
+
+          const dataStr = commit.getAttribute("data-news-commit");
+          if (!dataStr) return;
+
+          try {
+            openModal(JSON.parse(dataStr), commit);
+          } catch (err) {
+            console.error(err);
+          }
+        },
+        { signal },
+      );
+
+      document.addEventListener(
+        GITHUB_NEWS_UPDATED_EVENT,
+        (event) => {
+          const releases = (event as CustomEvent<ReleaseNewsItem[]>).detail;
+          if (releases?.length) renderReleasesNews(releases);
+        },
+        { signal },
+      );
+    },
+  );
+</script>

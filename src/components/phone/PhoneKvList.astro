@@ -1,0 +1,20 @@
+---
+import type { MockupKv } from "../../utils/project-mockup";
+
+interface Props {
+  items: MockupKv[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="phone-mockup-kv-list">
+  {
+    items.map((item) => (
+      <li class="phone-app-card phone-mockup-kv">
+        <span>{item.label}</span>
+        <span class="phone-mockup-kv__val">{item.value}</span>
+      </li>
+    ))
+  }
+</ul>

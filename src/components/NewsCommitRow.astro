@@ -1,0 +1,43 @@
+---
+import { localizedField, type Language } from "../utils/i18n";
+import type { ReleaseNewsItem } from "../utils/github-releases";
+
+interface Props {
+  news: ReleaseNewsItem;
+  index: number;
+  lang: Language;
+  relPrefix: string;
+}
+
+const { news, index, lang, relPrefix } = Astro.props;
+const nInfo = localizedField(lang, news);
+const tagLabel = news.tag || `${relPrefix}${news.prNumber}`;
+---
+
+<button
+  type="button"
+  class="news-commit-row"
+  data-news-commit={JSON.stringify(news)}
+  aria-haspopup="dialog"
+  aria-label={`${nInfo.title} — ${news.date}`}
+>
+  <div class="news-commit-row__rail">
+    <div class="news-commit-row__line" aria-hidden="true"></div>
+    {index > 0 && <div class="news-commit-row__branch" aria-hidden="true" />}
+    <div class="news-commit-row__node" aria-hidden="true">
+      <div class="news-commit-row__node-core"></div>
+    </div>
+  </div>
+  <div class="news-commit-row__body">
+    <div class="news-commit-row__main">
+      <div class="news-commit-row__meta">
+        <span class="news-commit-row__hash">{news.hash}</span>
+        <span class="news-commit-row__sep" aria-hidden="true">|</span>
+        <span class="news-commit-row__tag">{tagLabel}</span>
+        <span class="news-commit-row__author">@{news.author}</span>
+      </div>
+      <h3 class="news-commit-row__title">{nInfo.title}</h3>
+    </div>
+    <time class="news-commit-row__date">{news.date}</time>
+  </div>
+</button>

@@ -1,0 +1,147 @@
+---
+import { getLangFromUrl, useTranslations } from "../utils/i18n";
+import {
+  CONTACT_EMAIL,
+  GITHUB_PROFILE_URL,
+  SOCIAL_LINKS,
+} from "../constants/site";
+
+const t = useTranslations(getLangFromUrl(Astro.url));
+---
+
+<footer
+  class="w-full border-t border-border-color text-text-secondary font-mono text-xs select-none transition-colors duration-200"
+  style="background: var(--md3-surface);"
+>
+  <div class="md3-panel-bar footer-top-bar">
+    <div class="md3-status-bar-group">
+      <span class="md3-status-bar-item text-[11px]">
+        <span class="text-accent">●</span>
+        <span>darkmoonight.github.io</span>
+      </span>
+      <span class="hidden md:flex md3-status-bar-item text-text-muted">
+        <span>|</span>
+        <span>{t("footer.license")}</span>
+        <span>|</span>
+        <span>{t("footer.established")}</span>
+      </span>
+    </div>
+
+    <div class="md3-status-bar-group text-[11px]">
+      <a
+        href={GITHUB_PROFILE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="md3-btn-text hover:text-accent"
+      >
+        <span>[git]</span>
+        <span class="hover:underline">github</span>
+      </a>
+      <a href={SOCIAL_LINKS.email} class="md3-btn-text hover:text-accent">
+        <span>[mail]</span>
+        <span class="hover:underline">{CONTACT_EMAIL}</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="md3-status-bar">
+    <div class="md3-status-bar-group">
+      <span class="md3-status-bar-badge bg-accent/10 text-accent font-semibold">
+        <span>🕧</span>
+        <span>{t("footer.branch")}</span>
+      </span>
+
+      <span class="md3-status-bar-item" id="connection-status">
+        <span
+          class="inline-block w-1.5 h-1.5 rounded-full bg-accent-success animate-pulse"
+          id="status-dot"></span>
+        <span id="status-text">{t("footer.statusOnline")}</span>
+      </span>
+
+      <span class="hidden sm:inline text-text-muted">|</span>
+
+      <span class="hidden sm:flex md3-status-bar-item text-text-muted">
+        <span class="text-accent-success">●</span>
+        <span>{t("footer.statusOk")}</span>
+      </span>
+
+      <span class="hidden sm:inline text-text-muted">|</span>
+
+      <span
+        id="footer-bugs-counter-btn"
+        class="footer-easter-egg md3-status-bar-item font-semibold"
+        title={t("footer.bugsTitle")}
+        aria-hidden="true"
+      >
+        <span>🪲</span>
+        <span id="footer-bugs-count" class="text-accent-secondary font-bold"
+          >0</span
+        >
+        <span>{t("footer.bugsLabel")}</span>
+      </span>
+    </div>
+
+    <div class="md3-status-bar-group">
+      <span class="hidden md:inline md3-status-bar-item"
+        >{t("footer.cursorPos")}</span
+      >
+      <span class="hidden md:inline md3-status-bar-item"
+        >{t("footer.spaces")}</span
+      >
+      <span class="md3-status-bar-item">{t("footer.encoding")}</span>
+      <span class="hidden sm:inline md3-status-bar-item"
+        >{t("footer.crlf")}</span
+      >
+      <button
+        type="button"
+        id="footer-sys-mon-btn"
+        class="footer-easter-egg footer-easter-egg--clickable md3-status-bar-badge hidden md:inline-flex font-semibold text-text-muted"
+        title={t("footer.sysTitle")}
+      >
+        <span>{t("footer.sysBtn")}</span>
+      </button>
+      <span
+        class="md3-status-bar-badge bg-accent-secondary/10 text-accent-secondary font-semibold"
+      >
+        {t("footer.editor")}
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  import { clientT } from "../utils/i18n";
+  import { getBugsSquashedString } from "../utils/bugs-storage";
+
+  const statusDot = document.getElementById("status-dot");
+  const statusText = document.getElementById("status-text");
+
+  function updateConnectionStatus() {
+    if (navigator.onLine) {
+      statusDot?.classList.remove("bg-red-500");
+      statusDot?.classList.add("bg-accent-success");
+      if (statusText) {
+        statusText.innerText = clientT("footer", "statusOnline");
+      }
+    } else {
+      statusDot?.classList.remove("bg-accent-success");
+      statusDot?.classList.add("bg-red-500");
+      if (statusText) {
+        statusText.innerText = clientT("footer", "statusOffline");
+      }
+    }
+  }
+
+  window.addEventListener("online", updateConnectionStatus);
+  window.addEventListener("offline", updateConnectionStatus);
+  updateConnectionStatus();
+
+  const bugsCountEl = document.getElementById("footer-bugs-count");
+
+  function syncBugsCounter() {
+    if (bugsCountEl) bugsCountEl.textContent = getBugsSquashedString();
+  }
+
+  syncBugsCounter();
+  document.addEventListener("sync-bugs-squashed", syncBugsCounter);
+</script>

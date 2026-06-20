@@ -1,0 +1,127 @@
+---
+import type { Language } from "../../utils/i18n";
+import { useTranslations } from "../../utils/i18n";
+import { getIkmsMockup } from "../../utils/project-mockup";
+import PhonePanel from "./PhonePanel.astro";
+import PhoneSection from "./PhoneSection.astro";
+import PhoneKvList from "./PhoneKvList.astro";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const ikms = getIkmsMockup(lang, t);
+const next = ikms.nextClass;
+---
+
+<PhonePanel panel="home" active>
+  <header class="phone-app-header">
+    <h4 class="phone-app-header__brand phone-app-header__brand--secondary">
+      IKMS
+    </h4>
+    <span class="phone-app-header__meta"
+      >{t("projectDetail.mockup.semesterWeek")}</span
+    >
+  </header>
+
+  {
+    next && (
+      <div class="phone-app-card ikms-next-card" id="ikms-next-card">
+        <span class="phone-app-section__title">
+          {t("projectDetail.mockup.nextClass")}
+        </span>
+        <span
+          class="phone-app-title ikms-next-card__title"
+          id="ikms-next-title"
+        >
+          {next.sub}
+        </span>
+        <span class="phone-app-label" id="ikms-next-meta">
+          {next.room} • {next.prof} · {next.time}
+        </span>
+      </div>
+    )
+  }
+
+  <p class="phone-app-label" id="ikms-classes-today">
+    {
+      t("projectDetail.mockup.classesToday").replace(
+        "{n}",
+        String(ikms.initialClassCount),
+      )
+    }
+  </p>
+
+  <div class="ikms-day-tabs" role="tablist">
+    {
+      ikms.days.map((day, i) => (
+        <button
+          type="button"
+          class:list={["ikms-day-tab", { "is-active": i === 0 }]}
+          data-day={day.id}
+        >
+          {day.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <PhoneSection title={t("projectDetail.mockup.timetable")}>
+    <div class="ikms-class-list" id="ikms-class-list">
+      {
+        ikms.initialClasses.map((cls) => (
+          <button
+            type="button"
+            class:list={["ikms-class-row phone-app-card border-l-4", cls.color]}
+          >
+            <span class="ikms-class-row__main">
+              <span class="ikms-class-row__title">{cls.sub}</span>
+              <span class="ikms-class-row__meta">
+                {cls.room} • {cls.prof}
+              </span>
+            </span>
+            <span class="ikms-class-row__time">{cls.time}</span>
+          </button>
+        ))
+      }
+    </div>
+  </PhoneSection>
+</PhonePanel>
+
+<PhonePanel panel="stats">
+  <PhoneSection title={t("projectDetail.mockup.stats")}>
+    <p class="phone-app-title phone-stats-lead">
+      {t("projectDetail.mockup.weekTotalHours")}
+    </p>
+    <ul class="phone-mockup-bars">
+      {
+        ikms.weekBars.map((bar) => (
+          <li class="phone-mockup-bar">
+            <span class="phone-mockup-bar__label">{bar.label}</span>
+            <span class="phone-mockup-bar__track">
+              <span
+                class="phone-mockup-bar__fill"
+                style={`width: ${bar.fill}%`}
+              />
+            </span>
+            <span class="phone-mockup-bar__val">{bar.value}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="phone-app-card phone-summary-card">
+      <span class="phone-app-title"
+        >{t("projectDetail.mockup.settingsGroupVal")}</span
+      >
+      <span class="phone-app-label">{ikms.statsCourses}</span>
+    </div>
+  </PhoneSection>
+</PhonePanel>
+
+<PhonePanel panel="settings">
+  <PhoneSection title={t("projectDetail.mockup.navSettings")}>
+    <PhoneKvList items={ikms.settings} />
+  </PhoneSection>
+</PhonePanel>

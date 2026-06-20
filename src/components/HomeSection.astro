@@ -1,0 +1,19 @@
+---
+import SectionHeader from "./SectionHeader.astro";
+
+interface Props {
+  id: string;
+  label: string;
+  title: string;
+  hint?: string;
+}
+
+const { id, label, title, hint } = Astro.props;
+---
+
+<section id={id} class="w-full scroll-mt-14 transition-colors duration-200">
+  <SectionHeader label={label} title={title} hint={hint} />
+  <div class="section-stack">
+    <slot />
+  </div>
+</section>

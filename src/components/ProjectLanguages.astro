@@ -1,0 +1,44 @@
+---
+import {
+  buildProjectLanguagesDomHtml,
+  sortLanguageBreakdown,
+} from "../utils/project-languages";
+
+interface Props {
+  projectId: string;
+  languages: Record<string, number>;
+  label?: string;
+  variant?: "bar" | "tags";
+}
+
+const { projectId, languages, label, variant = "bar" } = Astro.props;
+const entries = sortLanguageBreakdown(languages);
+const innerHtml = buildProjectLanguagesDomHtml(languages, variant);
+const isTags = variant === "tags";
+---
+
+{
+  entries.length > 0 &&
+    (isTags ? (
+      <div
+        class="project-languages-tags"
+        data-github-languages-list={projectId}
+        data-github-languages-variant="tags"
+        set:html={innerHtml}
+      />
+    ) : (
+      <div class="project-languages">
+        {label && (
+          <span class="term-section-label project-languages__label normal-case">
+            {label}
+          </span>
+        )}
+        <div
+          class="project-languages__inner"
+          data-github-languages-list={projectId}
+          data-github-languages-variant="bar"
+          set:html={innerHtml}
+        />
+      </div>
+    ))
+}

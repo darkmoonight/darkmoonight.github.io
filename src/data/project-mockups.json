@@ -1,0 +1,364 @@
+{
+  "zest": {
+    "categories": [
+      {
+        "icon": "💻",
+        "label": { "en": "Dev", "ru": "Dev" },
+        "count": 2,
+        "tone": "violet"
+      },
+      {
+        "icon": "🛒",
+        "label": { "en": "Home", "ru": "Дом" },
+        "count": 1,
+        "tone": "blue"
+      },
+      { "labelKey": "categoryStudy", "count": 0, "tone": "amber" }
+    ],
+    "tasks": [
+      {
+        "title": {
+          "en": "Refactor Isar DB models",
+          "ru": "Рефакторинг моделей Isar"
+        },
+        "dueKey": "dueToday",
+        "priorityKey": "priorityHigh",
+        "priorityTone": "success",
+        "done": true
+      },
+      {
+        "title": {
+          "en": "Design Material You theme",
+          "ru": "Тема Material You"
+        },
+        "dueKey": "dueToday",
+        "priorityKey": "priorityMed",
+        "done": true
+      },
+      {
+        "title": {
+          "en": "Integrate snooze alarms",
+          "ru": "Интеграция snooze-напоминаний"
+        },
+        "dueKey": "dueTomorrow",
+        "priorityKey": "priorityHigh",
+        "priorityTone": "warn",
+        "done": false
+      },
+      {
+        "title": {
+          "en": "Release Zest v1.6.0 on GitHub",
+          "ru": "Релиз Zest v1.6.0 на GitHub"
+        },
+        "dueKey": "dueFriday",
+        "priorityKey": "priorityMed",
+        "done": false
+      }
+    ],
+    "heatmap": [0.35, 0.55, 0.8, 1, 0.7, 0.45, 0.6],
+    "metrics": [
+      { "labelKey": "statCompletedWeek", "valueKey": "statWeekValue" },
+      { "labelKey": "statOpen", "valueId": "zest-stat-open", "value": "2" },
+      { "labelKey": "statStreak", "valueKey": "statStreakValue" },
+      { "labelKey": "statFocusMin", "valueKey": "statFocusValue" }
+    ],
+    "settings": [
+      { "labelKey": "settingsTheme", "valueKey": "settingsThemeVal" },
+      { "labelKey": "settingsNotif", "valueKey": "settingsNotifVal" },
+      { "labelKey": "settingsBackup", "valueKey": "settingsBackupVal" },
+      { "labelKey": "settingsLang", "valueKey": "settingsLangVal" }
+    ]
+  },
+  "rain": {
+    "hours": [
+      {
+        "time": "12:00",
+        "temp": "18°C",
+        "tempShort": "18°",
+        "feels": "17°",
+        "high": "21°",
+        "low": "14°",
+        "statusKey": "patchyRain",
+        "icon": "🌦️",
+        "humid": "82%",
+        "wind": "14 km/h",
+        "barom": "1012",
+        "uv": "3",
+        "vis": "8 km",
+        "precip": "45%",
+        "active": true
+      },
+      {
+        "time": "13:00",
+        "temp": "17°C",
+        "tempShort": "17°",
+        "feels": "16°",
+        "high": "20°",
+        "low": "13°",
+        "statusKey": "heavyRain",
+        "icon": "🌧️",
+        "humid": "88%",
+        "wind": "22 km/h",
+        "barom": "1008",
+        "uv": "2",
+        "vis": "5 km",
+        "precip": "90%"
+      },
+      {
+        "time": "14:00",
+        "temp": "19°C",
+        "tempShort": "19°",
+        "feels": "18°",
+        "high": "22°",
+        "low": "15°",
+        "statusKey": "cloudy",
+        "icon": "☁️",
+        "humid": "76%",
+        "wind": "11 km/h",
+        "barom": "1015",
+        "uv": "4",
+        "vis": "10 km",
+        "precip": "20%"
+      },
+      {
+        "time": "15:00",
+        "temp": "20°C",
+        "tempShort": "20°",
+        "feels": "19°",
+        "high": "23°",
+        "low": "16°",
+        "statusKey": "clearLater",
+        "icon": "⛅",
+        "humid": "70%",
+        "wind": "9 km/h",
+        "barom": "1016",
+        "uv": "5",
+        "vis": "12 km",
+        "precip": "10%"
+      },
+      {
+        "time": "16:00",
+        "temp": "18°C",
+        "tempShort": "18°",
+        "feels": "17°",
+        "high": "21°",
+        "low": "15°",
+        "statusKey": "patchyRain",
+        "icon": "🌦️",
+        "humid": "74%",
+        "wind": "12 km/h",
+        "barom": "1013",
+        "uv": "3",
+        "vis": "9 km",
+        "precip": "35%"
+      }
+    ],
+    "statKeys": ["humid", "wind", "barom", "uv", "vis", "precip"],
+    "outlook": [
+      {
+        "dayKey": "dayThu",
+        "icon": "🌧️",
+        "high": 16,
+        "low": 12,
+        "precip": "80%"
+      },
+      {
+        "dayKey": "dayFri",
+        "icon": "🌦️",
+        "high": 18,
+        "low": 14,
+        "precip": "45%"
+      },
+      {
+        "dayKey": "daySat",
+        "icon": "⛅",
+        "high": 20,
+        "low": 15,
+        "precip": "15%"
+      },
+      {
+        "dayKey": "daySun",
+        "icon": "☀️",
+        "high": 22,
+        "low": 16,
+        "precip": "5%"
+      },
+      {
+        "dayKey": "dayMonShort",
+        "icon": "☁️",
+        "high": 19,
+        "low": 14,
+        "precip": "30%"
+      }
+    ],
+    "settings": [
+      { "labelKey": "settingsUnits", "valueKey": "settingsUnitsVal" },
+      { "labelKey": "settingsWidget", "valueKey": "settingsWidgetVal" },
+      { "labelKey": "settingsAlerts", "valueKey": "settingsAlertsVal" }
+    ]
+  },
+  "ikms": {
+    "days": [
+      { "id": "mon", "labelKey": "monDay" },
+      { "id": "tue", "labelKey": "tueDay" },
+      { "id": "wed", "labelKey": "wedDay" }
+    ],
+    "schedule": {
+      "mon": {
+        "en": [
+          {
+            "sub": "Software Architecture",
+            "room": "Room 402",
+            "prof": "Prof. Petrov",
+            "time": "09:00",
+            "color": "border-l-accent-secondary"
+          },
+          {
+            "sub": "Machine Learning Labs",
+            "room": "Room 511",
+            "prof": "Prof. Ivanov",
+            "time": "10:45",
+            "color": "border-l-indigo-500"
+          },
+          {
+            "sub": "Database Security",
+            "room": "Room 304",
+            "prof": "Prof. Sidorov",
+            "time": "12:30",
+            "color": "border-l-blue-400"
+          }
+        ],
+        "ru": [
+          {
+            "sub": "Архитектура ПО",
+            "room": "Ауд. 402",
+            "prof": "Проф. Петров",
+            "time": "09:00",
+            "color": "border-l-accent-secondary"
+          },
+          {
+            "sub": "Машинное обучение",
+            "room": "Ауд. 511",
+            "prof": "Проф. Иванов",
+            "time": "10:45",
+            "color": "border-l-indigo-500"
+          },
+          {
+            "sub": "Безопасность БД",
+            "room": "Ауд. 304",
+            "prof": "Проф. Сидоров",
+            "time": "12:30",
+            "color": "border-l-blue-400"
+          }
+        ]
+      },
+      "tue": {
+        "en": [
+          {
+            "sub": "Mobile App Dev",
+            "room": "Room 204",
+            "prof": "Prof. Yoshi",
+            "time": "09:00",
+            "color": "border-l-accent-secondary"
+          },
+          {
+            "sub": "UI/UX Design Workshop",
+            "room": "Lab 3",
+            "prof": "Prof. Leonavichus",
+            "time": "10:45",
+            "color": "border-l-pink-500"
+          },
+          {
+            "sub": "Technical English",
+            "room": "Room 101",
+            "prof": "Prof. Smirnova",
+            "time": "12:30",
+            "color": "border-l-emerald-500"
+          }
+        ],
+        "ru": [
+          {
+            "sub": "Мобильная разработка",
+            "room": "Ауд. 204",
+            "prof": "Проф. Йоши",
+            "time": "09:00",
+            "color": "border-l-accent-secondary"
+          },
+          {
+            "sub": "Проектирование UI/UX",
+            "room": "Лаб. 3",
+            "prof": "Проф. Леонавичус",
+            "time": "10:45",
+            "color": "border-l-pink-500"
+          },
+          {
+            "sub": "Технический английский",
+            "room": "Ауд. 101",
+            "prof": "Проф. Смирнова",
+            "time": "12:30",
+            "color": "border-l-emerald-500"
+          }
+        ]
+      },
+      "wed": {
+        "en": [
+          {
+            "sub": "Distributed Systems",
+            "room": "Room 312",
+            "prof": "Prof. Kozlov",
+            "time": "09:00",
+            "color": "border-l-amber-500"
+          },
+          {
+            "sub": "Operating Systems",
+            "room": "Room 405",
+            "prof": "Prof. Fedorov",
+            "time": "10:45",
+            "color": "border-l-teal-500"
+          },
+          {
+            "sub": "Linear Algebra",
+            "room": "Room 202",
+            "prof": "Prof. Sokolov",
+            "time": "12:30",
+            "color": "border-l-accent-secondary"
+          }
+        ],
+        "ru": [
+          {
+            "sub": "Распределенные системы",
+            "room": "Ауд. 312",
+            "prof": "Проф. Козлов",
+            "time": "09:00",
+            "color": "border-l-amber-500"
+          },
+          {
+            "sub": "Операционные системы",
+            "room": "Ауд. 405",
+            "prof": "Проф. Федоров",
+            "time": "10:45",
+            "color": "border-l-teal-500"
+          },
+          {
+            "sub": "Линейная алгебра",
+            "room": "Ауд. 202",
+            "prof": "Проф. Соколов",
+            "time": "12:30",
+            "color": "border-l-accent-secondary"
+          }
+        ]
+      }
+    },
+    "weekBars": [
+      { "labelKey": "hoursMon", "valueKey": "ikmsHoursMon", "fill": 90 },
+      { "labelKey": "hoursTue", "valueKey": "ikmsHoursTue", "fill": 90 },
+      { "labelKey": "hoursWed", "valueKey": "ikmsHoursWed", "fill": 90 }
+    ],
+    "settings": [
+      { "labelKey": "settingsGroup", "valueKey": "settingsGroupVal" },
+      { "labelKey": "settingsSync", "valueKey": "settingsSyncVal" },
+      { "labelKey": "settingsExport", "valueKey": "settingsExportVal" }
+    ],
+    "statsCourses": ["courseMl", "courseDb"]
+  }
+}

@@ -1,0 +1,20 @@
+---
+interface Props {
+  panel: "home" | "stats" | "settings";
+  active?: boolean;
+  centered?: boolean;
+}
+
+const { panel, active = false, centered = false } = Astro.props;
+---
+
+<div
+  data-phone-nav-panel={panel}
+  class:list={[
+    "phone-nav-panel",
+    { "is-active": active },
+    { "phone-nav-panel--center": centered },
+  ]}
+>
+  <slot />
+</div>

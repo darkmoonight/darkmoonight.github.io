@@ -1,0 +1,857 @@
+---
+import {
+  getLangFromUrl,
+  useTranslations,
+  useLocalizedPath,
+  getLangSwitchUrl,
+  isHomePath,
+} from "../utils/i18n";
+import {
+  HOME_SECTION_IDS,
+  NAV_I18N_KEYS,
+  sectionHash,
+} from "../constants/sections";
+import Icon from "./Icon.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const l = useLocalizedPath(lang);
+
+const isHome = isHomePath(Astro.url.pathname);
+
+const navItems = HOME_SECTION_IDS.map((id) => ({
+  id,
+  file: t(NAV_I18N_KEYS[id].file),
+  hash: sectionHash(id),
+  desc: t(NAV_I18N_KEYS[id].desc),
+}));
+
+const otherLang = lang === "en" ? "ru" : "en";
+const langSwitchUrl = getLangSwitchUrl(Astro.url.pathname, otherLang);
+---
+
+<header
+  id="site-header"
+  class="fixed top-0 left-0 right-0 z-100 w-full border-b border-border-color backdrop-blur-md transition-colors duration-200"
+  style="background: color-mix(in srgb, var(--md3-surface) 95%, transparent);"
+>
+  <div
+    class="site-header-bar page-main grid h-12 w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-x-2 font-mono text-sm"
+  >
+    <div
+      class="site-header-brand relative z-10 flex shrink-0 items-center self-center pb-0.5 justify-self-start"
+    >
+      <Icon name="folder" class="h-4 w-4 text-text-muted select-none mr-2" />
+      <a
+        href={l("/")}
+        class="font-bold tracking-tight hover:text-accent flex items-center space-x-1"
+      >
+        <span class="text-accent">&lt;</span>
+        <span class="hidden sm:inline">DARK_NIGHT</span>
+        <span class="sm:hidden">DN</span>
+        <span class="text-accent">/&gt;</span>
+      </a>
+    </div>
+
+    <nav
+      class="site-header-nav pointer-events-none hidden md:flex h-full max-w-full items-end justify-self-center overflow-x-auto scrollbar-none scroll-smooth"
+      aria-label={t("header.mainNav")}
+    >
+      <div class="pointer-events-auto flex h-full items-end shrink-0">
+        {
+          navItems.map((item) => {
+            const href = isHome ? item.hash : l("/") + item.hash;
+            return (
+              <a
+                href={href}
+                data-nav-tab={item.id}
+                class="nav-tab md3-tab-nav group relative flex h-10 shrink-0 items-center justify-center border-r border-border-color px-3 md:px-4 border-t-2 border-t-transparent border-b border-b-border-color select-none first:border-l first:border-l-border-color rounded-none"
+              >
+                <Icon
+                  name="file"
+                  class="h-3.5 w-3.5 text-text-muted group-hover:text-accent mr-1.5"
+                />
+                <span class="whitespace-nowrap">{item.file}</span>
+                <span
+                  class="ml-2 h-1.5 w-1.5 rounded-full bg-border-color opacity-60"
+                  aria-hidden="true"
+                />
+                <div class="absolute -top-0.5 left-0 right-0 h-0.5 bg-transparent group-[.active-tab]:bg-accent" />
+                <div class="absolute -bottom-px left-0 right-0 h-px bg-transparent group-[.active-tab]:bg-bg-panel" />
+              </a>
+            );
+          })
+        }
+      </div>
+    </nav>
+
+    <div
+      class="site-header-actions relative z-10 flex shrink-0 items-center self-center gap-2 select-none pb-0.5 justify-self-end"
+    >
+      <button
+        type="button"
+        id="mobile-nav-trigger"
+        class="header-menu-btn flex md:hidden items-center gap-1.5"
+        aria-expanded="false"
+        aria-controls="mobile-nav-drawer"
+        aria-label={t("header.menuOpen")}
+      >
+        <span class="font-bold text-accent">&gt;_</span>
+        <span class="font-semibold">{t("header.menu")}</span>
+      </button>
+
+      <div class="header-toolbar header-tool--desktop-only">
+        <a
+          href={langSwitchUrl}
+          id="lang-target-switcher"
+          class="header-tool-btn header-tool-btn--wide"
+          title={t("header.langSwitchTitle")}
+        >
+          <span class="text-text-muted text-[10px] hidden lg:inline"
+            >{t("header.langPrefix")}</span
+          >
+          <span class="text-accent-secondary uppercase font-semibold"
+            >{lang}</span
+          >
+          <span class="text-text-muted opacity-60">/</span>
+          <span class="text-text-secondary uppercase">{otherLang}</span>
+        </a>
+
+        <span class="header-toolbar-divider" aria-hidden="true"></span>
+
+        <button
+          type="button"
+          id="comfort-toggle"
+          class="header-tool-btn"
+          title={t("header.comfortTitle")}
+        >
+          <span class="text-[11px] font-bold font-mono leading-none">A+</span>
+        </button>
+
+        <button
+          type="button"
+          id="crt-toggle"
+          class="header-tool-btn"
+          title={t("header.crtTitle")}
+        >
+          <Icon name="monitor" class="h-4 w-4" />
+        </button>
+
+        <button
+          type="button"
+          id="theme-toggle"
+          class="header-tool-btn"
+          title={t("header.themeTitle")}
+        >
+          <svg
+            id="theme-sun"
+            class="h-4 w-4 hidden dark:block"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"
+            ></path>
+          </svg>
+          <svg
+            id="theme-moon"
+            class="h-4 w-4 block dark:hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+            ></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div
+  id="mobile-nav-drawer"
+  class="mobile-nav-drawer md:hidden"
+  aria-hidden="true"
+>
+  <div id="mobile-nav-backdrop" class="mobile-nav-backdrop" aria-hidden="true">
+  </div>
+  <nav
+    id="mobile-nav-panel"
+    class="mobile-nav-panel font-mono text-sm"
+    aria-label={t("header.mainNav")}
+  >
+    <div class="md3-panel-bar">
+      <span class="text-accent font-bold">{t("header.menu")}</span>
+      <button
+        type="button"
+        id="mobile-nav-close"
+        class="mobile-nav-close"
+        aria-label={t("header.menuClose")}
+      >
+        {t("common.esc")}
+      </button>
+    </div>
+    <div class="mobile-nav-panel__links flex flex-col">
+      {
+        navItems.map((item) => {
+          const href = isHome ? item.hash : l("/") + item.hash;
+          return (
+            <a
+              href={href}
+              data-nav-tab={item.id}
+              data-mobile-nav-tab
+              class="mobile-nav-tab"
+            >
+              <Icon name="file" class="h-3.5 w-3.5 text-text-muted shrink-0" />
+              <span>{item.file}</span>
+            </a>
+          );
+        })
+      }
+    </div>
+    <div
+      class="mobile-nav-panel__tools mt-auto border-t border-border-color p-3"
+    >
+      <div class="mobile-nav-panel__tools-grid">
+        <button
+          type="button"
+          id="mobile-comfort-toggle"
+          class="mobile-drawer-tool"
+        >
+          {t("header.drawerComfort")}
+        </button>
+        <button type="button" id="mobile-crt-toggle" class="mobile-drawer-tool">
+          {t("header.drawerCrt")}
+        </button>
+        <button
+          type="button"
+          id="mobile-theme-toggle"
+          class="mobile-drawer-tool"
+        >
+          {t("header.themeTitle")}
+        </button>
+        <a href={langSwitchUrl} class="mobile-drawer-tool">
+          {lang} / {otherLang}
+        </a>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div
+  id="command-palette-modal"
+  class="md3-modal-scrim md3-modal-scrim--top fixed inset-0 z-999 hidden p-4 md:p-16 pt-12 md:pt-24 opacity-0 pointer-events-none transition-opacity duration-200"
+  aria-hidden="true"
+  role="presentation"
+>
+  <div
+    id="command-palette-content"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="palette-dialog-title"
+    class="w-full max-w-lg md3-panel shadow-2xl overflow-hidden flex flex-col scale-95 opacity-0 transition-all duration-200 pointer-events-none font-mono text-xs"
+  >
+    <span id="palette-dialog-title" class="sr-only">{t("header.search")}</span>
+    <div class="md3-panel-bar md3-panel-bar--inline h-11">
+      <Icon
+        name="search"
+        class="h-4 w-4 text-text-muted mr-2 select-none shrink-0"
+      />
+      <input
+        type="text"
+        id="palette-search-input"
+        placeholder={t("header.searchPlaceholder")}
+        class="md3-input flex-1 bg-transparent border-none outline-none focus:ring-0 p-0 h-full"
+        autocomplete="off"
+      />
+      <button
+        type="button"
+        id="close-palette"
+        class="text-text-muted hover:text-text-primary text-[10px] px-1.5 py-0.5 md3-chip cursor-pointer font-bold"
+      >
+        {t("common.esc")}
+      </button>
+    </div>
+
+    <div
+      id="palette-list"
+      class="max-h-75 overflow-y-auto p-1.5 space-y-0.5 select-none"
+    >
+    </div>
+
+    <div
+      class="md3-panel-bar md3-panel-bar--footer text-[10px] text-text-muted"
+    >
+      <div class="flex items-center space-x-3">
+        <span
+          >↑↓ <span class="text-text-secondary">{t("common.navigate")}</span
+          ></span
+        >
+        <span
+          >↵ <span class="text-text-secondary">{t("common.select")}</span></span
+        >
+      </div>
+      <span
+        >{t("common.total")}: <span
+          id="palette-items-count"
+          class="text-text-secondary font-bold">0</span
+        >
+        {t("common.items")}</span
+      >
+    </div>
+  </div>
+</div>
+
+<div
+  id="palette-items-data"
+  class="hidden"
+  data-lang={lang}
+  data-localized-home={l("/")}
+  data-switch-lang-url={langSwitchUrl}
+  data-nav-json={JSON.stringify(navItems)}
+>
+</div>
+
+<script>
+  import { clientT } from "../utils/i18n";
+  import { HOME_SECTION_IDS, type HomeSectionId } from "../constants/sections";
+  import { DOM_IDS } from "../constants/dom-ids";
+  import {
+    isOverlayOpen,
+    unlockBodyScrollIfIdle,
+  } from "../utils/overlay-modal";
+  import { bindOverlayPanel } from "../utils/overlay-panel";
+
+  document.body.style.overflow = "";
+
+  const HEADER_OFFSET = (() => {
+    const header = document.getElementById(DOM_IDS.siteHeader);
+    return header ? header.offsetHeight + 4 : 52;
+  })();
+
+  function getIsHome() {
+    const path = window.location.pathname;
+    return path === "/" || /^\/(en|ru)\/?$/.test(path);
+  }
+
+  function getScrollTop(): number {
+    return (
+      window.scrollY ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop ||
+      0
+    );
+  }
+
+  function getSectionDocumentTop(section: HTMLElement) {
+    return section.getBoundingClientRect().top + getScrollTop();
+  }
+
+  let currentActiveNavId = "";
+  let scrollSpyLocked = false;
+  let scrollSpyLockTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function lockScrollSpy(duration = 900) {
+    scrollSpyLocked = true;
+    if (scrollSpyLockTimer) clearTimeout(scrollSpyLockTimer);
+    scrollSpyLockTimer = setTimeout(() => {
+      scrollSpyLocked = false;
+    }, duration);
+  }
+
+  function scrollToSection(id: string, updateHash = true) {
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    lockScrollSpy();
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    if (updateHash) {
+      history.replaceState(null, "", `#${id}`);
+    }
+
+    setActiveNavTab(id);
+  }
+
+  function setActiveNavTab(activeId: string) {
+    if (currentActiveNavId === activeId) return;
+    currentActiveNavId = activeId;
+
+    document.querySelectorAll("[data-nav-tab]").forEach((tab) => {
+      const tabId = tab.getAttribute("data-nav-tab");
+      tab.classList.toggle("active-tab", tabId === activeId);
+    });
+  }
+
+  function getMobileNavElements() {
+    return {
+      drawer: document.getElementById("mobile-nav-drawer"),
+      trigger: document.getElementById("mobile-nav-trigger"),
+      closeBtn: document.getElementById("mobile-nav-close"),
+      backdrop: document.getElementById("mobile-nav-backdrop"),
+    };
+  }
+
+  function openMobileNav() {
+    const { drawer, trigger } = getMobileNavElements();
+    if (!drawer) return;
+    drawer.classList.add("is-open");
+    drawer.setAttribute("aria-hidden", "false");
+    trigger?.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+    drawer.querySelector<HTMLElement>("[data-mobile-nav-tab]")?.focus();
+  }
+
+  function closeMobileNav() {
+    const { drawer, trigger } = getMobileNavElements();
+    if (!drawer) return;
+    drawer.classList.remove("is-open");
+    drawer.setAttribute("aria-hidden", "true");
+    trigger?.setAttribute("aria-expanded", "false");
+    unlockBodyScrollIfIdle();
+    trigger?.focus();
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target?.closest) return;
+
+    if (target.closest("#mobile-nav-trigger")) {
+      event.preventDefault();
+      openMobileNav();
+      return;
+    }
+
+    if (
+      target.closest("#mobile-nav-close") ||
+      target.closest("#mobile-nav-backdrop")
+    ) {
+      event.preventDefault();
+      closeMobileNav();
+      return;
+    }
+
+    if (target.closest("#mobile-theme-toggle")) {
+      document.getElementById("theme-toggle")?.click();
+      return;
+    }
+
+    if (target.closest("#mobile-comfort-toggle")) {
+      document.getElementById("comfort-toggle")?.click();
+      return;
+    }
+
+    if (target.closest("#mobile-crt-toggle")) {
+      document.getElementById("crt-toggle")?.click();
+      return;
+    }
+
+    if (target.closest("[data-mobile-nav-tab]")) {
+      closeMobileNav();
+    }
+  });
+
+  window.addEventListener("keydown", (e) => {
+    const { drawer } = getMobileNavElements();
+    if (e.key === "Escape" && drawer?.classList.contains("is-open")) {
+      e.preventDefault();
+      closeMobileNav();
+    }
+  });
+
+  let homeNavAbort: AbortController | null = null;
+
+  function getLocalizedHomePath() {
+    return (
+      document
+        .getElementById("palette-items-data")
+        ?.getAttribute("data-localized-home") || "/"
+    );
+  }
+
+  function syncNavTabHrefs() {
+    const localizedHome = getLocalizedHomePath();
+    const isHome = getIsHome();
+
+    document.querySelectorAll("a[data-nav-tab]").forEach((tab) => {
+      const id = tab.getAttribute("data-nav-tab");
+      if (!id) return;
+      tab.setAttribute("href", isHome ? `#${id}` : `${localizedHome}#${id}`);
+    });
+  }
+
+  function initHomeNavigation() {
+    homeNavAbort?.abort();
+    homeNavAbort = new AbortController();
+    const { signal } = homeNavAbort;
+
+    currentActiveNavId = "";
+
+    if (!getIsHome()) return;
+
+    function updateActiveSectionFromScroll() {
+      if (scrollSpyLocked) return;
+
+      const scrollPos = getScrollTop() + HEADER_OFFSET + 8;
+      let currentId: HomeSectionId = HOME_SECTION_IDS[0];
+
+      for (const id of HOME_SECTION_IDS) {
+        const section = document.getElementById(id);
+        if (section && getSectionDocumentTop(section) <= scrollPos) {
+          currentId = id;
+        }
+      }
+
+      setActiveNavTab(currentId);
+    }
+
+    let scrollTicking = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (scrollTicking) return;
+        scrollTicking = true;
+        requestAnimationFrame(() => {
+          updateActiveSectionFromScroll();
+          scrollTicking = false;
+        });
+      },
+      { passive: true, signal },
+    );
+
+    updateActiveSectionFromScroll();
+  }
+
+  initHomeNavigation();
+  syncNavTabHrefs();
+  document.addEventListener("astro:page-load", () => {
+    closePalette();
+    closeMobileNav();
+    syncNavTabHrefs();
+    initHomeNavigation();
+    scrollToHashFromUrl();
+  });
+
+  function scrollToHashFromUrl() {
+    if (!getIsHome()) return;
+    const hash = window.location.hash.replace("#", "") as HomeSectionId;
+    if (hash && (HOME_SECTION_IDS as readonly string[]).includes(hash)) {
+      requestAnimationFrame(() => {
+        setTimeout(() => scrollToSection(hash, false), 80);
+      });
+    }
+  }
+
+  scrollToHashFromUrl();
+
+  // Capture phase: close mobile drawer before hash scroll / view-transition nav runs.
+  document.addEventListener(
+    "click",
+    (event) => {
+      const target = event.target as HTMLElement | null;
+      const tab = target?.closest?.(
+        "a[data-nav-tab]",
+      ) as HTMLAnchorElement | null;
+      if (!tab) return;
+
+      closeMobileNav();
+
+      const href = tab.getAttribute("href") || "";
+      const hashMatch = href.match(/#([a-z0-9_-]+)$/i);
+      if (!hashMatch) return;
+
+      const sectionId = hashMatch[1];
+      const section = document.getElementById(sectionId);
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      if (getIsHome() && section) {
+        scrollToSection(sectionId);
+        return;
+      }
+
+      const destination = `${getLocalizedHomePath()}#${sectionId}`;
+      import("astro:transitions/client")
+        .then(({ navigate }) => navigate(destination))
+        .catch(() => {
+          window.location.href = destination;
+        });
+    },
+    true,
+  );
+
+  function getPaletteElements() {
+    return {
+      modal: document.getElementById("command-palette-modal"),
+      content: document.getElementById("command-palette-content"),
+      closeBtn: document.getElementById("close-palette"),
+      searchInput: document.getElementById(
+        "palette-search-input",
+      ) as HTMLInputElement | null,
+      listContainer: document.getElementById("palette-list"),
+      itemsCountEl: document.getElementById("palette-items-count"),
+      rawDataEl: document.getElementById("palette-items-data"),
+    };
+  }
+
+  function getPaletteConfig() {
+    const { rawDataEl } = getPaletteElements();
+    let items: Array<{ id: string; file: string; hash: string; desc: string }> =
+      [];
+    try {
+      items = JSON.parse(rawDataEl?.getAttribute("data-nav-json") || "[]");
+    } catch (e) {
+      console.error(e);
+    }
+    return {
+      navItems: items,
+      currentLang: rawDataEl?.getAttribute("data-lang") || "en",
+      localizedHome: rawDataEl?.getAttribute("data-localized-home") || "/",
+      switchLangUrl: rawDataEl?.getAttribute("data-switch-lang-url") || "/",
+    };
+  }
+
+  const paletteScrim = document.getElementById(DOM_IDS.commandPaletteModal);
+  const palettePanel = document.getElementById(DOM_IDS.commandPaletteContent);
+  const paletteOverlay =
+    paletteScrim && palettePanel
+      ? bindOverlayPanel({
+          scrim: paletteScrim,
+          panel: palettePanel,
+          closeSelectors: ["#close-palette"],
+          signal: new AbortController().signal,
+          transitionMs: 200,
+          onOpen: () => {
+            setTimeout(() => getPaletteElements().searchInput?.focus(), 50);
+          },
+          onClose: () => {
+            document
+              .getElementById(DOM_IDS.searchPaletteTrigger)
+              ?.setAttribute("aria-expanded", "false");
+            getPaletteElements().searchInput?.blur();
+          },
+        })
+      : null;
+
+  let paletteItems: Array<{
+    label: string;
+    desc: string;
+    icon: string;
+    action: () => void;
+  }> = [];
+  let selectedIndex = 0;
+
+  const paletteIconFile =
+    '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>';
+  const paletteIconGear =
+    '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>';
+  const paletteIconGlobe =
+    '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>';
+  const paletteIconText =
+    '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h10M4 18h7"/></svg>';
+  const paletteIconMonitor =
+    '<svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>';
+
+  function generatePaletteItems() {
+    paletteItems = [];
+    const { navItems, localizedHome, switchLangUrl } = getPaletteConfig();
+    const isHome = getIsHome();
+
+    navItems.forEach((item) => {
+      const destination = isHome ? item.hash : localizedHome + item.hash;
+      paletteItems.push({
+        label: item.file,
+        desc: item.desc,
+        icon: paletteIconFile,
+        action: () => {
+          if (isHome) {
+            scrollToSection(item.id);
+          } else {
+            import("astro:transitions/client")
+              .then(({ navigate }) => navigate(destination))
+              .catch(() => {
+                window.location.href = destination;
+              });
+          }
+        },
+      });
+    });
+
+    paletteItems.push({
+      label: clientT("header", "paletteTheme"),
+      desc: clientT("header", "paletteThemeDesc"),
+      icon: paletteIconGear,
+      action: () => {
+        document.getElementById("theme-toggle")?.click();
+      },
+    });
+
+    paletteItems.push({
+      label: clientT("header", "paletteLang"),
+      desc: clientT("header", "paletteLangDesc"),
+      icon: paletteIconGlobe,
+      action: () => {
+        window.location.href = switchLangUrl;
+      },
+    });
+
+    paletteItems.push({
+      label: clientT("header", "paletteComfort"),
+      desc: clientT("header", "paletteComfortDesc"),
+      icon: paletteIconText,
+      action: () => {
+        document.getElementById("comfort-toggle")?.click();
+      },
+    });
+
+    paletteItems.push({
+      label: clientT("header", "paletteCrt"),
+      desc: clientT("header", "paletteCrtDesc"),
+      icon: paletteIconMonitor,
+      action: () => {
+        document.getElementById("crt-toggle")?.click();
+      },
+    });
+  }
+
+  function renderPaletteList(filter = "") {
+    const { listContainer, itemsCountEl } = getPaletteElements();
+    if (!listContainer) return;
+    listContainer.innerHTML = "";
+
+    const query = filter.toLowerCase().trim();
+    const filtered = paletteItems.filter(
+      (item) =>
+        item.label.toLowerCase().includes(query) ||
+        item.desc.toLowerCase().includes(query),
+    );
+
+    if (filtered.length === 0) {
+      listContainer.innerHTML = `
+        <div class="text-center py-6 text-text-muted">
+          <div>🚫</div>
+          <div class="font-bold mt-1">${clientT("common", "noResults")} "${filter}"</div>
+        </div>
+      `;
+      if (itemsCountEl) itemsCountEl.textContent = "0";
+      return;
+    }
+
+    if (selectedIndex >= filtered.length) {
+      selectedIndex = filtered.length - 1;
+    }
+    if (selectedIndex < 0) selectedIndex = 0;
+
+    filtered.forEach((item, idx) => {
+      const activeClass =
+        idx === selectedIndex
+          ? "bg-accent/15 border-l-4 border-l-accent text-text-primary"
+          : "text-text-secondary border-l-4 border-l-transparent hover:bg-bg-secondary/40";
+      const itemEl = document.createElement("button");
+      itemEl.type = "button";
+      itemEl.className = `palette-item md3-surface-container flex items-center justify-between w-full p-2 cursor-pointer transition-all text-left border-0 ${activeClass}`;
+      itemEl.innerHTML = `
+        <div class="flex items-center space-x-2.5 overflow-hidden">
+          <span class="text-text-muted text-sm shrink-0 select-none">${item.icon}</span>
+          <div class="overflow-hidden">
+            <div class="font-bold tracking-wide">${item.label}</div>
+            <div class="text-[10px] text-text-muted truncate mt-0.5">${item.desc}</div>
+          </div>
+        </div>
+        ${idx === selectedIndex ? '<span class="text-[9px] text-accent shrink-0 font-bold select-none mr-1">' + clientT("common", "enter") + "</span>" : ""}
+      `;
+
+      itemEl.addEventListener("click", () => {
+        item.action();
+        closePalette();
+      });
+
+      listContainer.appendChild(itemEl);
+    });
+
+    if (itemsCountEl) itemsCountEl.textContent = String(filtered.length);
+  }
+
+  function openPalette() {
+    const { searchInput } = getPaletteElements();
+    const trigger = document.getElementById(DOM_IDS.searchPaletteTrigger);
+    if (!paletteOverlay) return;
+
+    trigger?.setAttribute("aria-expanded", "true");
+    generatePaletteItems();
+    selectedIndex = 0;
+    if (searchInput) searchInput.value = "";
+    renderPaletteList();
+
+    paletteOverlay.open(trigger);
+  }
+
+  function closePalette() {
+    paletteOverlay?.close();
+  }
+
+  document.addEventListener("input", (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.id !== "palette-search-input") return;
+    selectedIndex = 0;
+    renderPaletteList((target as HTMLInputElement).value);
+  });
+
+  window.addEventListener("keydown", (e) => {
+    const { searchInput } = getPaletteElements();
+
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "p") {
+      e.preventDefault();
+      if (!isOverlayOpen(DOM_IDS.commandPaletteModal)) {
+        openPalette();
+      } else {
+        closePalette();
+      }
+      return;
+    }
+
+    if (!isOverlayOpen(DOM_IDS.commandPaletteModal)) return;
+
+    const query = searchInput?.value || "";
+    generatePaletteItems();
+    const filtered = paletteItems.filter(
+      (item) =>
+        item.label.toLowerCase().includes(query) ||
+        item.desc.toLowerCase().includes(query),
+    );
+
+    switch (e.key) {
+      case "Escape":
+        e.preventDefault();
+        closePalette();
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        selectedIndex = (selectedIndex + 1) % filtered.length;
+        renderPaletteList(query);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        selectedIndex = (selectedIndex - 1 + filtered.length) % filtered.length;
+        renderPaletteList(query);
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (filtered[selectedIndex]) {
+          filtered[selectedIndex].action();
+          closePalette();
+        }
+        break;
+    }
+  });
+</script>

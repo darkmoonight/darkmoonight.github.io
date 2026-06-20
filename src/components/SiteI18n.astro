@@ -1,0 +1,28 @@
+---
+import { buildClientI18nPayload, getLangFromUrl } from "../utils/i18n";
+
+// Hidden DOM payload consumed by clientT() in hydrated scripts (see readClientI18n).
+const lang = getLangFromUrl(Astro.url);
+
+const payload = buildClientI18nPayload(lang, [
+  "footer",
+  "theme",
+  "layout",
+  "terminal",
+  "contacts",
+  "about",
+  "projectDetail",
+  "common",
+  "news",
+  "header",
+  "github",
+]);
+---
+
+<div
+  id="site-i18n"
+  class="hidden"
+  data-json={JSON.stringify(payload)}
+  aria-hidden="true"
+>
+</div>

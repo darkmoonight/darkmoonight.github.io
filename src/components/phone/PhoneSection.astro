@@ -1,0 +1,14 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<section class="phone-app-section">
+  <h5 class="phone-app-section__title">{title}</h5>
+  <div class="phone-app-section__body">
+    <slot />
+  </div>
+</section>

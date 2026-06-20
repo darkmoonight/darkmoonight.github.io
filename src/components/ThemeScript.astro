@@ -1,0 +1,155 @@
+---
+
+---
+
+<script is:inline>
+  (function () {
+    function getThemePreference() {
+      if (
+        typeof localStorage !== "undefined" &&
+        localStorage.getItem("theme")
+      ) {
+        return localStorage.getItem("theme");
+      }
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+    }
+
+    function applyStoredUiState() {
+      const theme = getThemePreference();
+      const isDark = theme === "dark";
+
+      document.documentElement.classList.toggle("dark", isDark);
+      document.documentElement.classList.toggle(
+        "reader-mode",
+        localStorage.getItem("reader-mode") === "active",
+      );
+      document.documentElement.classList.toggle(
+        "crt-overdrive",
+        localStorage.getItem("crt-overdrive") === "active",
+      );
+
+      if (
+        typeof localStorage !== "undefined" &&
+        !localStorage.getItem("theme")
+      ) {
+        localStorage.setItem("theme", theme);
+      }
+    }
+
+    function getThemeT(key) {
+      var html = document.documentElement;
+      var data = html.getAttribute("data-theme-i18n");
+      if (data) {
+        try {
+          var parsed = JSON.parse(data);
+          return parsed[key] || "";
+        } catch (e) {}
+      }
+      return "";
+    }
+
+    applyStoredUiState();
+
+    document.addEventListener("astro:before-swap", function (event) {
+      var theme = getThemePreference();
+      var isDark = theme === "dark";
+      var newDoc = event.newDocument.documentElement;
+      newDoc.classList.toggle("dark", isDark);
+      newDoc.classList.toggle(
+        "reader-mode",
+        localStorage.getItem("reader-mode") === "active",
+      );
+      newDoc.classList.toggle(
+        "crt-overdrive",
+        localStorage.getItem("crt-overdrive") === "active",
+      );
+    });
+
+    document.addEventListener("astro:page-load", applyStoredUiState);
+
+    document.addEventListener(
+      "click",
+      function (event) {
+        var target = event.target;
+        if (!target || !target.closest) return;
+
+        var themeBtn = target.closest("#theme-toggle");
+        if (themeBtn) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          var isDark = document.documentElement.classList.contains("dark");
+          document.documentElement.classList.toggle("dark", !isDark);
+          localStorage.setItem("theme", !isDark ? "dark" : "light");
+          return;
+        }
+
+        var comfortBtn = target.closest("#comfort-toggle");
+        if (comfortBtn) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          var isComfort =
+            document.documentElement.classList.toggle("reader-mode");
+          localStorage.setItem(
+            "reader-mode",
+            isComfort ? "active" : "inactive",
+          );
+          comfortBtn.classList.toggle("border-accent", isComfort);
+          comfortBtn.classList.toggle("text-accent", isComfort);
+          comfortBtn.classList.toggle("bg-accent/10", isComfort);
+          comfortBtn.classList.toggle("text-text-secondary", !isComfort);
+          if (window.showTerminalNotification) {
+            window.showTerminalNotification(
+              getThemeT(isComfort ? "readerOn" : "readerOff"),
+              "info",
+            );
+          }
+          return;
+        }
+
+        var crtBtn = target.closest("#crt-toggle");
+        if (crtBtn) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          var isCrt =
+            document.documentElement.classList.toggle("crt-overdrive");
+          localStorage.setItem("crt-overdrive", isCrt ? "active" : "inactive");
+          crtBtn.classList.toggle("border-accent", isCrt);
+          crtBtn.classList.toggle("text-accent", isCrt);
+          crtBtn.classList.toggle("bg-accent/10", isCrt);
+          crtBtn.classList.toggle("text-text-secondary", !isCrt);
+          if (window.showTerminalNotification) {
+            window.showTerminalNotification(
+              getThemeT(isCrt ? "crtOn" : "crtOff"),
+              "info",
+            );
+          }
+        }
+      },
+      true,
+    );
+
+    document.addEventListener("astro:page-load", function () {
+      var comfortBtn = document.getElementById("comfort-toggle");
+      if (comfortBtn) {
+        var isComfort =
+          document.documentElement.classList.contains("reader-mode");
+        comfortBtn.classList.toggle("border-accent", isComfort);
+        comfortBtn.classList.toggle("text-accent", isComfort);
+        comfortBtn.classList.toggle("bg-accent/10", isComfort);
+        comfortBtn.classList.toggle("text-text-secondary", !isComfort);
+      }
+
+      var crtBtn = document.getElementById("crt-toggle");
+      if (crtBtn) {
+        var isCrt =
+          document.documentElement.classList.contains("crt-overdrive");
+        crtBtn.classList.toggle("border-accent", isCrt);
+        crtBtn.classList.toggle("text-accent", isCrt);
+        crtBtn.classList.toggle("bg-accent/10", isCrt);
+        crtBtn.classList.toggle("text-text-secondary", !isCrt);
+      }
+    });
+  })();
+</script>

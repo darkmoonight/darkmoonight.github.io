@@ -1,0 +1,808 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Icon from "../Icon.astro";
+import {
+  getLangFromUrl,
+  useTranslations,
+  useLocalizedPath,
+  localizedField,
+} from "../../utils/i18n";
+import projectsData from "../../data/projects.json";
+import { getIkmsSchedule } from "../../utils/project-mockup";
+import PhoneMockup from "../phone/PhoneMockup.astro";
+import ProjectLanguages from "../ProjectLanguages.astro";
+import {
+  enrichProject,
+  getProjectReleases,
+  loadGithubSnapshot,
+} from "../../utils/github-snapshot";
+import type { ProjectId } from "../../constants/github";
+import PanelTerminalBar from "../PanelTerminalBar.astro";
+import { formatLastPush } from "../../utils/format-last-push";
+import {
+  buildLatestReleaseBlockHtml,
+  buildOlderReleasesListHtml,
+  buildProjectDetailReleaseLabels,
+  splitDetailReleases,
+} from "../../utils/project-detail-releases";
+import { buildApkPickerLabels } from "../../utils/apk-picker-labels";
+import {
+  buildApkPickerHtml,
+  getReleaseApkVariant,
+} from "../../utils/project-apk-download";
+
+const { id } = Astro.params;
+const snapshot = loadGithubSnapshot();
+const rawProject = projectsData.find((p: any) => p.id === id);
+const project = rawProject ? enrichProject(rawProject, snapshot) : undefined;
+const lang = getLangFromUrl(Astro.url);
+
+if (!project) {
+  return Astro.redirect("/404");
+}
+
+const t = useTranslations(lang);
+const l = useLocalizedPath(lang);
+
+const pInfo = localizedField(lang, project);
+const projectId = project.id as ProjectId;
+const repoMeta = snapshot.repos[projectId];
+const lastPushText = formatLastPush(repoMeta?.pushed_at, lang);
+const openIssues = repoMeta?.open_issues ?? 0;
+const openPullRequests = repoMeta?.open_pull_requests ?? 0;
+const projectReleases = getProjectReleases(projectId, snapshot);
+const { latest: latestRelease, older: olderReleases } =
+  splitDetailReleases(projectReleases);
+const releaseLabels = buildProjectDetailReleaseLabels(t);
+const latestReleaseBlockHtml = latestRelease
+  ? buildLatestReleaseBlockHtml(
+      latestRelease,
+      lang,
+      releaseLabels,
+      project.github,
+    )
+  : "";
+const olderReleasesListHtml = buildOlderReleasesListHtml(
+  olderReleases,
+  project.github,
+);
+const installStepCount = pInfo.installation.length;
+const readmePanelPath = `~/darkmoonight/projects/${project.id}/${t("projectDetail.readmePath")}`;
+const defaultBranch = repoMeta?.default_branch || "main";
+const apkVariants = latestRelease?.apkVariants ?? [];
+const showApkPicker = apkVariants.length > 1;
+const defaultApkVariant = latestRelease
+  ? getReleaseApkVariant(latestRelease, latestRelease.defaultApkId)
+  : undefined;
+const downloadHref =
+  defaultApkVariant?.url ?? latestRelease?.apkUrl ?? project.github;
+const downloadTag = latestRelease?.tag ?? project.version;
+const apkSizeLabel = defaultApkVariant?.sizeLabel ?? "";
+const apkFileName = defaultApkVariant?.fileName ?? "";
+const repoSizeLabel = project.size;
+const metaSizeLabel = apkSizeLabel || repoSizeLabel;
+const metaSizeTitle = apkSizeLabel
+  ? `${t("projectDetail.apkSizeTitle")} · ${apkFileName || "APK"}`
+  : `${t("projectDetail.repoSizeTitle")} · ${repoSizeLabel}`;
+const apkPickerLabels = buildApkPickerLabels(t);
+const apkPickerHtml = showApkPicker
+  ? buildApkPickerHtml(
+      apkVariants,
+      apkPickerLabels,
+      defaultApkVariant?.id ?? latestRelease?.defaultApkId ?? "",
+    )
+  : "";
+
+const ikmsSchedule = project.id === "ikms" ? getIkmsSchedule(lang) : null;
+---
+
+<Layout title={t("meta.siteTitle")} description={pInfo.description}>
+  {
+    latestRelease ? (
+      <script
+        is:inline
+        type="application/json"
+        id="project-latest-release-json"
+        set:html={JSON.stringify(latestRelease)}
+      />
+    ) : null
+  }
+  <div
+    class="page-stack project-detail-page font-mono"
+    style={`--project-accent: ${project.color}`}
+  >
+    <div>
+      <a
+        href={l("/")}
+        class="md3-btn-text text-accent hover:underline inline-flex items-center gap-1.5"
+      >
+        <Icon name="arrow-left" class="h-4 w-4" />
+        <span
+          ><span class="text-text-muted">cd ..</span>
+          {t("projectDetail.back")}</span
+        >
+      </a>
+    </div>
+
+    <div class="project-detail-layout">
+      <div
+        class="md3-panel md3-panel--terminal-code project-detail-header-panel"
+      >
+        <PanelTerminalBar title={readmePanelPath} tag={project.name} />
+        <div class="md3-panel-body">
+          <div class="project-detail-header">
+            <div class="project-detail-header-main min-w-0">
+              <div
+                class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-text-muted"
+              >
+                <Icon name="file" class="h-3.5 w-3.5 shrink-0" />
+                <span class="font-bold text-text-primary">{project.name}/</span>
+                <span class="text-text-muted"
+                  >{t("projectDetail.readmePath")}</span
+                >
+              </div>
+              <h1
+                class="text-2xl md:text-3xl font-bold text-text-primary flex flex-wrap items-center gap-2 mt-1"
+              >
+                <span>{project.name}</span>
+                <span
+                  class="md3-chip text-accent-secondary border-accent-secondary/30"
+                  data-github-license={project.id}>{project.license}</span
+                >
+              </h1>
+              <p
+                class="project-detail-header-tagline text-[11px] text-text-muted mt-2 font-mono"
+              >
+                <span class="text-text-muted/80"># </span>
+                {pInfo.tagline}
+              </p>
+              <p
+                class="project-detail-header-desc prose-content text-xs text-text-secondary mt-2 leading-relaxed font-sans"
+              >
+                {pInfo.description}
+              </p>
+              <div class="project-detail-meta-row mt-3">
+                <span
+                  class="md3-chip text-[10px]"
+                  data-project-version-badge={project.id}
+                  data-project-github={project.github}
+                  data-github-version={project.id}>{project.version}</span
+                >
+                <span
+                  class="md3-chip text-[10px]"
+                  data-github-apk-size={project.id}
+                  title={metaSizeTitle}>{metaSizeLabel}</span
+                >
+                <span
+                  class="project-detail-meta-sep text-text-muted/60"
+                  aria-hidden="true">|</span
+                >
+                <span>
+                  <span class="text-text-muted/80"
+                    >{t("projectDetail.branch")}:</span
+                  >{" "}
+                  <span class="text-project-accent">{defaultBranch}</span>
+                </span>
+                <span
+                  class="project-detail-meta-sep text-text-muted/60"
+                  aria-hidden="true">|</span
+                >
+                <span>
+                  <span class="text-text-muted/80"
+                    >{t("projectDetail.lastPush")}:</span
+                  >{" "}
+                  <time
+                    data-github-pushed={project.id}
+                    datetime={repoMeta?.pushed_at}>{lastPushText}</time
+                  >
+                </span>
+                <span
+                  class="project-detail-meta-sep text-text-muted/60"
+                  aria-hidden="true">|</span
+                >
+                <span class="inline-flex flex-wrap items-center gap-x-1">
+                  <a
+                    href={`${project.github}/issues`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1 hover:text-project-accent transition-colors"
+                    title={t("projectDetail.issuesTitle")}
+                  >
+                    <span class="text-text-muted/80"
+                      >{t("projectDetail.issues")}:</span
+                    >
+                    <span data-github-issues={project.id}>{openIssues}</span>
+                  </a>
+                  <span
+                    class="project-detail-meta-sep text-text-muted/60"
+                    aria-hidden="true">·</span
+                  >
+                  <a
+                    href={`${project.github}/pulls`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1 hover:text-project-accent transition-colors"
+                    title={t("projectDetail.pullRequestsTitle")}
+                  >
+                    <span class="text-text-muted/80"
+                      >{t("projectDetail.pullRequests")}:</span
+                    >
+                    <span data-github-prs={project.id}>{openPullRequests}</span>
+                  </a>
+                </span>
+              </div>
+              <ProjectLanguages
+                projectId={project.id}
+                languages={project.languages}
+                label={t("projectDetail.languagesLabel")}
+              />
+            </div>
+
+            <aside class="project-detail-header-aside">
+              <span class="term-section-label term-section-label--xs"
+                >{t("projectDetail.repoStats")}</span
+              >
+              <div class="project-detail-header-stats">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="project-detail-stat-cell project-detail-stat-link"
+                  title={t("projects.githubStarsTitle")}
+                >
+                  <span
+                    class="project-detail-stat-cell__value"
+                    data-github-stars={project.id}>{project.stars}</span
+                  >
+                  <span class="project-detail-stat-cell__label"
+                    >★ {t("projectDetail.stars")}</span
+                  >
+                </a>
+                <a
+                  href={`${project.github}/fork`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="project-detail-stat-cell project-detail-stat-link"
+                  title={t("projects.githubForksTitle")}
+                >
+                  <span
+                    class="project-detail-stat-cell__value"
+                    data-github-forks={project.id}>{project.forks}</span
+                  >
+                  <span class="project-detail-stat-cell__label"
+                    >⑂ {t("projectDetail.forks")}</span
+                  >
+                </a>
+              </div>
+              <span class="term-section-label term-section-label--xs pt-1"
+                >{t("projectDetail.quickActions")}</span
+              >
+              <div class="project-detail-download-block">
+                <div
+                  id="project-apk-picker"
+                  class:list={[
+                    "project-detail-apk-picker",
+                    { hidden: !showApkPicker },
+                  ]}
+                  set:html={apkPickerHtml}
+                />
+                <div class="project-detail-header-actions">
+                  <a
+                    href={downloadHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id="download-apk-link"
+                    class="md3-btn-tonal project-detail-action-btn project-detail-download-btn"
+                    title={apkFileName
+                      ? `${t("projectDetail.downloadApkLabel")} — ${apkFileName}`
+                      : t("projectDetail.downloadApkLabel")}
+                  >
+                    <span
+                      class="project-detail-download-btn__icon"
+                      aria-hidden="true">💾</span
+                    >
+                    <span class="project-detail-download-btn__label"
+                      >{t("projectDetail.downloadApkLabel")}</span
+                    >
+                    <span
+                      id="download-apk-tag"
+                      class="md3-chip project-detail-download-btn__tag"
+                      >{downloadTag}</span
+                    >
+                    {
+                      apkSizeLabel ? (
+                        <span
+                          id="download-apk-size"
+                          class="md3-chip project-detail-download-btn__tag"
+                        >
+                          {apkSizeLabel}
+                        </span>
+                      ) : null
+                    }
+                  </a>
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="md3-btn-outlined project-detail-action-btn"
+                  >
+                    {t("projectDetail.viewGithub")}
+                  </a>
+                  <a
+                    href={`${project.github}/releases`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="md3-btn-outlined project-detail-action-btn"
+                  >
+                    {t("projectDetail.viewReleases")}
+                  </a>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-detail-main-left">
+        <div id="project-features" class="scroll-mt-16">
+          <div class="project-detail-features md3-card">
+            <div class="project-detail-features__head">
+              <h3 class="term-section-label text-xs normal-case m-0">
+                {t("projectDetail.featuresTitle")}
+              </h3>
+              <span class="project-detail-features__count">
+                {
+                  t("projectDetail.featuresCount").replace(
+                    "{n}",
+                    String(pInfo.features.length),
+                  )
+                }
+              </span>
+            </div>
+            <ul class="project-detail-features-grid">
+              {
+                pInfo.features.map((feature: string) => (
+                  <li class="project-detail-feature-tile md3-surface-container">
+                    <span
+                      class="project-detail-feature-tile__icon"
+                      aria-hidden="true"
+                    >
+                      ✓
+                    </span>
+                    <span class="project-detail-feature-tile__text">
+                      {feature}
+                    </span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+
+        <div
+          id="project-download"
+          class="scroll-mt-16 project-detail-releases-slot"
+        >
+          <div class="md3-panel project-detail-releases-panel">
+            <div class="md3-panel-bar md3-panel-bar--inline">
+              <div
+                class="flex items-center gap-1.5 shrink-0"
+                aria-hidden="true"
+              >
+                <div class="w-2 h-2 rounded-full bg-red-500/80"></div>
+                <div class="w-2 h-2 rounded-full bg-yellow-500/80"></div>
+                <div class="w-2 h-2 rounded-full bg-green-500/80"></div>
+              </div>
+              <span class="term-section-label text-xs normal-case"
+                >{t("projectDetail.releases")}</span
+              >
+            </div>
+            <div class="md3-panel-body md3-panel-body--flush">
+              <div class="project-detail-releases-compact">
+                <div
+                  id="project-latest-release-dynamic"
+                  set:html={latestReleaseBlockHtml}
+                />
+
+                {
+                  olderReleases.length > 0 && (
+                    <div class="project-detail-releases-history-wrap">
+                      <p class="project-detail-releases-history-label">
+                        {t("projectDetail.previousReleases")}
+                      </p>
+                      <ul
+                        id="project-releases-list"
+                        class="project-detail-releases-history"
+                        set:html={olderReleasesListHtml}
+                      />
+                    </div>
+                  )
+                }
+
+                <a href={l("/#news")} class="project-detail-releases-news-link">
+                  {t("projectDetail.viewAllNews")}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <PhoneMockup projectId={project.id} lang={lang} />
+    </div>
+
+    <div id="project-build" class="font-mono scroll-mt-16">
+      <div class="md3-panel text-xs md:text-sm">
+        <div
+          class="md3-panel-bar md3-panel-bar--inline project-build-panel-bar scroll-x-touch"
+        >
+          <div class="flex items-center gap-1.5 shrink-0" aria-hidden="true">
+            <div class="w-2 h-2 rounded-full bg-red-500/80"></div>
+            <div class="w-2 h-2 rounded-full bg-yellow-500/80"></div>
+            <div class="w-2 h-2 rounded-full bg-green-500/80"></div>
+          </div>
+          <span class="term-section-label text-sm normal-case"
+            >// {t("projectDetail.buildTitle")}</span
+          >
+          <span
+            id="build-step-label"
+            class="text-[10px] text-text-muted ml-auto"
+            data-build-total={installStepCount}
+          >
+            {
+              t("projectDetail.buildStep")
+                .replace("{n}", "1")
+                .replace("{total}", String(installStepCount))
+            }
+          </span>
+        </div>
+        <div class="md3-panel-body section-block">
+          <div id="build-instructions" class="section-block">
+            <div
+              class="build-tablist scroll-x-touch select-none"
+              role="tablist"
+            >
+              {
+                pInfo.installation.map((step: any, index: number) => (
+                  <button
+                    type="button"
+                    role="tab"
+                    data-build-tab={index}
+                    aria-selected={index === 0 ? "true" : "false"}
+                    class="md3-tab"
+                  >
+                    {step.label}
+                  </button>
+                ))
+              }
+            </div>
+
+            <div
+              class="build-steps-stack md3-code-block leading-relaxed select-all text-[11px] md:text-xs"
+            >
+              {
+                pInfo.installation.map((step: any, index: number) => (
+                  <div
+                    role="tabpanel"
+                    data-build-content={index}
+                    class:list={[
+                      "build-step-panel group",
+                      index === 0 && "is-active",
+                    ]}
+                  >
+                    <pre>{step.cmd}</pre>
+                    <button
+                      type="button"
+                      data-copy-cmd={step.cmd}
+                      class="absolute right-2 top-2 md3-chip opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    >
+                      {t("projectDetail.copy")}
+                    </button>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+{
+  ikmsSchedule && (
+    <div
+      id="project-mockup-data"
+      class="hidden"
+      data-ikms={JSON.stringify(ikmsSchedule)}
+      aria-hidden="true"
+    />
+  )
+}
+
+<script>
+  // SSR renders release HTML from snapshot; client may refresh from GitHub live API.
+  import {
+    clientT,
+    clientDottedT,
+    getLangFromDocument,
+  } from "../../utils/i18n";
+  import {
+    PROJECT_DETAIL_COPY_FEEDBACK_MS,
+    PROJECT_DETAIL_RELEASE_COUNT,
+  } from "../../constants/project-detail";
+  import {
+    applyStatsToDom,
+    fetchProjectReleasesLive,
+    getCachedReleaseForProject,
+    readCachedStats,
+  } from "../../utils/github-client";
+  import type { ReleaseNewsItem } from "../../utils/github-releases";
+  import { notifyTerminal } from "../../utils/terminal-notify";
+  import {
+    buildLatestReleaseBlockHtml,
+    buildOlderReleasesListHtml,
+    buildProjectDetailReleaseLabels,
+  } from "../../utils/project-detail-releases";
+  import { buildApkPickerLabels } from "../../utils/apk-picker-labels";
+  import { APK_PICKER_DOM_IDS } from "../../constants/apk-picker";
+  import {
+    bindApkVariantPicker,
+    buildApkPickerHtml,
+    getReleaseApkVariant,
+    readStoredApkVariantId,
+    storeApkVariantId,
+  } from "../../utils/project-apk-download";
+  import type { ReleaseApkVariant } from "../../utils/release-apk-variants";
+  import { initProjectMockups } from "../../utils/project-mockup-interactive";
+
+  function applyApkVariantToDownload(
+    tag: string,
+    variant: ReleaseApkVariant,
+    projectId: string,
+  ) {
+    const downloadLink = document.getElementById(
+      APK_PICKER_DOM_IDS.downloadLink,
+    ) as HTMLAnchorElement;
+    const downloadTag = document.getElementById(APK_PICKER_DOM_IDS.downloadTag);
+    const downloadSize = document.getElementById(
+      APK_PICKER_DOM_IDS.downloadSize,
+    );
+    const versionBadge = document.querySelector("[data-project-version-badge]");
+
+    if (downloadLink) {
+      downloadLink.href = variant.url;
+      downloadLink.title = `${clientT("projectDetail", "downloadApkLabel")} — ${variant.fileName}`;
+    }
+    if (downloadTag) downloadTag.textContent = tag;
+    if (versionBadge) versionBadge.textContent = tag;
+
+    if (variant.sizeLabel && projectId) {
+      document
+        .querySelectorAll(`[data-github-apk-size="${projectId}"]`)
+        .forEach((el) => {
+          el.textContent = variant.sizeLabel;
+          el.setAttribute(
+            "title",
+            `${clientT("projectDetail", "apkSizeTitle")} · ${variant.fileName}`,
+          );
+        });
+    }
+
+    if (downloadSize) {
+      if (variant.sizeLabel) {
+        downloadSize.textContent = variant.sizeLabel;
+        downloadSize.classList.remove("hidden");
+      } else {
+        downloadSize.textContent = "";
+        downloadSize.classList.add("hidden");
+      }
+    } else if (variant.sizeLabel) {
+      const tagEl = document.getElementById(APK_PICKER_DOM_IDS.downloadTag);
+      const chip = document.createElement("span");
+      chip.id = APK_PICKER_DOM_IDS.downloadSize;
+      chip.className = "md3-chip project-detail-download-btn__tag";
+      chip.textContent = variant.sizeLabel;
+      tagEl?.insertAdjacentElement("afterend", chip);
+    }
+  }
+
+  function mountReleaseDownload(
+    release: ReleaseNewsItem,
+    projectId: string,
+    signal: AbortSignal,
+  ) {
+    const pickerRoot = document.getElementById(APK_PICKER_DOM_IDS.pickerRoot);
+    const variants = release.apkVariants ?? [];
+    const labels = buildApkPickerLabels((key) => clientDottedT(clientT, key));
+    const storedId = readStoredApkVariantId(projectId);
+    const activeVariant =
+      getReleaseApkVariant(release, storedId ?? undefined) ??
+      getReleaseApkVariant(release);
+
+    if (pickerRoot) {
+      const showPicker = variants.length > 1;
+      pickerRoot.classList.toggle("hidden", !showPicker);
+      if (showPicker) {
+        pickerRoot.innerHTML = buildApkPickerHtml(
+          variants,
+          labels,
+          activeVariant?.id ?? release.defaultApkId,
+        );
+        bindApkVariantPicker(
+          pickerRoot,
+          (variant) => {
+            storeApkVariantId(projectId, variant.id);
+            applyApkVariantToDownload(release.tag, variant, projectId);
+          },
+          signal,
+        );
+      } else {
+        pickerRoot.innerHTML = "";
+      }
+    }
+
+    if (activeVariant) {
+      applyApkVariantToDownload(release.tag, activeVariant, projectId);
+    }
+  }
+
+  function renderProjectReleases(
+    releases: ReleaseNewsItem[],
+    githubBase: string,
+  ) {
+    const root = document.getElementById("project-latest-release-dynamic");
+    const list = document.getElementById("project-releases-list");
+    if (!root || !releases.length) return;
+
+    const lang = getLangFromDocument();
+    const labels = buildProjectDetailReleaseLabels((key) =>
+      clientDottedT(clientT, key),
+    );
+    const latest = releases[0];
+    root.innerHTML = buildLatestReleaseBlockHtml(
+      latest,
+      lang,
+      labels,
+      githubBase,
+    );
+
+    if (!list) return;
+    const olderHtml = buildOlderReleasesListHtml(releases.slice(1), githubBase);
+    if (!olderHtml) {
+      list.innerHTML = "";
+      list.closest(".project-detail-releases-history-wrap")?.remove();
+      return;
+    }
+    list.innerHTML = olderHtml;
+  }
+
+  async function syncProjectReleases(signal: AbortSignal) {
+    const versionBadge = document.querySelector("[data-project-version-badge]");
+    const projectId =
+      versionBadge?.getAttribute("data-project-version-badge") || "";
+    if (!projectId) return;
+
+    const githubBase = versionBadge?.getAttribute("data-project-github") || "";
+    const cached = getCachedReleaseForProject(projectId);
+    if (cached) {
+      mountReleaseDownload(cached, projectId, signal);
+    }
+
+    const releases = await fetchProjectReleasesLive(
+      projectId,
+      PROJECT_DETAIL_RELEASE_COUNT,
+    );
+    if (!releases?.length) return;
+
+    mountReleaseDownload(releases[0], projectId, signal);
+    renderProjectReleases(releases, githubBase);
+  }
+
+  let projectPageAbort: AbortController | null = null;
+
+  function setBuildTab(activeId: string) {
+    document.querySelectorAll("[data-build-tab]").forEach((tab) => {
+      const el = tab as HTMLElement;
+      const selected = el.getAttribute("data-build-tab") === activeId;
+      el.setAttribute("aria-selected", selected ? "true" : "false");
+    });
+
+    document.querySelectorAll("[data-build-content]").forEach((panel) => {
+      const el = panel as HTMLElement;
+      el.classList.toggle(
+        "is-active",
+        el.getAttribute("data-build-content") === activeId,
+      );
+    });
+
+    const stepLabel = document.getElementById("build-step-label");
+    if (stepLabel) {
+      const total = stepLabel.getAttribute("data-build-total") || "1";
+      const stepNum = String(Number(activeId) + 1);
+      const tpl = clientT("projectDetail", "buildStep");
+      stepLabel.textContent = tpl
+        .replace("{n}", stepNum)
+        .replace("{total}", total);
+    }
+  }
+
+  function initProjectPage() {
+    projectPageAbort?.abort();
+    if (!document.getElementById("build-instructions")) return;
+
+    projectPageAbort = new AbortController();
+    const { signal } = projectPageAbort;
+
+    const cachedStats = readCachedStats();
+    if (cachedStats) applyStatsToDom(cachedStats);
+
+    const versionBadge = document.querySelector("[data-project-version-badge]");
+    const projectId =
+      versionBadge?.getAttribute("data-project-version-badge") || "";
+    const releaseJsonEl = document.getElementById(
+      "project-latest-release-json",
+    );
+    if (releaseJsonEl?.textContent && projectId) {
+      try {
+        const release = JSON.parse(
+          releaseJsonEl.textContent,
+        ) as ReleaseNewsItem;
+        mountReleaseDownload(release, projectId, signal);
+      } catch {}
+    }
+
+    syncProjectReleases(signal);
+
+    const buildRoot = document.getElementById("build-instructions");
+    buildRoot?.addEventListener(
+      "click",
+      (event) => {
+        const tab = (event.target as HTMLElement).closest?.("[data-build-tab]");
+        if (tab) {
+          event.preventDefault();
+          const tabId = tab.getAttribute("data-build-tab");
+          if (tabId != null) setBuildTab(tabId);
+          return;
+        }
+
+        const copyBtn = (event.target as HTMLElement).closest?.(
+          "[data-copy-cmd]",
+        );
+        if (!copyBtn) return;
+
+        event.preventDefault();
+        const btnEl = copyBtn as HTMLElement;
+        const cmd = btnEl.getAttribute("data-copy-cmd") || "";
+
+        navigator.clipboard
+          .writeText(cmd)
+          .then(() => {
+            btnEl.textContent = clientT("projectDetail", "copied");
+            btnEl.classList.remove("hover:border-accent");
+            btnEl.classList.add("border-accent-success", "text-accent-success");
+
+            notifyTerminal(clientT("projectDetail", "copyToast"), "success");
+
+            setTimeout(() => {
+              btnEl.textContent = clientT("projectDetail", "copy");
+              btnEl.classList.remove(
+                "border-accent-success",
+                "text-accent-success",
+              );
+              btnEl.classList.add("hover:border-accent");
+            }, PROJECT_DETAIL_COPY_FEEDBACK_MS);
+          })
+          .catch((err) => {
+            console.error("Could not copy command: ", err);
+          });
+      },
+      { signal },
+    );
+
+    initProjectMockups(signal);
+  }
+
+  initProjectPage();
+  document.addEventListener("astro:page-load", initProjectPage);
+</script>

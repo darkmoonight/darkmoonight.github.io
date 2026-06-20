@@ -1,0 +1,467 @@
+---
+import {
+  getLangFromUrl,
+  useTranslations,
+  useLocalizedPath,
+  localizedField,
+} from "../../utils/i18n";
+import HomeSection from "../HomeSection.astro";
+import Icon from "../Icon.astro";
+import ProjectLanguages from "../ProjectLanguages.astro";
+import TerminalStatusFooter from "../TerminalStatusFooter.astro";
+import { GITHUB_PROFILE_HOST } from "../../constants/site";
+import projectsData from "../../data/projects.json";
+import {
+  enrichProjects,
+  loadGithubSnapshot,
+  type GitHubSnapshot,
+} from "../../utils/github-snapshot";
+
+interface Props {
+  snapshot?: GitHubSnapshot;
+}
+
+const { snapshot = loadGithubSnapshot() } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const l = useLocalizedPath(lang);
+const ghSnapshot = snapshot;
+const projects = enrichProjects(projectsData, ghSnapshot);
+const repoCount = ghSnapshot.profile?.public_repos ?? projects.length;
+---
+
+<HomeSection
+  id="projects"
+  label={t("projects.sectionHeader")}
+  title={t("projects.title")}
+>
+  <p class="section-subtitle">
+    {t("projects.subtitle")}
+  </p>
+
+  <div class="md3-panel md3-panel--terminal-code projects-ide">
+    <div class="md3-panel-bar">
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="text-accent font-bold shrink-0"
+          >{t("projects.explorerLabel")}</span
+        >
+        <span class="text-text-muted truncate"
+          >{t("projects.explorerRoot")}</span
+        >
+      </div>
+      <span
+        class="text-[10px] text-text-muted shrink-0"
+        id="projects-repo-count"
+        data-repo-count-label={t("projects.repoCount")}
+      >
+        {t("projects.repoCount").replace("{n}", String(repoCount))}
+      </span>
+    </div>
+
+    <div class="projects-explorer-grep border-b border-border-color/50">
+      <label
+        for="project-search"
+        class="projects-explorer-grep__label text-accent-secondary font-bold shrink-0"
+      >
+        {t("projects.grepCmd")}
+      </label>
+      <div class="projects-explorer-grep__field flex-1 min-w-0">
+        <input
+          type="search"
+          id="project-search"
+          placeholder={t("projects.search")}
+          aria-label={t("projects.searchLabel")}
+          class="md3-input w-full"
+          autocomplete="off"
+        />
+      </div>
+      <button
+        type="button"
+        id="search-clear"
+        class="projects-explorer-grep__clear md3-btn-text text-[10px] hidden shrink-0"
+      >
+        {t("common.esc")}
+      </button>
+    </div>
+
+    <div
+      class="projects-ide__split relative min-h-72 lg:min-h-88"
+      id="projects-ide-wrap"
+    >
+      <nav
+        class="projects-ide__sidebar border-b lg:border-b-0 lg:border-r border-border-color/50"
+        aria-label={t("projects.sectionHeader")}
+        id="projects-sidebar"
+      >
+        <div
+          class="projects-ide__sidebar-head text-[10px] text-text-muted select-none"
+        >
+          <span>{t("projects.listCmd")}</span>
+        </div>
+        <div class="projects-ide__sidebar-list" role="tablist">
+          {
+            projects.map((project, index) => (
+              <button
+                type="button"
+                role="tab"
+                id={`project-tab-${project.id}`}
+                data-project-tab={project.id}
+                data-project-row
+                data-name={project.name.toLowerCase()}
+                data-desc={
+                  localizedField(lang, project).tagline.toLowerCase() +
+                  " " +
+                  localizedField(lang, project).description.toLowerCase()
+                }
+                data-langs={Object.keys(project.languages)
+                  .join(" ")
+                  .toLowerCase()}
+                aria-selected={index === 0 ? "true" : "false"}
+                aria-controls={`project-panel-${project.id}`}
+                class:list={["projects-ide__item", index === 0 && "is-active"]}
+                style={`--project-accent: ${project.color}`}
+              >
+                <span class="projects-ide__item-marker" aria-hidden="true">
+                  {index === 0 ? "▸" : " "}
+                </span>
+                <Icon
+                  name="folder"
+                  class="h-3.5 w-3.5 shrink-0 projects-ide__item-icon"
+                />
+                <span class="projects-ide__item-name truncate">
+                  {project.name}
+                </span>
+                <span
+                  class="projects-ide__item-meta text-text-muted"
+                  data-github-version={project.id}
+                >
+                  {project.version}
+                </span>
+              </button>
+            ))
+          }
+        </div>
+      </nav>
+
+      <div class="projects-ide__preview" id="projects-preview">
+        {
+          projects.map((project, index) => {
+            const pInfo = localizedField(lang, project);
+            const detailUrl = l(`/projects/${project.id}`);
+
+            return (
+              <article
+                id={`project-panel-${project.id}`}
+                role="tabpanel"
+                aria-labelledby={`project-tab-${project.id}`}
+                data-project-panel={project.id}
+                class:list={["projects-ide__panel", index === 0 && "is-active"]}
+                style={`--project-accent: ${project.color}`}
+              >
+                <div class="projects-ide__panel-head">
+                  <div class="flex flex-wrap items-center gap-x-2 gap-y-1 select-none">
+                    <Icon
+                      name="file"
+                      class="h-3.5 w-3.5 text-text-muted shrink-0"
+                    />
+                    <span class="font-bold text-text-primary">
+                      {project.name}/
+                    </span>
+                    <span class="text-text-muted">
+                      {t("projects.previewReadme")}
+                    </span>
+                  </div>
+                  <p class="projects-ide__panel-tagline text-[11px] text-text-muted mt-2">
+                    <span class="text-text-muted/80"># </span>
+                    {pInfo.tagline}
+                  </p>
+                </div>
+
+                <p class="projects-ide__panel-desc prose-content text-xs">
+                  {pInfo.description}
+                </p>
+
+                <div class="projects-ide__panel-meta flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[10px] text-text-muted select-none">
+                  <span class="md3-chip" data-github-version={project.id}>
+                    {project.version}
+                  </span>
+                  <span data-github-size={project.id}>{project.size}</span>
+                  <span class="md3-chip" data-github-license={project.id}>
+                    {project.license}
+                  </span>
+                  <span class="text-text-muted/60">|</span>
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1 hover:text-accent transition-colors"
+                    title={t("projects.githubStarsTitle")}
+                  >
+                    <span>★</span>
+                    <span data-github-stars={project.id}>{project.stars}</span>
+                  </a>
+                  <a
+                    href={`${project.github}/fork`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1 hover:text-accent transition-colors"
+                    title={t("projects.githubForksTitle")}
+                  >
+                    <span>⑂</span>
+                    <span data-github-forks={project.id}>{project.forks}</span>
+                  </a>
+                </div>
+
+                <div class="projects-ide__panel-langs">
+                  <span class="term-section-label project-languages__label normal-case">
+                    {t("projects.languages")}
+                  </span>
+                  <ProjectLanguages
+                    projectId={project.id}
+                    languages={project.languages}
+                    variant="tags"
+                  />
+                </div>
+
+                <div class="projects-ide__panel-actions flex flex-wrap items-center gap-2 pt-2">
+                  <a
+                    href={detailUrl}
+                    class="md3-btn-tonal py-1.5 px-3 text-[10px] normal-case tracking-normal"
+                  >
+                    {t("projects.details")} →
+                  </a>
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="md3-btn-outlined py-1.5 px-3 text-[10px]"
+                    title={t("projects.repoTitle")}
+                  >
+                    {t("projects.viewCode")}
+                  </a>
+                </div>
+              </article>
+            );
+          })
+        }
+
+        <div
+          id="projects-preview-empty"
+          class="projects-ide__panel projects-ide__panel--empty hidden"
+          hidden
+        >
+          <p class="text-text-muted text-sm">{t("projects.previewEmpty")}</p>
+        </div>
+      </div>
+
+      <div
+        id="no-projects-found"
+        class="projects-empty-state absolute inset-0 flex flex-col items-center justify-center text-center py-12 font-mono select-none z-10"
+        style="background: color-mix(in srgb, var(--md3-surface) 94%, transparent);"
+      >
+        <p class="code-line text-text-muted text-[11px]">
+          <span class="text-accent font-bold">$</span>
+          {t("projects.grepCmd")} "<span id="grep-query-echo"></span>"
+        </p>
+        <p class="text-sm text-text-secondary font-bold mt-3">
+          {t("projects.noMatches")}
+        </p>
+        <p class="text-xs text-text-muted mt-1">
+          {t("projects.noMatchesHint")}
+        </p>
+      </div>
+    </div>
+
+    <TerminalStatusFooter>
+      {t("projects.repoTitle")}
+      <span class="text-text-muted/60"> · </span>
+      {GITHUB_PROFILE_HOST}
+    </TerminalStatusFooter>
+  </div>
+</HomeSection>
+
+<script>
+  import { onPageInit } from "../../utils/page-lifecycle";
+
+  onPageInit(
+    () => Boolean(document.getElementById("project-search")),
+    (signal) => {
+      const searchInput = document.getElementById(
+        "project-search",
+      ) as HTMLInputElement;
+      const searchClear = document.getElementById("search-clear");
+      const tabs = document.querySelectorAll("[data-project-tab]");
+      const panels = document.querySelectorAll("[data-project-panel]");
+      const emptyState = document.getElementById("no-projects-found");
+      const previewEmpty = document.getElementById("projects-preview-empty");
+      const grepEcho = document.getElementById("grep-query-echo");
+      const repoCountEl = document.getElementById("projects-repo-count");
+      const ideWrap = document.getElementById("projects-ide-wrap");
+
+      function setActiveProject(id: string) {
+        tabs.forEach((tab) => {
+          const el = tab as HTMLButtonElement;
+          const active = el.getAttribute("data-project-tab") === id;
+          el.classList.toggle("is-active", active);
+          el.setAttribute("aria-selected", active ? "true" : "false");
+          const marker = el.querySelector(".projects-ide__item-marker");
+          if (marker) marker.textContent = active ? "▸" : " ";
+        });
+
+        let anyVisible = false;
+        panels.forEach((panel) => {
+          const el = panel as HTMLElement;
+          const active = el.getAttribute("data-project-panel") === id;
+          const tab = document.querySelector(
+            `[data-project-tab="${id}"]`,
+          ) as HTMLElement | null;
+          const tabHidden = tab?.classList.contains("hidden");
+
+          if (active && !tabHidden) {
+            el.classList.add("is-active");
+            el.hidden = false;
+            anyVisible = true;
+          } else {
+            el.classList.remove("is-active");
+            el.hidden = true;
+          }
+        });
+
+        if (previewEmpty) {
+          const showEmpty = !anyVisible;
+          previewEmpty.classList.toggle("is-active", showEmpty);
+          previewEmpty.hidden = !showEmpty;
+        }
+      }
+
+      function firstVisibleTabId(): string | null {
+        for (const tab of tabs) {
+          const el = tab as HTMLElement;
+          if (!el.classList.contains("hidden")) {
+            return el.getAttribute("data-project-tab");
+          }
+        }
+        return null;
+      }
+
+      function filterProjects() {
+        const query = searchInput.value.trim().toLowerCase();
+
+        if (query) {
+          searchClear?.classList.remove("hidden");
+        } else {
+          searchClear?.classList.add("hidden");
+        }
+
+        if (grepEcho) {
+          grepEcho.textContent = query;
+        }
+
+        let matches = 0;
+        let activeId: string | null = null;
+
+        tabs.forEach((tab) => {
+          const el = tab as HTMLElement;
+          const name = el.getAttribute("data-name") || "";
+          const desc = el.getAttribute("data-desc") || "";
+          const langs = el.getAttribute("data-langs") || "";
+          const isMatch =
+            !query ||
+            name.includes(query) ||
+            desc.includes(query) ||
+            langs.includes(query);
+
+          if (isMatch) {
+            el.classList.remove("hidden");
+            matches++;
+            if (el.classList.contains("is-active")) {
+              activeId = el.getAttribute("data-project-tab");
+            }
+          } else {
+            el.classList.add("hidden");
+          }
+        });
+
+        if (repoCountEl) {
+          const total = tabs.length;
+          const visible = matches;
+          repoCountEl.textContent =
+            query && visible !== total
+              ? `${visible} / ${total}`
+              : repoCountEl.getAttribute("data-label-full") ||
+                repoCountEl.textContent;
+        }
+
+        if (matches === 0 && query) {
+          emptyState?.classList.add("is-open");
+          ideWrap?.classList.add("projects-ide__split--empty");
+          panels.forEach((p) => {
+            const el = p as HTMLElement;
+            el.classList.remove("is-active");
+            el.hidden = true;
+          });
+          previewEmpty?.classList.add("is-active");
+          if (previewEmpty) previewEmpty.hidden = false;
+        } else {
+          emptyState?.classList.remove("is-open");
+          ideWrap?.classList.remove("projects-ide__split--empty");
+
+          if (
+            !activeId ||
+            document
+              .querySelector(`[data-project-tab="${activeId}"]`)
+              ?.classList.contains("hidden")
+          ) {
+            activeId = firstVisibleTabId();
+          }
+          if (activeId) {
+            setActiveProject(activeId);
+          }
+        }
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener(
+          "click",
+          () => {
+            const id = (tab as HTMLElement).getAttribute("data-project-tab");
+            if (id) setActiveProject(id);
+          },
+          { signal },
+        );
+      });
+
+      if (repoCountEl && !repoCountEl.getAttribute("data-label-full")) {
+        repoCountEl.setAttribute(
+          "data-label-full",
+          repoCountEl.textContent || "",
+        );
+      }
+
+      searchInput.addEventListener("input", filterProjects, { signal });
+
+      searchClear?.addEventListener(
+        "click",
+        () => {
+          searchInput.value = "";
+          filterProjects();
+          searchInput.focus();
+        },
+        { signal },
+      );
+
+      window.addEventListener(
+        "keydown",
+        (e) => {
+          if (e.key === "Escape" && document.activeElement === searchInput) {
+            searchInput.value = "";
+            filterProjects();
+            searchInput.blur();
+          }
+        },
+        { signal },
+      );
+    },
+  );
+</script>

@@ -1,0 +1,13 @@
+---
+import ProjectDetail from "../../../components/pages/ProjectDetail.astro";
+import projectsData from "../../../data/projects.json";
+import { LANGUAGES } from "../../../utils/i18n";
+
+export function getStaticPaths() {
+  return LANGUAGES.flatMap((lang) =>
+    projectsData.map((p) => ({ params: { lang, id: p.id } })),
+  );
+}
+---
+
+<ProjectDetail />

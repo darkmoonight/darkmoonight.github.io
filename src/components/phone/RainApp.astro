@@ -1,0 +1,118 @@
+---
+import type { Language } from "../../utils/i18n";
+import { useTranslations } from "../../utils/i18n";
+import { getRainMockup } from "../../utils/project-mockup";
+import PhonePanel from "./PhonePanel.astro";
+import PhoneSection from "./PhoneSection.astro";
+import PhoneKvList from "./PhoneKvList.astro";
+import PhoneMetricGrid from "./PhoneMetricGrid.astro";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const rain = getRainMockup(t);
+const defaultHour = rain.defaultHour;
+const rainStatFields = [
+  "humid",
+  "wind",
+  "barom",
+  "uv",
+  "vis",
+  "precip",
+] as const;
+const rainStats = rainStatFields.map((key) => ({
+  label: rain.statLabels[key],
+  value: defaultHour[key],
+  id: `rain-stat-${key}`,
+}));
+---
+
+<PhonePanel panel="home" active centered>
+  <button type="button" class="rain-location">
+    <span class="rain-location__city"
+      >📍 {t("projectDetail.mockup.location")}</span
+    >
+    <span class="phone-app-label">{t("projectDetail.mockup.updatedAgo")}</span>
+  </button>
+
+  <div class="rain-hero">
+    <div class="rain-hero__icon" id="rain-main-icon">{defaultHour.icon}</div>
+    <div class="rain-hero__temp phone-app-title" id="rain-main-temp">
+      {defaultHour.temp}
+    </div>
+    <div class="rain-hero__status phone-app-label" id="rain-main-status">
+      {defaultHour.status}
+    </div>
+    <div class="phone-app-label" id="rain-feels-like">{rain.feelsLike}</div>
+    <div class="phone-app-title rain-hero__range" id="rain-today-range">
+      {rain.todayRange}
+    </div>
+  </div>
+
+  <PhoneSection title={t("projectDetail.mockup.hourlyForecast")}>
+    <div class="rain-hour-scroll">
+      {
+        rain.hours.map((hour) => (
+          <button
+            type="button"
+            class:list={["rain-hour-card", { "is-active": hour.active }]}
+            data-temp={hour.temp}
+            data-feels={hour.feels}
+            data-high={hour.high}
+            data-low={hour.low}
+            data-status={hour.status}
+            data-icon={hour.icon}
+            data-humid={hour.humid}
+            data-wind={hour.wind}
+            data-barom={hour.barom}
+            data-uv={hour.uv}
+            data-vis={hour.vis}
+            data-precip={hour.precip}
+          >
+            <span class="phone-app-label">{hour.time}</span>
+            <span class="rain-hour-card__icon">{hour.icon}</span>
+            <span class="phone-app-title">{hour.tempShort}</span>
+          </button>
+        ))
+      }
+    </div>
+  </PhoneSection>
+
+  <PhoneMetricGrid metrics={rainStats} columns={3} accentValues />
+</PhonePanel>
+
+<PhonePanel panel="stats">
+  <PhoneSection title={t("projectDetail.mockup.stats")}>
+    <div class="phone-app-card phone-summary-card">
+      <span class="phone-app-label"
+        >{t("projectDetail.mockup.rainWeekAvg")}</span
+      >
+      <span class="phone-app-title"
+        >{t("projectDetail.mockup.rainWeekAvgVal")}</span
+      >
+    </div>
+  </PhoneSection>
+  <PhoneSection title={t("projectDetail.mockup.dailyOutlook")}>
+    <ul class="phone-mockup-outlook">
+      {
+        rain.outlook.map((row) => (
+          <li class="phone-app-card phone-mockup-outlook__row">
+            <span class="phone-mockup-outlook__day">{row.day}</span>
+            <span>{row.icon}</span>
+            <span class="phone-mockup-outlook__temps">{row.temps}</span>
+            <span class="phone-mockup-outlook__precip">{row.precip}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </PhoneSection>
+</PhonePanel>
+
+<PhonePanel panel="settings">
+  <PhoneSection title={t("projectDetail.mockup.navSettings")}>
+    <PhoneKvList items={rain.settings} />
+  </PhoneSection>
+</PhonePanel>

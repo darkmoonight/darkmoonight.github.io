@@ -1,0 +1,97 @@
+---
+
+---
+
+<div
+  id="terminal-toast-container"
+  class="terminal-toast-container pointer-events-none"
+>
+</div>
+
+<script is:inline>
+  window.showTerminalNotification = (message, type = "info") => {
+    const container = document.getElementById("terminal-toast-container");
+    if (!container) return;
+
+    let common = {};
+    try {
+      const el = document.getElementById("site-i18n");
+      const raw = el?.getAttribute("data-json") || el?.textContent;
+      common = raw ? JSON.parse(raw).common || {} : {};
+    } catch {}
+
+    const icons = {
+      success: "✓",
+      error: "✕",
+      warning: "!",
+      info: "i",
+    };
+
+    const toast = document.createElement("div");
+    const typeClass =
+      type === "success"
+        ? "md3-toast--success"
+        : type === "error"
+          ? "md3-toast--error"
+          : type === "warning"
+            ? "md3-toast--warning"
+            : "md3-toast--info";
+    toast.className = `md3-toast ${typeClass} toast--hidden`;
+    toast.dataset.toastType = type;
+
+    let prefix = common.snackbarSystem || "⚙️ [SYSTEM]";
+    let iconColor = "text-accent";
+
+    if (type === "success") {
+      prefix = common.snackbarSuccess || "✔ [SUCCESS]";
+      iconColor = "text-accent-success";
+    } else if (type === "error") {
+      prefix = common.snackbarError || "✖ [ERROR]";
+      iconColor = "text-red-500";
+    } else if (type === "warning") {
+      prefix = common.snackbarWarning || "⚠ [WARN]";
+      iconColor = "text-amber-500";
+    }
+
+    const iconEl = document.createElement("span");
+    iconEl.className = `md3-toast__icon md3-toast__icon--${type}`;
+    iconEl.setAttribute("aria-hidden", "true");
+    iconEl.textContent = icons[type] || icons.info;
+
+    const body = document.createElement("div");
+    body.className = "md3-toast__body";
+
+    const prefixEl = document.createElement("span");
+    prefixEl.className = `md3-toast__prefix ${iconColor}`;
+    prefixEl.textContent = prefix;
+
+    const messageEl = document.createElement("span");
+    messageEl.className = "md3-toast__message text-text-primary";
+    messageEl.textContent = message;
+
+    body.append(prefixEl, messageEl);
+
+    const closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.className = "md3-toast__close md3-btn-text";
+    closeBtn.setAttribute("aria-label", common.close || "Close");
+    closeBtn.textContent = "×";
+    closeBtn.addEventListener("click", () => toast.remove());
+
+    toast.append(iconEl, body, closeBtn);
+    container.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.classList.remove("toast--hidden");
+    });
+
+    const hideTimer = window.setTimeout(() => {
+      toast.classList.add("toast--hidden");
+      window.setTimeout(() => {
+        toast.remove();
+      }, 300);
+    }, 4000);
+
+    closeBtn.addEventListener("click", () => window.clearTimeout(hideTimer));
+  };
+</script>

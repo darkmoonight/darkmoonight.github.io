@@ -1,0 +1,151 @@
+---
+import type { Language } from "../../utils/i18n";
+import { useTranslations } from "../../utils/i18n";
+import { getZestMockup } from "../../utils/project-mockup";
+import PhonePanel from "./PhonePanel.astro";
+import PhoneSection from "./PhoneSection.astro";
+import PhoneKvList from "./PhoneKvList.astro";
+import PhoneMetricGrid from "./PhoneMetricGrid.astro";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const zest = getZestMockup(lang, t);
+const doneCount = zest.tasks.filter((task) => task.done).length;
+const progressPct = Math.round((doneCount / zest.tasks.length) * 100);
+---
+
+<PhonePanel panel="home" active>
+  <header class="phone-app-header">
+    <h4 class="phone-app-header__brand phone-app-header__brand--accent">
+      ZEST
+    </h4>
+    <span class="phone-app-header__meta"
+      >{t("projectDetail.mockup.todayFocus")}</span
+    >
+  </header>
+
+  <div class="phone-app-card phone-progress-card">
+    <div class="phone-progress-ring" id="zest-progress-ring">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <circle cx="18" cy="18" r="16" fill="none" stroke-width="2.5"></circle>
+        <circle
+          cx="18"
+          cy="18"
+          r="16"
+          fill="none"
+          stroke="var(--project-accent)"
+          stroke-width="2.5"
+          stroke-dasharray="100"
+          stroke-dashoffset={100 - progressPct}
+          stroke-linecap="round"></circle>
+      </svg>
+      <span class="phone-progress-ring__text" id="zest-progress-text"
+        >{progressPct}%</span
+      >
+    </div>
+    <div class="phone-progress-card__copy">
+      <div class="phone-app-title">{t("projectDetail.mockup.almostDone")}</div>
+      <div class="phone-app-label" id="zest-progress-sub">
+        {
+          t("projectDetail.mockup.tasksProgress")
+            .replace("{done}", String(doneCount))
+            .replace("{total}", String(zest.tasks.length))
+        }
+      </div>
+      <div class="phone-progress-card__streak">
+        {t("projectDetail.mockup.streakBadge")}
+      </div>
+    </div>
+  </div>
+
+  <PhoneSection title={t("projectDetail.mockup.categories")}>
+    <div class="zest-category-grid">
+      {
+        zest.categories.map((cat, i) => (
+          <button
+            type="button"
+            class:list={[
+              "zest-category phone-app-card",
+              { "is-active": i === 0 },
+            ]}
+            data-tone={cat.tone}
+          >
+            <span class="zest-category__label">
+              {cat.icon && <span aria-hidden="true">{cat.icon}</span>}
+              {cat.label}
+            </span>
+            <span>{cat.count}</span>
+          </button>
+        ))
+      }
+    </div>
+  </PhoneSection>
+
+  <PhoneSection title={t("projectDetail.mockup.todoList")}>
+    <div class="zest-task-list">
+      {
+        zest.tasks.map((task, idx) => (
+          <div
+            class:list={["zest-task phone-app-card", { "is-done": task.done }]}
+            data-task-idx={idx}
+          >
+            <span class="zest-task-chk" aria-hidden="true">
+              {task.done ? "☑" : "☐"}
+            </span>
+            <span class="zest-task__body">
+              <span class="zest-task-text">{task.title}</span>
+              <span class="zest-task-meta phone-app-label">{task.due}</span>
+            </span>
+            <span
+              class:list={[
+                "zest-task__priority",
+                { "zest-task__priority--high": task.priorityTone === "warn" },
+                {
+                  "zest-task__priority--done": task.priorityTone === "success",
+                },
+              ]}
+            >
+              {task.priority}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </PhoneSection>
+</PhonePanel>
+
+<PhonePanel panel="stats">
+  <PhoneSection title={t("projectDetail.mockup.stats")}>
+    <PhoneMetricGrid metrics={zest.metrics} />
+  </PhoneSection>
+  <div class="phone-app-card phone-heatmap-card">
+    <h5 class="phone-app-section__title">
+      {t("projectDetail.mockup.statHeatmap")}
+    </h5>
+    <div class="phone-mockup-heatmap" aria-hidden="true">
+      {
+        zest.heatmap.map((heat) => (
+          <span class="phone-mockup-heatmap__cell" style={`--heat: ${heat}`} />
+        ))
+      }
+    </div>
+    <div class="phone-heatmap-card__footer">
+      <span class="phone-app-label"
+        >{t("projectDetail.mockup.statAvgPerDay")}</span
+      >
+      <span class="phone-app-title"
+        >{t("projectDetail.mockup.statAvgValue")}</span
+      >
+    </div>
+  </div>
+</PhonePanel>
+
+<PhonePanel panel="settings">
+  <PhoneSection title={t("projectDetail.mockup.navSettings")}>
+    <PhoneKvList items={zest.settings} />
+  </PhoneSection>
+</PhonePanel>

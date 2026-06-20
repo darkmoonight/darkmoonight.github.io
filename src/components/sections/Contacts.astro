@@ -1,0 +1,374 @@
+---
+import { getLangFromUrl, useTranslations } from "../../utils/i18n";
+import { CONTACT_EMAIL, SOCIAL_LINKS } from "../../constants/site";
+import HomeSection from "../HomeSection.astro";
+import PanelTerminalBar from "../PanelTerminalBar.astro";
+
+const t = useTranslations(getLangFromUrl(Astro.url));
+const web3formsAccessKey = import.meta.env.PUBLIC_WEB3FORMS_ACCESS_KEY || "";
+---
+
+<HomeSection
+  id="contacts"
+  label={t("contacts.sectionHeader")}
+  title={t("contacts.title")}
+>
+  <p class="section-subtitle">
+    {t("contacts.subtitle")}
+  </p>
+
+  <div class="contacts-mail md3-panel md3-panel--terminal-code">
+    <PanelTerminalBar
+      title={t("contacts.title")}
+      tag={t("contacts.terminalTag")}
+    />
+
+    <div class="md3-panel-body contacts-mail__body code-container">
+      <div class="contacts-mail__routes select-none">
+        <div class="code-line text-text-muted">
+          {t("contacts.altRoutesComment")}
+        </div>
+        <div class="contacts-mail__route-row">
+          <span class="contacts-mail__prompt">tg:</span>
+          <a
+            href={SOCIAL_LINKS.telegram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contacts-mail__route-link"
+            title={t("contacts.telegramTitle")}
+          >
+            {SOCIAL_LINKS.telegram}
+          </a>
+        </div>
+        <div class="contacts-mail__route-row">
+          <span class="contacts-mail__prompt">dc:</span>
+          <a
+            href={SOCIAL_LINKS.discord}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contacts-mail__route-link"
+            title={t("contacts.discordTitle")}
+          >
+            {SOCIAL_LINKS.discord}
+          </a>
+        </div>
+        <div class="contacts-mail__route-row">
+          <span class="contacts-mail__prompt">gh:</span>
+          <a
+            href={SOCIAL_LINKS.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contacts-mail__route-link"
+            title={t("contacts.githubTitle")}
+          >
+            {SOCIAL_LINKS.github}
+          </a>
+        </div>
+      </div>
+
+      <div class="terminal-divider" aria-hidden="true"></div>
+
+      <form
+        id="contact-form-env"
+        data-web3forms-access-key={web3formsAccessKey}
+        class="contacts-mail__compose"
+      >
+        <div class="code-line text-text-muted select-none">
+          {t("contacts.composeComment")}
+        </div>
+
+        <div class="contacts-mail__field">
+          <span class="contacts-mail__prompt" id="contact-to-label"
+            >{t("contacts.promptTo")}</span
+          >
+          <span class="contacts-mail__fixed" aria-labelledby="contact-to-label"
+            >{CONTACT_EMAIL}</span
+          >
+        </div>
+
+        <div class="contacts-mail__field">
+          <label class="contacts-mail__prompt" for="contact-email"
+            >{t("contacts.promptFrom")}</label
+          >
+          <input
+            type="email"
+            id="contact-email"
+            name="email"
+            required
+            aria-describedby="contact-email-error"
+            placeholder={t("contacts.placeholderEmail")}
+            class="contacts-mail__input"
+          />
+        </div>
+        <p
+          id="contact-email-error"
+          class="form-field-error hidden"
+          role="alert"
+        >
+        </p>
+
+        <div class="contacts-mail__field">
+          <span class="contacts-mail__prompt" id="contact-subject-label"
+            >{t("contacts.promptSubject")}</span
+          >
+          <span
+            class="contacts-mail__fixed contacts-mail__fixed--muted"
+            aria-labelledby="contact-subject-label"
+          >
+            {t("contacts.subjectAuto")}
+          </span>
+        </div>
+
+        <div class="contacts-mail__field contacts-mail__field--body">
+          <label
+            class="contacts-mail__prompt contacts-mail__prompt--top"
+            for="contact-message"
+          >
+            {t("contacts.promptBody")}
+          </label>
+          <textarea
+            id="contact-message"
+            name="message"
+            required
+            aria-describedby="contact-message-error"
+            rows="5"
+            placeholder={t("contacts.placeholderMsg")}
+            class="contacts-mail__input contacts-mail__input--multiline"
+          ></textarea>
+        </div>
+        <p
+          id="contact-message-error"
+          class="form-field-error hidden"
+          role="alert"
+        >
+        </p>
+
+        <div
+          id="contact-debug-panel"
+          class="hidden contacts-mail__log md3-code-block space-y-1 select-text"
+        >
+          <div class="text-text-muted select-none">
+            {t("contacts.debugComment")}
+          </div>
+          <div id="debug-line-1">{t("contacts.mailValidateOk")}</div>
+          <div id="debug-line-2">{t("contacts.debugTransmit")}</div>
+          <div id="debug-line-3" class="text-accent-secondary">&gt; …</div>
+          <div id="debug-line-4" class="text-accent-success hidden">
+            {t("contacts.debugPushOk")}
+          </div>
+        </div>
+
+        <div
+          class="contacts-mail__confirm"
+          role="group"
+          aria-labelledby="contact-send-prompt"
+        >
+          <span id="contact-send-prompt" class="contacts-mail__confirm-q"
+            >{t("contacts.sendPrompt")}</span
+          >
+          <div class="contacts-mail__confirm-actions">
+            <button
+              type="submit"
+              id="contact-submit-btn"
+              class="contacts-mail__yn contacts-mail__yn--yes md3-btn-tonal cursor-pointer pointer-events-auto"
+            >
+              {t("contacts.confirmYes")}
+            </button>
+            <button
+              type="button"
+              id="contact-cancel-btn"
+              class="contacts-mail__yn contacts-mail__yn--no md3-btn-outlined cursor-pointer pointer-events-auto"
+            >
+              {t("contacts.confirmNo")}
+            </button>
+          </div>
+          <span class="contacts-mail__cursor" aria-hidden="true">_</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</HomeSection>
+
+<script>
+  import { WEB3FORMS_SUBMIT_URL } from "../../constants/site";
+  import { clientT } from "../../utils/i18n";
+  import { onPageInit } from "../../utils/page-lifecycle";
+  import { notifyTerminal } from "../../utils/terminal-notify";
+
+  onPageInit(
+    () => Boolean(document.getElementById("contact-form-env")),
+    (signal) => {
+      const form = document.getElementById(
+        "contact-form-env",
+      ) as HTMLFormElement;
+      const submitBtn = document.getElementById(
+        "contact-submit-btn",
+      ) as HTMLButtonElement;
+      const cancelBtn = document.getElementById("contact-cancel-btn");
+      const debugPanel = document.getElementById("contact-debug-panel");
+      const debugLine3 = document.getElementById("debug-line-3");
+      const debugLine4 = document.getElementById("debug-line-4");
+      const emailError = document.getElementById("contact-email-error");
+      const messageError = document.getElementById("contact-message-error");
+
+      function showFieldError(el: HTMLElement | null, message: string) {
+        if (!el) return;
+        el.textContent = message;
+        el.classList.remove("hidden");
+      }
+
+      function clearFieldErrors() {
+        [emailError, messageError].forEach((el) => {
+          if (el) {
+            el.textContent = "";
+            el.classList.add("hidden");
+          }
+        });
+      }
+
+      cancelBtn?.addEventListener(
+        "click",
+        () => {
+          clearFieldErrors();
+          form.reset();
+          debugPanel?.classList.add("hidden");
+        },
+        { signal },
+      );
+
+      form.addEventListener(
+        "keydown",
+        (e) => {
+          const active = document.activeElement;
+          if (
+            active instanceof HTMLInputElement ||
+            active instanceof HTMLTextAreaElement ||
+            active?.getAttribute("contenteditable") === "true"
+          ) {
+            return;
+          }
+
+          if (
+            e.key === "n" ||
+            e.key === "N" ||
+            e.key === "н" ||
+            e.key === "Н"
+          ) {
+            e.preventDefault();
+            cancelBtn?.click();
+          }
+        },
+        { signal },
+      );
+
+      form.addEventListener(
+        "submit",
+        async (e) => {
+          e.preventDefault();
+          if (!submitBtn) return;
+
+          const emailInput = document.getElementById(
+            "contact-email",
+          ) as HTMLInputElement;
+          const msgInput = document.getElementById(
+            "contact-message",
+          ) as HTMLTextAreaElement;
+
+          clearFieldErrors();
+
+          let hasError = false;
+          if (!emailInput?.value.trim()) {
+            showFieldError(emailError, clientT("contacts", "emailRequired"));
+            hasError = true;
+          } else if (
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())
+          ) {
+            showFieldError(emailError, clientT("contacts", "emailInvalid"));
+            hasError = true;
+          }
+          if (!msgInput?.value.trim()) {
+            showFieldError(
+              messageError,
+              clientT("contacts", "messageRequired"),
+            );
+            hasError = true;
+          }
+          if (hasError) return;
+
+          const sendingText = clientT("contacts", "sending");
+          const successText = clientT("contacts", "success");
+          const errorText = clientT("contacts", "error");
+
+          submitBtn.disabled = true;
+          cancelBtn?.setAttribute("disabled", "true");
+          submitBtn.textContent = sendingText;
+
+          if (debugPanel) {
+            debugPanel.classList.remove("hidden");
+            if (debugLine4) debugLine4.classList.add("hidden");
+            if (debugLine3) debugLine3.textContent = `> ${sendingText}`;
+          }
+
+          const accessKey =
+            form.getAttribute("data-web3forms-access-key") || "";
+          let isSuccess = false;
+
+          try {
+            if (accessKey) {
+              const response = await fetch(WEB3FORMS_SUBMIT_URL, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+                body: JSON.stringify({
+                  access_key: accessKey,
+                  email: emailInput.value,
+                  message: msgInput.value,
+                  subject: clientT("contacts", "formSubject"),
+                  from_name: "DARK NIGHT",
+                  botcheck: "",
+                }),
+              });
+              const result = (await response.json()) as {
+                success?: boolean;
+              };
+              isSuccess = response.ok && result.success === true;
+            } else {
+              await new Promise((resolve) => setTimeout(resolve, 1500));
+              console.log("Mock mail send (no PUBLIC_WEB3FORMS_ACCESS_KEY):", {
+                email: emailInput.value,
+                message: msgInput.value,
+              });
+              isSuccess = true;
+            }
+          } catch (err) {
+            console.error(err);
+            isSuccess = false;
+          }
+
+          if (isSuccess) {
+            if (debugLine3 && debugLine4) {
+              debugLine3.textContent = `> ${clientT("contacts", "debugTransmit")} ${clientT("contacts", "debugOk")}`;
+              debugLine4.textContent = clientT("contacts", "debugPushOk");
+              debugLine4.classList.remove("hidden");
+            }
+            notifyTerminal(successText, "success");
+            form.reset();
+            debugPanel?.classList.add("hidden");
+          } else {
+            if (debugLine3) {
+              debugLine3.textContent = `> ${clientT("contacts", "debugTransmit")} ${clientT("contacts", "debugFailed")}`;
+            }
+            notifyTerminal(errorText, "error");
+          }
+
+          submitBtn.disabled = false;
+          cancelBtn?.removeAttribute("disabled");
+          submitBtn.textContent = clientT("contacts", "confirmYes");
+        },
+        { signal },
+      );
+    },
+  );
+</script>

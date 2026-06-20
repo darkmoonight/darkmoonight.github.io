@@ -1,0 +1,319 @@
+---
+import { getLangFromUrl, useTranslations } from "../../utils/i18n";
+import HomeSection from "../HomeSection.astro";
+import PanelTerminalBar from "../PanelTerminalBar.astro";
+import teamMembers from "../../data/team.json";
+import { MOON_ASCII } from "../../data/moon-ascii";
+import { CONTACT_EMAIL } from "../../constants/site";
+import {
+  aboutMetaFromSnapshot,
+  loadGithubSnapshot,
+  type GitHubSnapshot,
+} from "../../utils/github-snapshot";
+
+interface Props {
+  snapshot?: GitHubSnapshot;
+}
+
+const { snapshot = loadGithubSnapshot() } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const tEn = useTranslations("en");
+
+const gh = snapshot;
+const ghMeta = aboutMetaFromSnapshot(
+  gh,
+  t("about.orgType"),
+  t("about.orgLocation"),
+);
+const ghMetaEn = aboutMetaFromSnapshot(
+  gh,
+  tEn("about.orgType"),
+  tEn("about.orgLocation"),
+);
+
+const teamDetails = {
+  organization: ghMeta.organization,
+  established: ghMeta.established,
+  type: ghMeta.type,
+  location: ghMeta.location,
+  active_members: teamMembers,
+  status: "active_and_coding",
+  license: "MIT",
+  repository: ghMeta.repository,
+  website: ghMeta.website,
+  default_branch: ghMeta.default_branch,
+  description: ghMeta.description,
+  followers: ghMeta.followers,
+  public_repos: ghMeta.public_repos,
+  email: ghMeta.email || CONTACT_EMAIL,
+  created_at: ghMeta.created_at,
+  host: ghMeta.host,
+  primaryStack: ghMeta.primaryStack,
+};
+
+/** metadata.json is always English (raw export), regardless of page locale. */
+const metadataJson = {
+  organization: teamDetails.organization,
+  description: teamDetails.description,
+  established: teamDetails.established,
+  location: ghMetaEn.location,
+  type: ghMetaEn.type,
+  primaryStack: teamDetails.primaryStack,
+  philosophy: tEn("about.philosophy"),
+  active_members: teamDetails.active_members,
+  status: teamDetails.status,
+  license: teamDetails.license,
+  followers: teamDetails.followers,
+  public_repos: teamDetails.public_repos,
+  repository: teamDetails.repository,
+  website: teamDetails.website,
+  default_branch: teamDetails.default_branch,
+  email: teamDetails.email,
+};
+
+const activeMembersHtml = teamMembers
+  .map(
+    (member, index) =>
+      `${index > 0 ? ",\n    " : "    "}<span class="text-accent">"${member}"</span>`,
+  )
+  .join("");
+---
+
+<HomeSection
+  id="about"
+  label={t("about.sectionHeader")}
+  title={t("about.title")}
+  hint={t("about.readOnly")}
+>
+  <p class="section-subtitle">
+    {t("about.subtitle")}
+  </p>
+
+  <div class="about-terminal md3-panel md3-panel--terminal-code">
+    <PanelTerminalBar
+      title={t("about.panelTitle")}
+      tag={t("about.terminalTag")}
+    />
+
+    <div class="about-terminal__body">
+      <div class="about-terminal__session">
+        <div class="about-terminal__neofetch-group">
+          <p class="about-terminal__cmd text-text-muted select-none m-0">
+            {t("about.cmdNeofetch")}
+          </p>
+          <div class="neofetch neofetch--about">
+            <div class="neofetch__moon-wrap" aria-hidden="true">
+              <pre class="neofetch__moon text-accent">{MOON_ASCII}</pre>
+            </div>
+            <div class="neofetch__info">
+              <div>
+                <span class="text-accent-secondary font-bold"
+                  >org@darknight</span
+                >
+              </div>
+              <div class="text-text-muted">---------------</div>
+              <div>
+                <span class="text-accent font-bold"
+                  >{t("about.neofetchHost")}:</span
+                >
+                <span data-github-org="host">{teamDetails.host}</span>
+              </div>
+              <div>
+                <span class="text-accent font-bold"
+                  >{t("about.neofetchEst")}:</span
+                >
+                <span class="text-accent-success" data-github-org="established"
+                  >{teamDetails.established}</span
+                >
+              </div>
+              <div>
+                <span class="text-accent font-bold"
+                  >{t("about.neofetchType")}:</span
+                >
+                <span data-github-org="description"
+                  >{teamDetails.description}</span
+                >
+              </div>
+              <div>
+                <span class="text-accent font-bold"
+                  >{t("about.neofetchLocale")}:</span
+                >
+                <span data-github-org="location">{teamDetails.location}</span>
+              </div>
+              <div>
+                <span class="text-accent font-bold"
+                  >{t("about.neofetchLang")}:</span
+                >
+                {lang.toUpperCase()}
+              </div>
+              <div>
+                <span class="text-accent font-bold"
+                  >{t("about.neofetchStack")}:</span
+                >
+                <span data-github-org="stack"
+                  >{teamDetails.primaryStack.join(", ")}</span
+                >
+              </div>
+              <div>
+                <span class="text-accent font-bold"
+                  >{t("about.neofetchStatus")}:</span
+                >
+                <span class="text-accent-success">active_and_coding</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="terminal-divider" aria-hidden="true"></div>
+
+        <div class="about-terminal__block about-terminal__block--compact">
+          <p
+            class="about-terminal__cmd about-terminal__cmd--inline text-text-muted select-none m-0"
+          >
+            {t("about.cmdReadme")}
+          </p>
+          <p class="about-terminal__out text-text-primary">
+            {t("about.readme")}
+          </p>
+        </div>
+
+        <div class="about-terminal__block about-terminal__block--compact">
+          <p
+            class="about-terminal__cmd about-terminal__cmd--inline text-text-muted select-none m-0"
+          >
+            {t("about.cmdMission")}
+          </p>
+          <blockquote class="about-terminal__quote">
+            <p class="about-terminal__out text-text-secondary m-0">
+              {t("about.mission")}
+            </p>
+          </blockquote>
+        </div>
+
+        <div class="about-terminal__block about-terminal__block--compact">
+          <p
+            class="about-terminal__cmd about-terminal__cmd--inline text-text-muted select-none m-0"
+          >
+            {t("about.cmdStack")}
+          </p>
+          <div class="about-terminal__tree">
+            <p class="about-terminal__out m-0">
+              <span class="text-accent-secondary">flutter/</span>
+              <span class="text-text-muted"># {t("about.stackFlutter")}</span>
+            </p>
+            <p class="about-terminal__out m-0">
+              <span class="text-accent-secondary">astro/</span>
+              <span class="text-text-muted"># {t("about.stackAstro")}</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="about-terminal__block about-terminal__block--compact">
+          <p
+            class="about-terminal__cmd about-terminal__cmd--inline text-text-muted select-none m-0"
+          >
+            {t("about.cmdTeam")}
+          </p>
+          <ul class="about-terminal__team list-none m-0 p-0">
+            {
+              teamMembers.map((member) => (
+                <li class="about-terminal__team-row">
+                  <span class="text-accent-secondary">
+                    {member.toLowerCase().replace(/\s+/g, "")}
+                  </span>
+                  <span class="text-text-muted"> — </span>
+                  <span class="text-text-primary">{member}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="about-terminal__block about-terminal__block--compact">
+          <p
+            class="about-terminal__cmd about-terminal__cmd--inline text-text-muted select-none m-0"
+          >
+            {t("about.cmdJoin")}
+          </p>
+          <p class="about-terminal__out text-text-secondary m-0">
+            {t("about.joinUsBody")}
+          </p>
+        </div>
+      </div>
+
+      <aside class="about-terminal__meta">
+        <button
+          type="button"
+          id="about-json-toggle"
+          class="about-terminal__meta-toggle"
+          aria-expanded="false"
+          aria-controls="about-json-panel"
+        >
+          <span class="text-accent font-bold">{t("about.showRawJson")}</span>
+          <span class="text-text-muted text-[10px]">metadata.json</span>
+        </button>
+
+        <div id="about-json-panel" class="about-terminal__meta-panel">
+          <div class="about-terminal__cmd text-text-muted select-none">
+            {t("about.cmdMetadata")}
+          </div>
+
+          <div class="about-terminal__json-wrap">
+            <pre
+              class="md3-code-block about-terminal__json leading-relaxed select-all text-[11px] md:text-xs">
+&#123;
+  <span class="text-accent-secondary">"organization"</span>: <span class="text-accent" data-github-org="organization">"{metadataJson.organization}"</span>,
+  <span class="text-accent-secondary">"description"</span>: <span class="text-accent" data-github-org="description">"{metadataJson.description}"</span>,
+  <span class="text-accent-secondary">"established"</span>: <span class="text-accent-success" data-github-org="established">{metadataJson.established}</span>,
+  <span class="text-accent-secondary">"location"</span>: <span class="text-accent" data-github-org="location">"{metadataJson.location}"</span>,
+  <span class="text-accent-secondary">"type"</span>: <span class="text-accent">"{metadataJson.type}"</span>,
+  <span class="text-accent-secondary">"primary_stack"</span>: [
+{metadataJson.primaryStack.map((tech, index) => (
+  <>{index > 0 ? ',\n    ' : '    '}<span class="text-accent">"{tech}"</span></>
+))}
+  ],
+  <span class="text-accent-secondary">"philosophy"</span>: <span class="text-accent">"{metadataJson.philosophy}"</span>,
+  <span class="text-accent-secondary">"active_members"</span>: [
+<Fragment set:html={activeMembersHtml} />
+  ],
+  <span class="text-accent-secondary">"status"</span>: <span class="text-accent-success">"active_and_coding"</span>,
+  <span class="text-accent-secondary">"license"</span>: <span class="text-accent">"MIT"</span>,
+  <span class="text-accent-secondary">"followers"</span>: <span class="text-accent" data-github-org="followers">{metadataJson.followers}</span>,
+  <span class="text-accent-secondary">"public_repos"</span>: <span class="text-accent-success" data-github-org="public_repos">{metadataJson.public_repos}</span>,
+  <span class="text-accent-secondary">"repository"</span>: <span class="text-accent" data-github-org="repository">"{metadataJson.repository}"</span>,
+  <span class="text-accent-secondary">"website"</span>: <span class="text-accent" data-github-org="website">"{metadataJson.website}"</span>,
+  <span class="text-accent-secondary">"default_branch"</span>: <span class="text-accent" data-github-org="default_branch">"{metadataJson.default_branch}"</span>,
+  <span class="text-accent-secondary">"email"</span>: <span class="text-accent" data-github-org="email">"{metadataJson.email}"</span>
+&#125;
+          </pre>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</HomeSection>
+
+<script>
+  import { onPageInit } from "../../utils/page-lifecycle";
+
+  onPageInit(
+    () => Boolean(document.getElementById("about-json-toggle")),
+    (signal) => {
+      const toggle = document.getElementById("about-json-toggle");
+      const panel = document.getElementById("about-json-panel");
+      if (!toggle || !panel) return;
+
+      toggle.addEventListener(
+        "click",
+        () => {
+          const isOpen = !panel.classList.contains("is-open");
+          panel.classList.toggle("is-open", isOpen);
+          toggle.setAttribute("aria-expanded", String(isOpen));
+        },
+        { signal },
+      );
+    },
+  );
+</script>

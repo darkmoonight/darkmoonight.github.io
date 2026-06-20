@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  tag?: string;
+  lights?: "sm" | "md";
+}
+
+const { title, tag, lights = "sm" } = Astro.props;
+---
+
+<div class="md3-panel-bar md3-panel-bar--terminal">
+  <div
+    class={`md3-traffic-lights md3-traffic-lights--${lights}`}
+    aria-hidden="true"
+  >
+    <span class="md3-traffic-lights__dot md3-traffic-lights__dot--red"></span>
+    <span class="md3-traffic-lights__dot md3-traffic-lights__dot--yellow"
+    ></span>
+    <span class="md3-traffic-lights__dot md3-traffic-lights__dot--green"></span>
+  </div>
+  <span class="text-text-secondary font-medium truncate min-w-0">{title}</span>
+  {tag && <span class="md3-panel-bar__tag">{tag}</span>}
+</div>

@@ -1,0 +1,28 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Hero from "../../components/sections/Hero.astro";
+import About from "../../components/sections/About.astro";
+import Projects from "../../components/sections/Projects.astro";
+import News from "../../components/sections/News.astro";
+// import Donations from "../../components/sections/Donations.astro";
+import Contacts from "../../components/sections/Contacts.astro";
+import { LANGUAGES, useTranslations, type Language } from "../../utils/i18n";
+import { loadGithubSnapshot } from "../../utils/github-snapshot";
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params as { lang: Language };
+const t = useTranslations(lang);
+const snapshot = loadGithubSnapshot();
+---
+
+<Layout title={t("meta.siteTitle")} description={t("meta.siteDescription")}>
+  <Hero snapshot={snapshot} />
+  <About snapshot={snapshot} />
+  <Projects snapshot={snapshot} />
+  <News snapshot={snapshot} />
+  {/* <Donations /> */}
+  <Contacts />
+</Layout>

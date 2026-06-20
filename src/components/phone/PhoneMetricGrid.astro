@@ -1,0 +1,35 @@
+---
+import type { MockupMetric } from "../../utils/project-mockup";
+
+interface Props {
+  metrics: MockupMetric[];
+  columns?: 2 | 3;
+  accentValues?: boolean;
+}
+
+const { metrics, columns = 2, accentValues = false } = Astro.props;
+---
+
+<div
+  class:list={[
+    "phone-mockup-metric-grid",
+    { "phone-mockup-metric-grid--3": columns === 3 },
+  ]}
+>
+  {
+    metrics.map((metric) => (
+      <div class="phone-app-card phone-mockup-metric">
+        <div class="phone-mockup-metric__label">{metric.label}</div>
+        <div
+          class:list={[
+            "phone-mockup-metric__value",
+            { "phone-mockup-metric__value--accent": accentValues },
+          ]}
+          id={metric.id}
+        >
+          {metric.value}
+        </div>
+      </div>
+    ))
+  }
+</div>

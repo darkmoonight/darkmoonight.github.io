@@ -1,0 +1,714 @@
+---
+import {
+  getLangFromUrl,
+  useTranslations,
+  pickSection,
+  localizedField,
+} from "../../utils/i18n";
+import projectsData from "../../data/projects.json";
+import teamMembers from "../../data/team.json";
+import {
+  buildHeroProjectEntries,
+  formatHeroProjectsList,
+} from "../../utils/hero-projects";
+import {
+  enrichProjects,
+  loadGithubSnapshot,
+  type GitHubSnapshot,
+} from "../../utils/github-snapshot";
+import PanelTerminalBar from "../PanelTerminalBar.astro";
+
+interface Props {
+  snapshot?: GitHubSnapshot;
+}
+
+const { snapshot = loadGithubSnapshot() } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const heroProjects = enrichProjects(projectsData, snapshot);
+const heroProjectEntries = buildHeroProjectEntries(
+  heroProjects,
+  Object.fromEntries(
+    heroProjects.map((p) => [p.id, localizedField(lang, p).tagline]),
+  ),
+);
+const projectList = formatHeroProjectsList(heroProjectEntries);
+---
+
+<section
+  id="hero"
+  class="w-full pt-2 md:pt-8 flex flex-col gap-4 md:gap-6 scroll-mt-14 transition-colors duration-200"
+>
+  <div class="md3-panel hero-terminal-panel relative w-full flex flex-col">
+    <PanelTerminalBar
+      title={t("hero.terminalTitle")}
+      tag={t("hero.encoding")}
+      lights="md"
+    />
+
+    <div
+      id="terminal-screen"
+      class="md3-panel-body relative flex flex-1 flex-col min-h-0 overflow-hidden font-mono text-xs selection:bg-accent/30 selection:text-text-primary"
+    >
+      <canvas
+        id="terminal-matrix-canvas"
+        class="hidden absolute inset-0 z-20"
+        style="background: color-mix(in srgb, var(--term-screen-bg) 95%, transparent);"
+      ></canvas>
+
+      <div class="hero-ascii-wrap hero-ascii-banner shrink-0">
+        <pre
+          class="text-[9px] md:text-xs leading-none text-accent font-bold select-none hero-ascii-pulse motion-reduce:animate-none"
+          aria-label={t(
+            "meta.siteTitle",
+          )}>██████╗  █████╗ ██████╗ ██╗  ██╗    ███╗   ██╗██╗ ██████╗ ██╗  ██╗████████╗
+██╔══██╗██╔══██╗██╔══██╗██║ ██╔╝    ████╗  ██║██║██╔════╝ ██║  ██║╚══██╔══╝
+██║  ██║███████║██████╔╝█████╔╝     ██╔██╗ ██║██║██║  ███╗███████║   ██║
+██║  ██║██╔══██║██╔══██╗██╔═██╗     ██║╚██╗██║██║██║   ██║██╔══██║   ██║
+██████╔╝██║  ██║██║  ██║██║  ██╗    ██║ ╚████║██║╚██████╔╝██║  ██║   ██║
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝    ╚═╝  ╚═══╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝</pre>
+      </div>
+
+      <div
+        id="terminal-output"
+        class="terminal-output flex-1 min-h-0 overflow-y-auto scroll-smooth flex flex-col gap-3"
+      >
+        <div id="terminal-history" class="space-y-3"></div>
+
+        <div
+          class="hero-input-line flex items-center gap-2 pt-1 shrink-0"
+          id="input-line"
+        >
+          <span class="text-accent font-bold shrink-0">{t("hero.prompt")}</span>
+          <div class="flex-1 relative flex items-center min-w-0">
+            <input
+              type="text"
+              id="terminal-input"
+              class="w-full bg-transparent border-none outline-none focus:ring-0 p-0 text-text-primary caret-transparent"
+              autocomplete="off"
+            />
+            <span
+              id="custom-cursor"
+              class="absolute w-2 h-4 bg-text-primary pointer-events-none cursor-blink"
+            ></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="hero-try-bar md3-surface-container border-t border-border-color/80 px-4 py-2.5 font-mono text-[10px] md:text-xs text-text-secondary flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-2 sm:gap-3 select-none shrink-0"
+    >
+      <div
+        class="flex flex-col sm:flex-row sm:items-center gap-1 shrink-0 min-w-0"
+      >
+        <span class="text-text-muted font-bold">{t("hero.tryLabel")}</span>
+        <span class="text-[9px] text-text-muted/80 font-normal normal-case"
+          >{t("hero.tryHint")}</span
+        >
+      </div>
+      <div class="hero-try-bar__cmds flex flex-wrap gap-1.5 items-center">
+        <button
+          type="button"
+          data-cmd-tag="help"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold hover:border-accent hover:text-accent transition-all"
+          >help</button
+        >
+        <button
+          type="button"
+          data-cmd-tag="neofetch"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold hover:border-accent hover:text-accent transition-all"
+          >neofetch</button
+        >
+        <button
+          type="button"
+          data-cmd-tag="about"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold hover:border-accent hover:text-accent transition-all"
+          >about</button
+        >
+        <button
+          type="button"
+          data-cmd-tag="projects"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold hover:border-accent hover:text-accent transition-all"
+          >projects</button
+        >
+        <button
+          type="button"
+          id="hero-more-cmd-toggle"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold text-text-muted hover:border-accent hover:text-accent transition-all"
+          aria-expanded="false"
+          aria-controls="hero-more-commands"
+        >
+          {t("hero.moreCommands")}
+        </button>
+      </div>
+      <div
+        id="hero-more-commands"
+        class="collapse-panel hero-try-bar__more hidden"
+        aria-hidden="true"
+      >
+        <button
+          type="button"
+          data-cmd-tag="matrix"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold text-text-muted hover:border-accent hover:text-accent transition-all"
+          >matrix</button
+        >
+        <button
+          type="button"
+          data-cmd-tag="train"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold text-text-muted hover:border-accent hover:text-accent transition-all"
+          >train</button
+        >
+        <button
+          type="button"
+          data-cmd-tag="theme"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold text-text-muted hover:border-accent hover:text-accent transition-all"
+          >theme</button
+        >
+        <button
+          type="button"
+          data-cmd-tag="clear"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold text-text-muted hover:border-accent hover:text-accent transition-all"
+          >clear</button
+        >
+        <button
+          type="button"
+          data-cmd-tag="sudo rm -rf /"
+          class="md3-chip md3-chip--touch cursor-pointer font-bold text-red-500 border-red-500/30 hover:bg-red-500 hover:text-white transition-all"
+          >sudo rm -rf /</button
+        >
+      </div>
+    </div>
+  </div>
+
+  <p
+    id="hero-scroll-hint"
+    class="hero-scroll-hint text-center text-[11px] text-text-muted font-mono select-none motion-reduce:opacity-70"
+  >
+    {t("hero.scrollHint")}
+  </p>
+</section>
+
+<div
+  id="terminal-data"
+  class="hidden"
+  data-lang={lang}
+  data-help={t("hero.helpText")}
+  data-projects={projectList}
+  data-project-entries={JSON.stringify(heroProjectEntries)}
+  data-prompt={t("hero.prompt")}
+  data-glitch={t("hero.rmGlitch")}
+  data-mission={t("about.mission")}
+  data-team={teamMembers.join(", ")}
+  data-i18n={JSON.stringify(pickSection(lang, "terminal"))}
+>
+</div>
+
+<script>
+  import { getBugsSquashedString } from "../../utils/bugs-storage";
+  import { notifyTerminal } from "../../utils/terminal-notify";
+  import { DOM_IDS } from "../../constants/dom-ids";
+  import { SITE_HOST } from "../../constants/site";
+  import { onPageInit } from "../../utils/page-lifecycle";
+  import { escapeHtml } from "../../utils/html";
+  import { MOON_ASCII } from "../../data/moon-ascii";
+
+  const termDataEl = () => document.getElementById("terminal-data");
+  const lang = () =>
+    termDataEl()?.getAttribute("data-lang") ||
+    document.documentElement.lang ||
+    "en";
+  const helpText = () => termDataEl()?.getAttribute("data-help") || "";
+  const projectsText = () => termDataEl()?.getAttribute("data-projects") || "";
+  const promptSymbol = () =>
+    termDataEl()?.getAttribute("data-prompt") || tr("neofetchPromptFallback");
+  const glitchText = () => termDataEl()?.getAttribute("data-glitch") || "";
+  const missionText = () => termDataEl()?.getAttribute("data-mission") || "";
+
+  function tr(key: string, vars?: Record<string, string>): string {
+    const el = termDataEl();
+    if (!el) return key;
+    try {
+      const data = JSON.parse(el.getAttribute("data-i18n") || "{}");
+      let str = data[key] || key;
+      if (vars) {
+        for (const [k, v] of Object.entries(vars)) {
+          str = str.replace(`{${k}}`, v);
+        }
+      }
+      return str;
+    } catch {
+      return key;
+    }
+  }
+
+  let typingInterval: ReturnType<typeof setInterval> | null = null;
+  let matrixInterval: ReturnType<typeof setInterval> | null = null;
+
+  function bindHeroEvents(signal: AbortSignal) {
+    const heroRoot = document.getElementById("hero");
+    if (!heroRoot) return;
+
+    heroRoot.addEventListener(
+      "click",
+      (event) => {
+        const moreToggle = (event.target as HTMLElement).closest?.(
+          "#hero-more-cmd-toggle",
+        );
+        if (moreToggle) {
+          event.preventDefault();
+          const morePanel = document.getElementById("hero-more-commands");
+          if (!morePanel) return;
+          const isHidden = morePanel.classList.contains("hidden");
+          morePanel.classList.toggle("hidden", !isHidden);
+          morePanel.setAttribute("aria-hidden", isHidden ? "false" : "true");
+          moreToggle.setAttribute("aria-expanded", isHidden ? "true" : "false");
+          return;
+        }
+
+        const btn = (event.target as HTMLElement).closest?.("[data-cmd-tag]");
+        if (!btn) return;
+
+        const input = document.getElementById(
+          "terminal-input",
+        ) as HTMLInputElement | null;
+        if (!input) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const cmd = btn.getAttribute("data-cmd-tag");
+        if (!cmd) return;
+
+        if (typingInterval) clearInterval(typingInterval);
+
+        input.focus();
+        input.value = "";
+        updateCursorPosition();
+
+        let i = 0;
+        typingInterval = setInterval(() => {
+          if (i < cmd.length) {
+            input.value += cmd[i];
+            updateCursorPosition();
+            i++;
+          } else {
+            if (typingInterval) clearInterval(typingInterval);
+            typingInterval = null;
+
+            setTimeout(() => {
+              const commandLine = input.value.trim();
+              const parts = commandLine.toLowerCase().split(/\s+/);
+              const mainCommand = parts[0];
+
+              if (commandLine) {
+                executeCommand(commandLine, mainCommand);
+              }
+              input.value = "";
+              updateCursorPosition();
+            }, 150);
+          }
+        }, 30);
+      },
+      { signal },
+    );
+
+    document.addEventListener(
+      "click",
+      (event) => {
+        const screen = document.getElementById("terminal-screen");
+        if (screen && screen.contains(event.target as Node)) {
+          getTerminalInput()?.focus();
+        }
+      },
+      { signal },
+    );
+
+    document.addEventListener(
+      "input",
+      (event) => {
+        if ((event.target as HTMLElement).id === "terminal-input") {
+          updateCursorPosition();
+        }
+      },
+      { signal },
+    );
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+        const input = getTerminalInput();
+        if (event.target !== input || !input) return;
+
+        if (event.key === "Enter") {
+          const commandLine = input.value.trim();
+          const parts = commandLine.toLowerCase().split(/\s+/);
+          const mainCommand = parts[0];
+
+          if (commandLine) {
+            executeCommand(commandLine, mainCommand);
+          } else {
+            appendHistory(promptSymbol(), "");
+          }
+
+          input.value = "";
+          updateCursorPosition();
+        }
+      },
+      { signal },
+    );
+
+    document.addEventListener(
+      "click",
+      (event) => {
+        const canvas = getMatrixCanvas();
+        if (canvas && canvas.contains(event.target as Node)) stopMatrix();
+      },
+      { signal },
+    );
+
+    window.addEventListener(
+      "keydown",
+      (e) => {
+        if (matrixInterval && (e.key === "Escape" || e.key === "Enter")) {
+          stopMatrix();
+          e.preventDefault();
+        }
+      },
+      { signal },
+    );
+
+    const scrollHint = document.getElementById("hero-scroll-hint");
+    // Hide once the user scrolls — terminal output scrolls independently on mobile.
+    const hideScrollHint = () => scrollHint?.classList.add("is-hidden");
+    if (scrollHint && getScrollTop() > 80) hideScrollHint();
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (getScrollTop() > 80) hideScrollHint();
+      },
+      { passive: true, signal },
+    );
+  }
+
+  function getScrollTop(): number {
+    return window.scrollY || document.documentElement.scrollTop || 0;
+  }
+
+  function resetHeroState() {
+    if (typingInterval) {
+      clearInterval(typingInterval);
+      typingInterval = null;
+    }
+
+    stopMatrix();
+    document.getElementById(DOM_IDS.rmRfGlitchOverlay)?.remove();
+    document.body.classList.remove("rm-rf-active");
+
+    if (!document.getElementById(DOM_IDS.retroArcadeModal)) {
+      document.body.style.overflow = "";
+    }
+  }
+
+  function getTerminalInput() {
+    return document.getElementById("terminal-input") as HTMLInputElement | null;
+  }
+
+  function scrollTerminalToBottom() {
+    const output = document.getElementById("terminal-output");
+    if (output) output.scrollTop = output.scrollHeight;
+  }
+
+  function updateCursorPosition() {
+    const input = getTerminalInput();
+    const cursor = document.getElementById("custom-cursor");
+    if (!input || !cursor) return;
+    const charWidth = 7.2;
+    cursor.style.left = `${input.value.length * charWidth}px`;
+  }
+
+  function appendHistory(prompt: string, text: string, isHtml = false) {
+    const history = document.getElementById("terminal-history");
+    const input = getTerminalInput();
+    if (!history) return;
+    const item = document.createElement("div");
+    item.className = "space-y-1";
+
+    const pLine = document.createElement("div");
+    pLine.className = "flex items-center space-x-2";
+    pLine.innerHTML = `<span class="text-accent font-bold">${prompt}</span><span class="text-text-primary">${prompt ? escapeHtml(prompt === promptSymbol() ? (input?.value ?? "") : prompt) : ""}</span>`;
+
+    const resLine = document.createElement("div");
+    resLine.className =
+      "text-text-secondary whitespace-pre-wrap leading-relaxed";
+    if (isHtml) {
+      resLine.innerHTML = text;
+      if (text.includes("neofetch")) {
+        resLine.classList.add("terminal-neofetch-result");
+      }
+    } else {
+      resLine.textContent = text;
+    }
+
+    if (prompt) item.appendChild(pLine);
+    item.appendChild(resLine);
+    history.appendChild(item);
+
+    requestAnimationFrame(() => scrollTerminalToBottom());
+  }
+
+  function executeCommand(fullCommand: string, cmd: string) {
+    // Terminal command router — each case writes to history or toggles UI state.
+    switch (cmd) {
+      case "help":
+        appendHistory(promptSymbol(), helpText());
+        break;
+
+      case "clear": {
+        const historyEl = document.getElementById("terminal-history");
+        if (historyEl) historyEl.innerHTML = "";
+        break;
+      }
+
+      case "about":
+        appendHistory(promptSymbol(), missionText());
+        break;
+
+      case "projects":
+        appendHistory(promptSymbol(), projectsText());
+        break;
+
+      case "matrix":
+        if (matrixInterval) {
+          stopMatrix();
+          appendHistory(promptSymbol(), tr("matrixStop"));
+        } else {
+          startMatrix();
+        }
+        break;
+
+      case "train":
+      case "sl":
+        appendHistory(promptSymbol(), tr("trainStart"));
+        animateTrain();
+        break;
+
+      case "theme": {
+        const wasDark = document.documentElement.classList.contains("dark");
+        document.getElementById("theme-toggle")?.click();
+        const feedback = tr("themeToggled", {
+          mode: wasDark ? tr("themeLight") : tr("themeDark"),
+        });
+        appendHistory(promptSymbol(), feedback);
+        break;
+      }
+
+      case "neofetch":
+        const neofetchOutput = getNeofetchOutput();
+        appendHistory(promptSymbol(), neofetchOutput, true);
+        break;
+
+      case "sudo":
+        const subCmd = fullCommand.toLowerCase().replace(/\s+/g, " ");
+        if (subCmd.includes("rm -rf") || subCmd.includes("rm")) {
+          triggerGlitchEgg();
+        } else {
+          appendHistory(promptSymbol(), tr("sudoError"));
+        }
+        break;
+
+      default: {
+        const unknownText = tr("cmdNotFound", { cmd });
+        appendHistory(promptSymbol(), unknownText);
+      }
+    }
+  }
+
+  function getNeofetchOutput() {
+    const isDark = document.documentElement.classList.contains("dark");
+    const themeName = isDark
+      ? tr("neofetchThemeDark")
+      : tr("neofetchThemeLight");
+    const stackFallback = tr("neofetchStackFallback");
+    const stack =
+      document.querySelector('[data-github-org="stack"]')?.textContent ||
+      stackFallback;
+    const team = termDataEl()?.getAttribute("data-team") || "";
+
+    return `
+<div class="neofetch neofetch--hero">
+  <pre class="neofetch__moon text-accent" aria-hidden="true">${MOON_ASCII}</pre>
+  <div class="neofetch__info">
+    <div><span class="text-accent-secondary font-bold">${tr("neofetchUser")}</span></div>
+    <div class="text-text-muted">${tr("neofetchDivider")}</div>
+    <div><span class="text-accent font-bold">${tr("neofetchOs")}</span>: ${tr("neofetchOsValue")}</div>
+    <div><span class="text-accent font-bold">${tr("neofetchHost")}</span>: ${SITE_HOST}</div>
+    <div><span class="text-accent font-bold">${tr("neofetchKernel")}</span>: ${tr("neofetchKernelValue")}</div>
+    <div><span class="text-accent font-bold">${tr("neofetchShell")}</span>: ${tr("neofetchShellValue")}</div>
+    <div><span class="text-accent font-bold">${tr("neofetchTheme")}</span>: ${themeName}</div>
+    <div><span class="text-accent font-bold">${tr("neofetchLanguage")}</span>: ${lang().toUpperCase()}</div>
+    <div><span class="text-accent font-bold">${tr("neofetchStack")}</span>: <span data-github-org="stack">${stack}</span></div>
+    <div><span class="text-accent font-bold">${tr("neofetchTeam")}</span>: ${team}</div>
+    <div><span class="text-accent font-bold">${tr("neofetchBugs")}</span>: <span class="text-accent-secondary font-bold">${getBugsSquashedString()}</span></div>
+  </div>
+</div>`.trim();
+  }
+
+  function triggerGlitchEgg() {
+    document.body.classList.add("rm-rf-active");
+    document.body.style.overflow = "hidden";
+
+    const glitchOverlay = document.createElement("div");
+    glitchOverlay.id = DOM_IDS.rmRfGlitchOverlay;
+    glitchOverlay.setAttribute("role", "alert");
+    glitchOverlay.setAttribute("aria-live", "assertive");
+    glitchOverlay.className = "rm-rf-overlay text-red-500 text-lg";
+    glitchOverlay.innerHTML = `
+      <div class="rm-rf-message space-y-4">
+        <div class="text-4xl font-extrabold tracking-widest text-red-600">${tr("rmFailureTitle")}</div>
+        <div class="text-sm border-y border-red-500/60 py-4 font-bold">${glitchText()}</div>
+        <div class="text-xs text-red-400/90 leading-normal">
+          ${tr("rmFailureBody").replace(/\\n/g, "<br/>")}
+        </div>
+      </div>
+    `;
+    document.documentElement.appendChild(glitchOverlay);
+
+    setTimeout(() => {
+      glitchOverlay.remove();
+      document.body.classList.remove("rm-rf-active");
+      document.body.style.overflow = "";
+
+      const historyEl = document.getElementById("terminal-history");
+      if (historyEl) historyEl.innerHTML = "";
+      appendHistory("", tr("rmRestored"));
+      scrollTerminalToBottom();
+
+      notifyTerminal(tr("rmRebootToast"), "success");
+    }, 3500);
+  }
+
+  function getMatrixCanvas() {
+    return document.getElementById(
+      "terminal-matrix-canvas",
+    ) as HTMLCanvasElement | null;
+  }
+
+  function drawMatrixFrame(
+    ctx: CanvasRenderingContext2D,
+    canvas: HTMLCanvasElement,
+    drops: number[],
+    alphabet: string,
+  ) {
+    ctx.fillStyle = "rgba(5, 6, 10, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#10b981";
+    ctx.font = "13px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = alphabet[Math.floor(Math.random() * alphabet.length)];
+      const x = i * 14;
+      const y = drops[i] * 14;
+
+      ctx.fillText(text, x, y);
+
+      if (y > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+
+    ctx.fillStyle = "#f0f3f6";
+    ctx.font = "10px monospace";
+    ctx.fillText(tr("matrixHelp"), 16, canvas.height - 16);
+  }
+
+  function startMatrix() {
+    // Full-screen canvas overlay; Escape/Enter stops the animation loop.
+    const matrixCanvas = getMatrixCanvas();
+    if (!matrixCanvas) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      appendHistory(promptSymbol(), tr("matrixStop"));
+      return;
+    }
+    matrixCanvas.classList.remove("hidden");
+    const context = matrixCanvas.getContext("2d");
+    if (!context) return;
+
+    const canvas = matrixCanvas;
+    const wrapper = canvas.parentElement;
+    if (wrapper) {
+      canvas.width = wrapper.clientWidth;
+      canvas.height = wrapper.clientHeight;
+    }
+
+    const columns = Math.floor(canvas.width / 14);
+    const drops: number[] = Array(columns).fill(1);
+    const alphabet = "010101010110101010101010110110101010101";
+
+    context.fillStyle = "#05060a";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    const tick = () => drawMatrixFrame(context, canvas, drops, alphabet);
+    tick();
+    matrixInterval = setInterval(tick, 33);
+
+    notifyTerminal(tr("matrixToast"), "success");
+  }
+
+  function stopMatrix() {
+    if (matrixInterval) {
+      clearInterval(matrixInterval);
+      matrixInterval = null;
+    }
+    getMatrixCanvas()?.classList.add("hidden");
+    getTerminalInput()?.focus();
+  }
+
+  function animateTrain() {
+    const screen = document.getElementById("terminal-screen");
+    const wrapper = screen?.parentElement || screen;
+    if (!wrapper) return;
+
+    const train = document.createElement("pre");
+    train.className =
+      "absolute select-none pointer-events-none text-accent font-bold whitespace-pre font-mono leading-none z-30 transition-all duration-75";
+    train.style.bottom = "48px";
+    train.style.left = "100%";
+
+    train.innerHTML = `
+      (@@) (@@) (@@) (@@)
+    _||_|  _||_  _||_  _||_
+   (      )(    )(    )(    )
+ _============================_
+[   ${tr("trainBanner")}  ]
+\\_OO___OO__OO___OO__OO___OO__/
+    `;
+
+    wrapper.appendChild(train);
+
+    let pos = wrapper.clientWidth;
+    function frame() {
+      if (pos < -320) {
+        train.remove();
+      } else {
+        pos -= 5;
+        train.style.left = `${pos}px`;
+        requestAnimationFrame(frame);
+      }
+    }
+    frame();
+  }
+
+  onPageInit(
+    () => Boolean(document.getElementById("terminal-input")),
+    (signal) => {
+      resetHeroState();
+      bindHeroEvents(signal);
+      updateCursorPosition();
+    },
+  );
+</script>

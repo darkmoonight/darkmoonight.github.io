@@ -1,0 +1,1487 @@
+{
+  "meta": {
+    "siteTitle": {
+      "en": "DARK NIGHT",
+      "ru": "DARK NIGHT"
+    },
+    "siteDescription": {
+      "en": "A dedicated developer group focused on crafting fast, gorgeous, and privacy-focused open-source mobile and desktop software.",
+      "ru": "Команда разработчиков, создающая быстрые, красивые и приватные open-source приложения для мобильных и десктопных платформ."
+    }
+  },
+  "error404": {
+    "title": {
+      "en": "404 — Page Not Found",
+      "ru": "404 — Страница не найдена"
+    },
+    "description": {
+      "en": "The requested file does not exist in the workspace.",
+      "ru": "Запрошенный файл не существует в рабочей области."
+    },
+    "heading": {
+      "en": "File not found in workspace",
+      "ru": "Файл не найден в рабочей области"
+    },
+    "body": {
+      "en": "The requested route is missing or was moved. Check the path and try again.",
+      "ru": "Запрошенный маршрут отсутствует или был перемещён. Проверьте путь и попробуйте снова."
+    },
+    "backHome": {
+      "en": "← Return to home",
+      "ru": "← Вернуться на главную"
+    },
+    "stderrLabel": {
+      "en": "stderr",
+      "ru": "stderr"
+    },
+    "exitCode": {
+      "en": "exit code 404",
+      "ru": "код выхода 404"
+    }
+  },
+  "common": {
+    "esc": {
+      "en": "ESC",
+      "ru": "ESC"
+    },
+    "navigate": {
+      "en": "Navigate",
+      "ru": "Навигация"
+    },
+    "select": {
+      "en": "Select",
+      "ru": "Выбор"
+    },
+    "total": {
+      "en": "Total",
+      "ru": "Всего"
+    },
+    "items": {
+      "en": "items",
+      "ru": "элементов"
+    },
+    "enter": {
+      "en": "ENTER ↵",
+      "ru": "ENTER ↵"
+    },
+    "noResults": {
+      "en": "No results matching",
+      "ru": "Ничего не найдено по запросу"
+    },
+    "skipToContent": {
+      "en": "Skip to content",
+      "ru": "Перейти к содержимому"
+    },
+    "merged": {
+      "en": "Merged",
+      "ru": "Слито"
+    },
+    "close": {
+      "en": "Close",
+      "ru": "Закрыть"
+    },
+    "relPrefix": {
+      "en": "REL #",
+      "ru": "REL #"
+    },
+    "snackbarSystem": {
+      "en": "⚙️ [SYSTEM]",
+      "ru": "⚙️ [SYSTEM]"
+    },
+    "snackbarSuccess": {
+      "en": "✔ [SUCCESS]",
+      "ru": "✔ [SUCCESS]"
+    },
+    "snackbarError": {
+      "en": "✖ [ERROR]",
+      "ru": "✖ [ERROR]"
+    },
+    "snackbarWarning": {
+      "en": "⚠ [WARN]",
+      "ru": "⚠ [WARN]"
+    },
+    "pingTimeout": {
+      "en": "timeout",
+      "ru": "таймаут"
+    }
+  },
+  "nav": {
+    "home": {
+      "en": "Home",
+      "ru": "Главная"
+    },
+    "about": {
+      "en": "About",
+      "ru": "О нас"
+    },
+    "projects": {
+      "en": "Projects",
+      "ru": "Проекты"
+    },
+    "news": {
+      "en": "News",
+      "ru": "Новости"
+    },
+    "donations": {
+      "en": "Support",
+      "ru": "Поддержка"
+    },
+    "contacts": {
+      "en": "Contact",
+      "ru": "Контакты"
+    },
+    "homeDesc": {
+      "en": "Welcome and interactive terminal",
+      "ru": "Приветствие и интерактивный терминал"
+    },
+    "aboutDesc": {
+      "en": "Who we are and what we build",
+      "ru": "Кто мы и что создаём"
+    },
+    "projectsDesc": {
+      "en": "Open-source apps: Zest, Rain, IKMS",
+      "ru": "Open-source приложения: Zest, Rain, IKMS"
+    },
+    "newsDesc": {
+      "en": "Release history from GitHub",
+      "ru": "История релизов с GitHub"
+    },
+    "donationsDesc": {
+      "en": "One-time donation or monthly subscription",
+      "ru": "Разовый донат или подписка"
+    },
+    "contactsDesc": {
+      "en": "Message us or join Telegram / Discord",
+      "ru": "Напишите нам или зайдите в Telegram / Discord"
+    }
+  },
+  "header": {
+    "search": {
+      "en": "Search",
+      "ru": "Поиск"
+    },
+    "searchPlaceholder": {
+      "en": "Jump to section or action… (e.g. about, theme)",
+      "ru": "Перейти к разделу или действию… (например: about, theme)"
+    },
+    "langPrefix": {
+      "en": "CC:",
+      "ru": "CC:"
+    },
+    "langSwitchTitle": {
+      "en": "Change target language",
+      "ru": "Сменить язык интерфейса"
+    },
+    "comfortTitle": {
+      "en": "Comfort Reader Mode (Large typography)",
+      "ru": "Режим комфортного чтения (Крупный шрифт)"
+    },
+    "crtTitle": {
+      "en": "Toggle Retro CRT Filter",
+      "ru": "Ретро CRT монитор"
+    },
+    "themeTitle": {
+      "en": "Toggle Theme",
+      "ru": "Переключить тему"
+    },
+    "paletteTheme": {
+      "en": "> Toggle dark/light UI theme",
+      "ru": "> Переключить темную/светлую тему"
+    },
+    "paletteThemeDesc": {
+      "en": "Toggle between terminal dark and editor light themes",
+      "ru": "Сменить оформление редактора"
+    },
+    "paletteLang": {
+      "en": "> Switch compilation target to Russian",
+      "ru": "> Сменить язык компиляции на English"
+    },
+    "paletteLangDesc": {
+      "en": "Switch site localization to RU",
+      "ru": "Переключить локализацию сайта на EN"
+    },
+    "paletteComfort": {
+      "en": "> Toggle Comfort Reader Mode",
+      "ru": "> Режим комфортного чтения (Крупный шрифт)"
+    },
+    "paletteComfortDesc": {
+      "en": "Scale typography up and increase line heights for reading",
+      "ru": "Увеличить размер шрифта и межстрочный интервал"
+    },
+    "paletteCrt": {
+      "en": "> Toggle Retro CRT Screen Filter",
+      "ru": "> Активировать ретро CRT-фильтр"
+    },
+    "paletteCrtDesc": {
+      "en": "Activate scanline pattern and screen flicker overlay",
+      "ru": "Включить эффект мерцания и сканирующих линий"
+    },
+    "mainNav": {
+      "en": "Main navigation",
+      "ru": "Основная навигация"
+    },
+    "menu": {
+      "en": "Menu",
+      "ru": "Меню"
+    },
+    "menuOpen": {
+      "en": "Open navigation menu",
+      "ru": "Открыть меню навигации"
+    },
+    "menuClose": {
+      "en": "Close navigation menu",
+      "ru": "Закрыть меню навигации"
+    },
+    "drawerComfort": {
+      "en": "Reader mode",
+      "ru": "Режим чтения"
+    },
+    "drawerCrt": {
+      "en": "CRT filter",
+      "ru": "CRT-фильтр"
+    }
+  },
+  "hero": {
+    "terminalTitle": {
+      "en": "bash — guest@darknight:~",
+      "ru": "bash — guest@darknight:~"
+    },
+    "encoding": {
+      "en": "UTF-8",
+      "ru": "UTF-8"
+    },
+    "tryLabel": {
+      "en": "Try:",
+      "ru": "Попробуйте:"
+    },
+    "tryHint": {
+      "en": "Terminal commands are in English",
+      "ru": "Команды терминала на английском"
+    },
+    "moreCommands": {
+      "en": "More…",
+      "ru": "Ещё…"
+    },
+    "scrollHint": {
+      "en": "↓ Scroll to explore",
+      "ru": "↓ Прокрутите, чтобы изучить сайт"
+    },
+    "prompt": {
+      "en": "guest@darknight:~$",
+      "ru": "guest@darknight:~$"
+    },
+    "helpText": {
+      "en": "Available commands:\n  help      - Show this help menu\n  neofetch  - Display system and team details\n  about     - Read our mission and core principles\n  projects  - List our active open-source projects\n  theme     - Toggle light/dark mode\n  matrix    - Toggle green matrix code rain\n  train     - Spawns a retro steam locomotive (sl)\n  clear     - Clear terminal screen\n  sudo rm   - Run secret developer command",
+      "ru": "Доступные команды:\n  help      - Показать это меню справки\n  neofetch  - Показать сведения о системе и команде\n  about     - Прочитать нашу миссию и принципы\n  projects  - Показать список активных проектов\n  theme     - Переключить светлую/темную тему\n  matrix    - Запустить зеленый дождь матричного кода\n  train     - Запустить ретро паровоз на экране\n  clear     - Очистить экран терминала\n  sudo rm   - Запустить секретную команду разработчика"
+    },
+    "rmGlitch": {
+      "en": "CRITICAL ERROR: SYSTEM CORRUPT. EXECUTING ROLLBACK...",
+      "ru": "КРИТИЧЕСКАЯ ОШИБКА: СИСТЕМА ПОВРЕЖДЕНА. ВЫПОЛНЯЕТСЯ ОТКАТ..."
+    }
+  },
+  "terminal": {
+    "matrixStop": {
+      "en": "Matrix rain code rain stopped.",
+      "ru": "Дождь матричного кода остановлен."
+    },
+    "trainStart": {
+      "en": "Releasing the DARK NIGHT Express steam locomotive!",
+      "ru": "Выпускаем DARK NIGHT Express паровоз!"
+    },
+    "themeToggled": {
+      "en": "Theme toggled. Current system configuration: [{mode}]",
+      "ru": "Тема переключена. Текущая конфигурация: [{mode}]"
+    },
+    "themeLight": {
+      "en": "LIGHT",
+      "ru": "СВЕТЛАЯ"
+    },
+    "themeDark": {
+      "en": "DARK",
+      "ru": "ТЕМНАЯ"
+    },
+    "sudoError": {
+      "en": "Error: Sudo permissions not required for this command.",
+      "ru": "Ошибка: Нам не нужны привилегии суперпользователя для этого."
+    },
+    "cmdNotFound": {
+      "en": "bash: command not found: {cmd}. Type 'help' to see available commands.",
+      "ru": "bash: команда не найдена: {cmd}. Введите 'help' для просмотра списка команд."
+    },
+    "neofetchOs": {
+      "en": "OS",
+      "ru": "OS"
+    },
+    "neofetchHost": {
+      "en": "Host",
+      "ru": "Хост"
+    },
+    "neofetchKernel": {
+      "en": "Kernel",
+      "ru": "Kernel"
+    },
+    "neofetchShell": {
+      "en": "Shell",
+      "ru": "Shell"
+    },
+    "neofetchTheme": {
+      "en": "Theme",
+      "ru": "Тема"
+    },
+    "neofetchLanguage": {
+      "en": "Language",
+      "ru": "Язык"
+    },
+    "neofetchStack": {
+      "en": "Stack",
+      "ru": "Стек"
+    },
+    "neofetchTeam": {
+      "en": "Team Members",
+      "ru": "Участники команды"
+    },
+    "neofetchBugs": {
+      "en": "Bugs Squashed",
+      "ru": "Исправлено багов"
+    },
+    "neofetchUser": {
+      "en": "guest@darknight",
+      "ru": "guest@darknight"
+    },
+    "neofetchDivider": {
+      "en": "---------------",
+      "ru": "---------------"
+    },
+    "neofetchOsValue": {
+      "en": "Arch Linux v7.0.9",
+      "ru": "Arch Linux v7.0.9"
+    },
+    "neofetchKernelValue": {
+      "en": "7.0.9-arch2-1",
+      "ru": "7.0.9-arch2-1"
+    },
+    "neofetchShellValue": {
+      "en": "bash 5.2.26",
+      "ru": "bash 5.2.26"
+    },
+    "neofetchThemeDark": {
+      "en": "DarkMoon",
+      "ru": "DarkMoon"
+    },
+    "neofetchThemeLight": {
+      "en": "Daylight",
+      "ru": "Daylight"
+    },
+    "neofetchStackFallback": {
+      "en": "Flutter, Dart, Astro, Tailwind",
+      "ru": "Flutter, Dart, Astro, Tailwind"
+    },
+    "neofetchPromptFallback": {
+      "en": "guest@darknight:~$",
+      "ru": "guest@darknight:~$"
+    },
+    "rmFailureTitle": {
+      "en": "⚠️ SYSTEM FAILURE ⚠️",
+      "ru": "⚠️ СБОЙ СИСТЕМЫ ⚠️"
+    },
+    "rmFailureBody": {
+      "en": "rm -rf / executed. All web components wiped from cache.\nWiping layout grids... [OK]\nCorrupting DOM trees... [OK]\nInitiating auto-reboot of Astro IDE...",
+      "ru": "rm -rf / выполнен. Все веб-компоненты удалены из кэша.\nОчистка layout-сеток... [OK]\nПовреждение DOM-деревьев... [OK]\nАвтоперезагрузка Astro IDE..."
+    },
+    "rmRestored": {
+      "en": "✔ SYSTEM RESTORED FROM CORE COLD STORAGE: Anti-malware protection was triggered successfully.",
+      "ru": "✔ РЕЗЕРВНАЯ КОПИЯ ВОССТАНОВЛЕНА: Система автоматически защищена от вредоносного ПО."
+    },
+    "rmRebootToast": {
+      "en": "Core systems rebooted after rm -rf incident!",
+      "ru": "Система успешно перезагружена после инцидента rm -rf!"
+    },
+    "matrixHelp": {
+      "en": "MATRIX OVERDRIVE COMMENCING. PRESS ESC OR ENTER TO EXIT...",
+      "ru": "РЕЖИМ МАТРИЦЫ АКТИВИРОВАН. НАЖМИТЕ ESC ИЛИ Enter ДЛЯ ВЫХОДА..."
+    },
+    "matrixToast": {
+      "en": "Matrix rain protocol active!",
+      "ru": "Зелёная матрица активирована!"
+    },
+    "trainBanner": {
+      "en": "DARK NIGHT EXPRESS - 2026",
+      "ru": "DARK NIGHT EXPRESS - 2026"
+    }
+  },
+  "about": {
+    "title": "about.sh",
+    "sectionHeader": {
+      "en": "About us",
+      "ru": "О нас"
+    },
+    "subtitle": {
+      "en": "Who we are, what we build, and the stack behind our projects.",
+      "ru": "Кто мы, что создаём и на чём работаем."
+    },
+    "readOnly": {
+      "en": "session",
+      "ru": "сессия"
+    },
+    "panelTitle": {
+      "en": "about.sh",
+      "ru": "about.sh"
+    },
+    "terminalTag": {
+      "en": "bash",
+      "ru": "bash"
+    },
+    "cmdNeofetch": {
+      "en": "$ neofetch",
+      "ru": "$ neofetch"
+    },
+    "cmdReadme": {
+      "en": "$ cat README.md",
+      "ru": "$ cat README.md"
+    },
+    "cmdMission": {
+      "en": "$ cat MISSION.md",
+      "ru": "$ cat MISSION.md"
+    },
+    "cmdStack": {
+      "en": "$ ls -1 ./stack/",
+      "ru": "$ ls -1 ./stack/"
+    },
+    "cmdTeam": {
+      "en": "$ getent group developers",
+      "ru": "$ getent group developers"
+    },
+    "cmdJoin": {
+      "en": "$ ./contributing --help",
+      "ru": "$ ./contributing --help"
+    },
+    "cmdMetadata": {
+      "en": "$ cat metadata.json",
+      "ru": "$ cat metadata.json"
+    },
+    "neofetchHost": {
+      "en": "Host",
+      "ru": "Хост"
+    },
+    "neofetchEst": {
+      "en": "Est",
+      "ru": "С"
+    },
+    "neofetchType": {
+      "en": "Type",
+      "ru": "Тип"
+    },
+    "neofetchLocale": {
+      "en": "Locale",
+      "ru": "Регион"
+    },
+    "neofetchLang": {
+      "en": "Lang",
+      "ru": "Язык"
+    },
+    "neofetchStack": {
+      "en": "Stack",
+      "ru": "Стек"
+    },
+    "neofetchStatus": {
+      "en": "Status",
+      "ru": "Статус"
+    },
+    "readme": {
+      "en": "DARK NIGHT is a team of indie game and application developers. We build open-source Flutter apps and share them with the world for free.",
+      "ru": "DARK NIGHT — команда разработчиков инди-игр и приложений. Мы создаём open-source приложения на Flutter и делимся ими бесплатно."
+    },
+    "mission": {
+      "en": "We use technology to make the world more open and free. We work together to turn ideas into real, useful software, publish it as open source, and welcome anyone who shares that passion — developers, designers, or people with great ideas.",
+      "ru": "Мы используем технологии, чтобы сделать мир более открытым и свободным. Вместе превращаем идеи в полезный софт, публикуем его с открытым исходным кодом и приглашаем всех, кто разделяет эту страсть — разработчиков, дизайнеров и тех, у кого есть сильные идеи."
+    },
+    "orgType": {
+      "en": "Indie games & applications",
+      "ru": "Инди-игры и приложения"
+    },
+    "orgFallbackDescription": {
+      "en": "A team of developers of indie games and applications.",
+      "ru": "Команда разработчиков инди-игр и приложений."
+    },
+    "orgLocation": {
+      "en": "Russian Federation",
+      "ru": "Россия"
+    },
+    "joinUsBody": {
+      "en": "Want to contribute? Open an issue or pull request on GitHub, or drop by our Telegram and Discord — we are always glad to meet new contributors.",
+      "ru": "Хотите помочь? Откройте issue или pull request на GitHub или загляните в Telegram и Discord — мы рады новым участникам."
+    },
+    "stackFlutter": {
+      "en": "for premium, native cross-platform mobile and desktop apps.",
+      "ru": "для кроссплатформенных мобильных и десктопных приложений."
+    },
+    "stackAstro": {
+      "en": "for highly responsive, high-performance static websites.",
+      "ru": "для сверхбыстрых и оптимизированных веб-интерфейсов."
+    },
+    "philosophy": {
+      "en": "Openness, freedom, and privacy-first software",
+      "ru": "Открытость, свобода и приватность пользователя"
+    },
+    "showRawJson": {
+      "en": "Show raw JSON",
+      "ru": "Показать JSON"
+    }
+  },
+  "projects": {
+    "title": "projects.json",
+    "sectionHeader": {
+      "en": "Our Projects",
+      "ru": "Наши проекты"
+    },
+    "subtitle": {
+      "en": "Our open-source apps with README previews, stats, and search.",
+      "ru": "Наши open-source проекты с описанием, статистикой и поиском."
+    },
+    "explorerLabel": {
+      "en": "EXPLORER",
+      "ru": "EXPLORER"
+    },
+    "explorerRoot": {
+      "en": "projects/",
+      "ru": "projects/"
+    },
+    "previewReadme": {
+      "en": "README.md",
+      "ru": "README.md"
+    },
+    "previewEmpty": {
+      "en": "Select a repository from the list",
+      "ru": "Выберите репозиторий из списка"
+    },
+    "search": {
+      "en": "Search projects…",
+      "ru": "Поиск проектов…"
+    },
+    "searchLabel": {
+      "en": "Filter projects by name, description, or language",
+      "ru": "Фильтр проектов по названию, описанию или языку"
+    },
+    "listCmd": {
+      "en": "ls ./projects/",
+      "ru": "ls ./projects/"
+    },
+    "grepCmd": {
+      "en": "grep -i",
+      "ru": "grep -i"
+    },
+    "repoCount": {
+      "en": "{n} repositories",
+      "ru": "{n} репозиториев"
+    },
+    "githubStarsTitle": {
+      "en": "GitHub stars",
+      "ru": "Звёзды на GitHub"
+    },
+    "githubForksTitle": {
+      "en": "GitHub forks",
+      "ru": "Форки на GitHub"
+    },
+    "repoTitle": {
+      "en": "Open source code repository",
+      "ru": "Репозиторий с открытым исходным кодом"
+    },
+    "viewCode": {
+      "en": "GitHub",
+      "ru": "GitHub"
+    },
+    "details": {
+      "en": "Details",
+      "ru": "Подробнее"
+    },
+    "languages": {
+      "en": "Languages",
+      "ru": "Языки"
+    },
+    "noMatches": {
+      "en": "No projects found",
+      "ru": "Проекты не найдены"
+    },
+    "noMatchesHint": {
+      "en": "Try a different name or keyword.",
+      "ru": "Попробуйте другое название или ключевое слово."
+    }
+  },
+  "news": {
+    "title": "news.log",
+    "sectionHeader": {
+      "en": "Commit History",
+      "ru": "Лог коммитов"
+    },
+    "subtitle": {
+      "en": "Latest releases from our GitHub repositories.",
+      "ru": "Последние релизы наших проектов на GitHub."
+    },
+    "gitLog": {
+      "en": "git log",
+      "ru": "git log"
+    },
+    "gitFlags": {
+      "en": "--graph --oneline --all",
+      "ru": "--graph --oneline --all"
+    },
+    "totalScrollable": {
+      "en": "Showing {visible} · scroll for {total} total",
+      "ru": "Видно {visible} · прокрутка, всего {total}"
+    },
+    "loading": {
+      "en": "Fetching releases from GitHub...",
+      "ru": "Загрузка релизов с GitHub..."
+    },
+    "closePr": {
+      "en": "Close File",
+      "ru": "Закрыть файл"
+    },
+    "mergedIn": {
+      "en": "Merged into main branch",
+      "ru": "Слито в ветку main"
+    },
+    "prFolder": {
+      "en": "pull_requests/",
+      "ru": "pull_requests/"
+    },
+    "closeEsc": {
+      "en": "× [ESC]",
+      "ru": "× [ESC]"
+    },
+    "summaryTitle": {
+      "en": "// SUMMARY DETAILS",
+      "ru": "// КРАТКОЕ ОПИСАНИЕ"
+    },
+    "highlightsTitle": {
+      "en": "// CORE IMPROVEMENTS",
+      "ru": "// ОСНОВНЫЕ ИЗМЕНЕНИЯ"
+    },
+    "fullChangelog": {
+      "en": "Full Changelog",
+      "ru": "Полный changelog"
+    },
+    "modalTitlePlaceholder": {
+      "en": "PR Title placeholder",
+      "ru": "Заголовок PR"
+    }
+  },
+  "donations": {
+    "title": "sponsor.sh",
+    "sectionHeader": {
+      "en": "Support Our Journey",
+      "ru": "Поддержка разработки"
+    },
+    "subtitle": {
+      "en": "Help us keep building — one-time donations and monthly sponsorship on GitHub.",
+      "ru": "Помогите нам развивать проекты — разовый донат или подписка на GitHub."
+    },
+    "scriptComment1": {
+      "en": "# DARK NIGHT SPONSORSHIP MODULE",
+      "ru": "# МОДУЛЬ ПОДДЕРЖКИ DARK NIGHT"
+    },
+    "scriptComment2": {
+      "en": "# Execute ./sponsor.sh with --once or --monthly",
+      "ru": "# Запуск ./sponsor.sh с флагом --once или --monthly"
+    },
+    "prompt": {
+      "en": "guest@darknight:~$",
+      "ru": "guest@darknight:~$"
+    },
+    "oneTimeFn": {
+      "en": "donate_once()",
+      "ru": "donate_once()"
+    },
+    "sponsorFn": {
+      "en": "sponsor_monthly()",
+      "ru": "sponsor_monthly()"
+    },
+    "oneTimeDesc": {
+      "en": "Any amount helps with hosting, domains, and development.",
+      "ru": "Любая сумма помогает с хостингом, доменами и разработкой."
+    },
+    "sponsorDesc": {
+      "en": "Recurring support on GitHub Sponsors — cancel anytime.",
+      "ru": "Регулярная поддержка на GitHub Sponsors — отмена в любой момент."
+    },
+    "donateBtn": {
+      "en": "Donate on GitHub",
+      "ru": "Задонатить на GitHub"
+    },
+    "subscribeBtn": {
+      "en": "Subscribe on GitHub",
+      "ru": "Подписаться на GitHub"
+    },
+    "note": {
+      "en": "Payments are processed securely by GitHub Sponsors.",
+      "ru": "Платежи обрабатываются через GitHub Sponsors."
+    },
+    "oneTimeAria": {
+      "en": "One-time donation on GitHub Sponsors",
+      "ru": "Разовый донат через GitHub Sponsors"
+    },
+    "sponsorAria": {
+      "en": "Monthly subscription on GitHub Sponsors",
+      "ru": "Ежемесячная подписка через GitHub Sponsors"
+    }
+  },
+  "contacts": {
+    "title": "mail",
+    "sectionHeader": {
+      "en": "Establish Contact",
+      "ru": "Связаться с нами"
+    },
+    "subtitle": {
+      "en": "Send a message or reach us on Telegram, Discord, and GitHub.",
+      "ru": "Напишите нам или свяжитесь через Telegram, Discord и GitHub."
+    },
+    "terminalTag": {
+      "en": "mail(1)",
+      "ru": "mail(1)"
+    },
+    "altRoutesComment": {
+      "en": "# alternate routes (bypass mail)",
+      "ru": "# альтернативные каналы (без mail)"
+    },
+    "composeComment": {
+      "en": "# new message — fill prompts below",
+      "ru": "# новое письмо — заполните поля ниже"
+    },
+    "promptTo": {
+      "en": "To:",
+      "ru": "Кому:"
+    },
+    "promptFrom": {
+      "en": "From:",
+      "ru": "От:"
+    },
+    "promptSubject": {
+      "en": "Subject:",
+      "ru": "Тема:"
+    },
+    "promptBody": {
+      "en": "Body:",
+      "ru": "Текст:"
+    },
+    "subjectAuto": {
+      "en": "(auto) inbound-web",
+      "ru": "(auto) inbound-web"
+    },
+    "sendPrompt": {
+      "en": "Send?",
+      "ru": "Отправить?"
+    },
+    "confirmYes": {
+      "en": "[Y]",
+      "ru": "[Д]"
+    },
+    "confirmNo": {
+      "en": "[n]",
+      "ru": "[н]"
+    },
+    "placeholderEmail": {
+      "en": "Enter your email...",
+      "ru": "Введите ваш email..."
+    },
+    "placeholderMsg": {
+      "en": "Write your message here...",
+      "ru": "Напишите ваше сообщение здесь..."
+    },
+    "success": {
+      "en": "SUCCESS: Message pushed successfully! Thank you, we will contact you soon.",
+      "ru": "УСПЕХ: Сообщение успешно доставлено! Спасибо, мы скоро с вами свяжемся."
+    },
+    "error": {
+      "en": "ERROR: Failed to deliver message. Check internet connection or retry later.",
+      "ru": "ОШИБКА: Не удалось отправить сообщение. Проверьте сеть или попробуйте позже."
+    },
+    "sending": {
+      "en": "sending message...",
+      "ru": "отправка письма..."
+    },
+    "telegramTitle": {
+      "en": "Open Telegram community",
+      "ru": "Открыть Telegram-сообщество"
+    },
+    "discordTitle": {
+      "en": "Join Discord server",
+      "ru": "Присоединиться к Discord-серверу"
+    },
+    "githubTitle": {
+      "en": "Open GitHub organization",
+      "ru": "Открыть организацию на GitHub"
+    },
+    "emailRequired": {
+      "en": "Email is required.",
+      "ru": "Укажите email."
+    },
+    "emailInvalid": {
+      "en": "Enter a valid email address.",
+      "ru": "Введите корректный email."
+    },
+    "messageRequired": {
+      "en": "Message is required.",
+      "ru": "Напишите сообщение."
+    },
+    "debugComment": {
+      "en": "# --- session log ---",
+      "ru": "# --- журнал сессии ---"
+    },
+    "debugPushOk": {
+      "en": "✔ [200 OK]: message queued for delivery",
+      "ru": "✔ [200 OK]: сообщение поставлено в очередь"
+    },
+    "mailValidateOk": {
+      "en": "> headers validated (To/From/Subject) ... [OK]",
+      "ru": "> заголовки проверены (Кому/От/Тема) ... [OK]"
+    },
+    "debugTransmit": {
+      "en": "> transmitting payload to web3forms endpoint ...",
+      "ru": "> передача на endpoint web3forms ..."
+    },
+    "debugOk": {
+      "en": "[100% OK]",
+      "ru": "[100% OK]"
+    },
+    "debugFailed": {
+      "en": "[FAILED]",
+      "ru": "[ОШИБКА]"
+    },
+    "formSubject": {
+      "en": "DARK NIGHT — website contact",
+      "ru": "DARK NIGHT — сообщение с сайта"
+    }
+  },
+  "footer": {
+    "branch": {
+      "en": "branch: main",
+      "ru": "ветка: main"
+    },
+    "encoding": {
+      "en": "UTF-8",
+      "ru": "UTF-8"
+    },
+    "statusOnline": {
+      "en": "Online",
+      "ru": "В сети"
+    },
+    "statusOffline": {
+      "en": "Offline",
+      "ru": "Не в сети"
+    },
+    "editor": {
+      "en": "Astro IDE",
+      "ru": "Astro IDE"
+    },
+    "license": {
+      "en": "MIT License",
+      "ru": "MIT License"
+    },
+    "established": {
+      "en": "Est. 2021",
+      "ru": "Est. 2021"
+    },
+    "statusOk": {
+      "en": "All checks passed",
+      "ru": "Все проверки пройдены"
+    },
+    "bugsLabel": {
+      "en": "bugs",
+      "ru": "багов"
+    },
+    "bugsTitle": {
+      "en": "Bugs squashed (easter egg)",
+      "ru": "Уничтожено багов (пасхалка)"
+    },
+    "sysTitle": {
+      "en": "Resource monitor (easter egg)",
+      "ru": "Монитор системы (пасхалка)"
+    },
+    "sysBtn": {
+      "en": "⚡ SYS",
+      "ru": "⚡ SYS"
+    },
+    "cursorPos": {
+      "en": "Ln 1, Col 1",
+      "ru": "Ln 1, Col 1"
+    },
+    "spaces": {
+      "en": "Spaces: 2",
+      "ru": "Spaces: 2"
+    },
+    "crlf": {
+      "en": "CRLF",
+      "ru": "CRLF"
+    }
+  },
+  "layout": {
+    "screensaver": {
+      "en": "IDLE PROTOCOL ACTIVE. MOVE MOUSE OR TAP ANY KEY TO WAKE UP...",
+      "ru": "ПРОТОКОЛ БЕЗДЕЙСТВИЯ АКТИВИРОВАН. ДВИЖИТЕ МЫШЬЮ ИЛИ НАЖМИТЕ КЛАВИШУ ДЛЯ СВЯЗИ..."
+    },
+    "sysMonitorTitle": {
+      "en": "// RESOURCE MONITOR",
+      "ru": "// МОНИТОР РЕСУРСОВ"
+    },
+    "cpuUsage": {
+      "en": "CPU Core Usage",
+      "ru": "Загрузка CPU"
+    },
+    "ramHeap": {
+      "en": "Astro Heap (RAM)",
+      "ru": "Куча Astro (RAM)"
+    },
+    "apiPing": {
+      "en": "api.github.com ping",
+      "ru": "Пинг api.github.com"
+    },
+    "apiRemaining": {
+      "en": "GitHub API Remaining",
+      "ru": "Остаток GitHub API"
+    },
+    "konamiStart": {
+      "en": "🕹️ KONAMI CODE ACTIVATED! Starting retro arcade...",
+      "ru": "🕹️ КОД КОНАМИ АКТИВИРОВАН! Запуск ретро-аркады..."
+    },
+    "arcadeTitle": {
+      "en": "// DARK NIGHT ARCADE",
+      "ru": "// DARK NIGHT ARCADE"
+    },
+    "arcadeHelp": {
+      "en": "Use ARROW KEYS to steer.<br/>Eat green code bugs 🐛, avoid walls and tail!",
+      "ru": "Используйте СТРЕЛКИ для управления.<br/>Ешьте зелёные баги 🐛, избегайте стен и хвоста!"
+    },
+    "gameOver": {
+      "en": "GAME OVER",
+      "ru": "ИГРА ОКОНЧЕНА"
+    },
+    "restart": {
+      "en": "Restart [R]",
+      "ru": "Заново [R]"
+    },
+    "score": {
+      "en": "Score:",
+      "ru": "Счёт:"
+    },
+    "highScore": {
+      "en": "High:",
+      "ru": "Рекорд:"
+    },
+    "arcadeWin": {
+      "en": "🕹️ Great play! Earned +1 bug-squashing point.",
+      "ru": "🕹️ Отличная игра! Получено +1 очко за баги."
+    }
+  },
+  "theme": {
+    "readerOn": {
+      "en": "Reader mode enabled",
+      "ru": "Режим чтения включен"
+    },
+    "readerOff": {
+      "en": "Reader mode disabled",
+      "ru": "Режим чтения выключен"
+    },
+    "crtOn": {
+      "en": "Retro-monitor activated",
+      "ru": "Ретро-монитор активирован"
+    },
+    "crtOff": {
+      "en": "Retro-monitor deactivated",
+      "ru": "Ретро-монитор деактивирован"
+    }
+  },
+  "projectDetail": {
+    "back": {
+      "en": "Back to projects",
+      "ru": "Назад к проектам"
+    },
+    "featuresTitle": {
+      "en": "// Key Features",
+      "ru": "// Основные функции"
+    },
+    "featuresCount": {
+      "en": "{n} items",
+      "ru": "{n} пунктов"
+    },
+    "buildTitle": {
+      "en": "How to Build from Source",
+      "ru": "Сборка из исходников"
+    },
+    "releases": {
+      "en": "// RELEASES & CHANNELS",
+      "ru": "// РЕЛИЗЫ И КАНАЛЫ"
+    },
+    "stars": {
+      "en": "Stars",
+      "ru": "Звёзды"
+    },
+    "forks": {
+      "en": "Forks",
+      "ru": "Форки"
+    },
+    "downloadApkLabel": {
+      "en": "Download APK",
+      "ru": "Скачать APK"
+    },
+    "apkSizeTitle": {
+      "en": "APK download size",
+      "ru": "Размер загружаемого APK"
+    },
+    "repoSizeTitle": {
+      "en": "Repository size on GitHub",
+      "ru": "Размер репозитория на GitHub"
+    },
+    "apkPickerAria": {
+      "en": "Choose APK build to download",
+      "ru": "Выбор сборки APK для загрузки"
+    },
+    "apkVariantUniversal": {
+      "en": "Universal (all ABIs)",
+      "ru": "Универсальная (все ABI)"
+    },
+    "apkVariantArm64": {
+      "en": "ARM64 (arm64-v8a)",
+      "ru": "ARM64 (arm64-v8a)"
+    },
+    "apkVariantArmeabi": {
+      "en": "ARMv7 (armeabi-v7a)",
+      "ru": "ARMv7 (armeabi-v7a)"
+    },
+    "apkVariantX86_64": {
+      "en": "x86_64 (emulator / Intel)",
+      "ru": "x86_64 (эмулятор / Intel)"
+    },
+    "apkVariantOther": {
+      "en": "Other build",
+      "ru": "Другая сборка"
+    },
+    "viewGithub": {
+      "en": "View on GitHub",
+      "ru": "Открыть на GitHub"
+    },
+    "viewReleases": {
+      "en": "gh release list",
+      "ru": "gh release list"
+    },
+    "viewAllNews": {
+      "en": "git log --all → News",
+      "ru": "git log --all → News"
+    },
+    "languagesLabel": {
+      "en": "Languages",
+      "ru": "Языки"
+    },
+    "branch": {
+      "en": "branch",
+      "ru": "ветка"
+    },
+    "repoStats": {
+      "en": "// REPO STATS",
+      "ru": "// СТАТИСТИКА РЕПО"
+    },
+    "quickActions": {
+      "en": "// QUICK ACTIONS",
+      "ru": "// БЫСТРЫЕ ДЕЙСТВИЯ"
+    },
+    "lastPush": {
+      "en": "last push",
+      "ru": "последний push"
+    },
+    "issues": {
+      "en": "Issues",
+      "ru": "Issues"
+    },
+    "issuesTitle": {
+      "en": "Open issues on GitHub",
+      "ru": "Открытые issues на GitHub"
+    },
+    "pullRequests": {
+      "en": "PR",
+      "ru": "PR"
+    },
+    "pullRequestsTitle": {
+      "en": "Open pull requests on GitHub",
+      "ru": "Открытые pull request'ы на GitHub"
+    },
+    "latestRelease": {
+      "en": "Latest release",
+      "ru": "Последний релиз"
+    },
+    "previousReleases": {
+      "en": "// PREVIOUS RELEASES",
+      "ru": "// ПРОШЛЫЕ РЕЛИЗЫ"
+    },
+    "releaseNotes": {
+      "en": "full release notes →",
+      "ru": "полное описание релиза →"
+    },
+    "readmePath": {
+      "en": "README.md",
+      "ru": "README.md"
+    },
+    "buildStep": {
+      "en": "$ step {n}/{total}",
+      "ru": "$ step {n}/{total}"
+    },
+    "copy": {
+      "en": "COPY",
+      "ru": "КОПИРОВАТЬ"
+    },
+    "copied": {
+      "en": "COPIED!",
+      "ru": "СКОПИРОВАНО!"
+    },
+    "copyToast": {
+      "en": "Command copied to clipboard!",
+      "ru": "Команда скопирована в буфер обмена!"
+    },
+    "mockup": {
+      "stats": {
+        "en": "Stats",
+        "ru": "Статистика"
+      },
+      "almostDone": {
+        "en": "Almost done!",
+        "ru": "Почти готово!"
+      },
+      "categories": {
+        "en": "Categories",
+        "ru": "Категории"
+      },
+      "todoList": {
+        "en": "To-Do List (click to toggle)",
+        "ru": "Список дел (клик для отметки)"
+      },
+      "location": {
+        "en": "London, UK",
+        "ru": "Москва, РФ"
+      },
+      "updatedAgo": {
+        "en": "Updated 2 mins ago",
+        "ru": "Обновлено 2 мин. назад"
+      },
+      "patchyRain": {
+        "en": "Patchy Rain Showers",
+        "ru": "Временами дождь"
+      },
+      "hourlyForecast": {
+        "en": "Hourly Forecast (click to change)",
+        "ru": "Прогноз по часам (клик для выбора)"
+      },
+      "heavyRain": {
+        "en": "Heavy Rain",
+        "ru": "Сильный дождь"
+      },
+      "cloudy": {
+        "en": "Cloudy",
+        "ru": "Облачно"
+      },
+      "humid": {
+        "en": "Humid",
+        "ru": "Влажн."
+      },
+      "wind": {
+        "en": "Wind",
+        "ru": "Ветер"
+      },
+      "barom": {
+        "en": "Barom",
+        "ru": "Давл."
+      },
+      "monDay": {
+        "en": "Mon 24",
+        "ru": "Пнд 24"
+      },
+      "tueDay": {
+        "en": "Tue 25",
+        "ru": "Втр 25"
+      },
+      "wedDay": {
+        "en": "Wed 26",
+        "ru": "Срд 26"
+      },
+      "timetable": {
+        "en": "Class Timetable (click days above)",
+        "ru": "Расписание (клик на дни выше)"
+      },
+      "courseMl": {
+        "en": "Machine Learning Labs",
+        "ru": "Машинное обучение"
+      },
+      "courseDb": {
+        "en": "Database Security",
+        "ru": "Безопасность БД"
+      },
+      "navHome": {
+        "en": "Home",
+        "ru": "Главная"
+      },
+      "navStats": {
+        "en": "Stats",
+        "ru": "Инфо"
+      },
+      "navSettings": {
+        "en": "Settings",
+        "ru": "Опции"
+      },
+      "tasksProgress": {
+        "en": "{done} of {total} tasks completed",
+        "ru": "{done} из {total} задач выполнено"
+      },
+      "todayFocus": {
+        "en": "Today · Focus mode",
+        "ru": "Сегодня · режим фокуса"
+      },
+      "streakBadge": {
+        "en": "🔥 5-day streak",
+        "ru": "🔥 серия 5 дней"
+      },
+      "categoryStudy": {
+        "en": "📚 Study",
+        "ru": "📚 Учёба"
+      },
+      "dueToday": {
+        "en": "Due today",
+        "ru": "Сегодня"
+      },
+      "dueTomorrow": {
+        "en": "Tomorrow",
+        "ru": "Завтра"
+      },
+      "dueFriday": {
+        "en": "Fri 14:00",
+        "ru": "Пт 14:00"
+      },
+      "priorityHigh": {
+        "en": "P1",
+        "ru": "В1"
+      },
+      "priorityMed": {
+        "en": "P2",
+        "ru": "В2"
+      },
+      "statCompletedWeek": {
+        "en": "Done this week",
+        "ru": "За неделю"
+      },
+      "statOpen": {
+        "en": "Open now",
+        "ru": "Открыто"
+      },
+      "statStreak": {
+        "en": "Streak",
+        "ru": "Серия"
+      },
+      "statAvgPerDay": {
+        "en": "Avg / day",
+        "ru": "В среднем"
+      },
+      "statFocusMin": {
+        "en": "Focus time",
+        "ru": "Фокус"
+      },
+      "statHeatmap": {
+        "en": "Last 7 days",
+        "ru": "Последние 7 дней"
+      },
+      "statWeekValue": {
+        "en": "12 tasks",
+        "ru": "12 задач"
+      },
+      "statStreakValue": {
+        "en": "5 days",
+        "ru": "5 дн."
+      },
+      "statAvgValue": {
+        "en": "1.7 tasks",
+        "ru": "1.7 задачи"
+      },
+      "statFocusValue": {
+        "en": "2h 40m",
+        "ru": "2ч 40м"
+      },
+      "settingsTheme": {
+        "en": "Theme",
+        "ru": "Тема"
+      },
+      "settingsThemeVal": {
+        "en": "Material You",
+        "ru": "Material You"
+      },
+      "settingsNotif": {
+        "en": "Reminders",
+        "ru": "Напоминания"
+      },
+      "settingsNotifVal": {
+        "en": "Daily 09:00",
+        "ru": "Ежедн. 09:00"
+      },
+      "settingsBackup": {
+        "en": "Backup",
+        "ru": "Бэкап"
+      },
+      "settingsBackupVal": {
+        "en": "Auto · GZip",
+        "ru": "Авто · GZip"
+      },
+      "settingsLang": {
+        "en": "Language",
+        "ru": "Язык"
+      },
+      "settingsLangVal": {
+        "en": "16 locales",
+        "ru": "16 языков"
+      },
+      "feelsLike": {
+        "en": "Feels {temp}",
+        "ru": "Ощущ. {temp}"
+      },
+      "todayRange": {
+        "en": "H {high} · L {low}",
+        "ru": "Макс {high} · Мин {low}"
+      },
+      "uv": {
+        "en": "UV",
+        "ru": "УФ"
+      },
+      "visibility": {
+        "en": "Vis",
+        "ru": "Видим."
+      },
+      "precip": {
+        "en": "Rain %",
+        "ru": "Осадки"
+      },
+      "clearLater": {
+        "en": "Clear spells",
+        "ru": "Прояснения"
+      },
+      "dailyOutlook": {
+        "en": "5-day outlook",
+        "ru": "Прогноз на 5 дней"
+      },
+      "dayThu": {
+        "en": "Thu",
+        "ru": "Чт"
+      },
+      "dayFri": {
+        "en": "Fri",
+        "ru": "Пт"
+      },
+      "daySat": {
+        "en": "Sat",
+        "ru": "Сб"
+      },
+      "daySun": {
+        "en": "Sun",
+        "ru": "Вс"
+      },
+      "dayMonShort": {
+        "en": "Mon",
+        "ru": "Пн"
+      },
+      "settingsUnits": {
+        "en": "Units",
+        "ru": "Единицы"
+      },
+      "settingsUnitsVal": {
+        "en": "Metric °C",
+        "ru": "Метрич. °C"
+      },
+      "settingsWidget": {
+        "en": "Widget",
+        "ru": "Виджет"
+      },
+      "settingsWidgetVal": {
+        "en": "Every 30 min",
+        "ru": "Каждые 30 мин"
+      },
+      "settingsAlerts": {
+        "en": "Alerts",
+        "ru": "Оповещения"
+      },
+      "settingsAlertsVal": {
+        "en": "Rain at 13:00",
+        "ru": "Дождь в 13:00"
+      },
+      "rainWeekAvg": {
+        "en": "Week avg.",
+        "ru": "Сред. нед."
+      },
+      "rainWeekAvgVal": {
+        "en": "17.4°C · 78% humid",
+        "ru": "17.4°C · 78% влажн."
+      },
+      "nextClass": {
+        "en": "Up next",
+        "ru": "Дальше"
+      },
+      "classesToday": {
+        "en": "{n} classes today",
+        "ru": "{n} пар сегодня"
+      },
+      "semesterWeek": {
+        "en": "Week 12 · Spring",
+        "ru": "12 нед. · весна"
+      },
+      "weekTotalHours": {
+        "en": "14 h this week",
+        "ru": "14 ч на неделе"
+      },
+      "hoursMon": {
+        "en": "Mon",
+        "ru": "Пнд"
+      },
+      "hoursTue": {
+        "en": "Tue",
+        "ru": "Втр"
+      },
+      "hoursWed": {
+        "en": "Wed",
+        "ru": "Срд"
+      },
+      "settingsGroup": {
+        "en": "Group",
+        "ru": "Группа"
+      },
+      "settingsGroupVal": {
+        "en": "PV-221",
+        "ru": "ПВ-221"
+      },
+      "settingsSync": {
+        "en": "Sync",
+        "ru": "Синхр."
+      },
+      "settingsSyncVal": {
+        "en": "2 min ago",
+        "ru": "2 мин. назад"
+      },
+      "settingsExport": {
+        "en": "Export",
+        "ru": "Экспорт"
+      },
+      "settingsExportVal": {
+        "en": "PDF timetable",
+        "ru": "PDF расписание"
+      },
+      "ikmsHoursMon": {
+        "en": "4.5 h",
+        "ru": "4.5 ч"
+      },
+      "ikmsHoursTue": {
+        "en": "4.5 h",
+        "ru": "4.5 ч"
+      },
+      "ikmsHoursWed": {
+        "en": "4.5 h",
+        "ru": "4.5 ч"
+      }
+    }
+  },
+  "github": {
+    "noDetails": {
+      "en": "No details provided.",
+      "ru": "Описание отсутствует."
+    }
+  }
+}

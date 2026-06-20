@@ -1,0 +1,112 @@
+---
+import { getLangFromUrl, useTranslations } from "../../utils/i18n";
+import { GITHUB_ORG, SPONSORS_URL } from "../../constants/site";
+import HomeSection from "../HomeSection.astro";
+import PanelTerminalBar from "../PanelTerminalBar.astro";
+import TerminalStatusFooter from "../TerminalStatusFooter.astro";
+
+const t = useTranslations(getLangFromUrl(Astro.url));
+---
+
+<HomeSection
+  id="donations"
+  label={t("donations.sectionHeader")}
+  title={t("donations.title")}
+>
+  <p class="section-subtitle">
+    {t("donations.subtitle")}
+  </p>
+
+  <div class="md3-panel md3-panel--terminal-code">
+    <PanelTerminalBar title={t("donations.title")} tag="bash" />
+
+    <div class="md3-panel-body code-container section-block">
+      <div class="code-line text-text-muted select-none">
+        {t("donations.scriptComment1")}
+      </div>
+      <div class="code-line text-text-muted select-none">
+        {t("donations.scriptComment2")}
+      </div>
+      <div
+        class="code-line flex flex-wrap items-center gap-x-1 gap-y-1 select-none"
+      >
+        <span class="text-accent-secondary font-bold shrink-0">export</span>
+        <span class="text-text-primary">SPONSOR_URL=</span>
+        <span class="text-text-muted">"</span>
+        <span class="text-accent break-all">{SPONSORS_URL}</span>
+        <span class="text-text-muted">"</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+        <a
+          href={SPONSORS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t("donations.oneTimeAria")}
+          class="donation-tier md3-surface-container md3-card-interactive no-underline group"
+        >
+          <div class="term-section-label term-section-label--xs">
+            {t("donations.oneTimeFn")}
+          </div>
+          <p
+            class="code-line text-text-muted select-none text-[11px] leading-relaxed"
+          >
+            # {t("donations.oneTimeDesc")}
+          </p>
+          <div
+            class="code-line flex flex-wrap items-center gap-x-1.5 gap-y-2 mt-1"
+          >
+            <span class="text-accent font-bold shrink-0"
+              >{t("donations.prompt")}</span
+            >
+            <span class="text-accent-secondary shrink-0">./sponsor.sh</span>
+            <span class="text-text-primary shrink-0">--once</span>
+            <span
+              class="donation-tier-action text-accent opacity-80 group-hover:opacity-100 transition-opacity"
+            >
+              ↗ {t("donations.donateBtn")}
+            </span>
+          </div>
+        </a>
+
+        <a
+          href={SPONSORS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t("donations.sponsorAria")}
+          class="donation-tier md3-surface-container md3-card-interactive no-underline group"
+        >
+          <div class="term-section-label term-section-label--xs">
+            {t("donations.sponsorFn")}
+          </div>
+          <p
+            class="code-line text-text-muted select-none text-[11px] leading-relaxed"
+          >
+            # {t("donations.sponsorDesc")}
+          </p>
+          <div
+            class="code-line flex flex-wrap items-center gap-x-1.5 gap-y-2 mt-1"
+          >
+            <span class="text-accent font-bold shrink-0"
+              >{t("donations.prompt")}</span
+            >
+            <span class="text-accent-secondary shrink-0">./sponsor.sh</span>
+            <span class="text-text-primary shrink-0">--monthly</span>
+            <span
+              class="donation-tier-action text-accent-secondary opacity-80 group-hover:opacity-100 transition-opacity"
+            >
+              ↗ {t("donations.subscribeBtn")}
+            </span>
+          </div>
+        </a>
+      </div>
+
+      <div class="code-line text-text-muted select-none pt-1">
+        <span class="text-accent-success">✔</span>
+        <span> provider: GitHub Sponsors · org: {GITHUB_ORG}</span>
+      </div>
+    </div>
+
+    <TerminalStatusFooter>{t("donations.note")}</TerminalStatusFooter>
+  </div>
+</HomeSection>
