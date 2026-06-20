@@ -202,7 +202,11 @@ const displayedNews = newsReleases.slice(0, NEWS_FEED_LIMIT);
     getLangFromDocument,
     localizedField,
   } from "../../utils/i18n";
-  import { GITHUB_NEWS_UPDATED_EVENT } from "../../utils/github-client";
+  import {
+    GITHUB_NEWS_SETTLED_EVENT,
+    GITHUB_NEWS_UPDATED_EVENT,
+    hydrateNewsFromClientCache,
+  } from "../../utils/github-client";
   import type { ReleaseNewsItem } from "../../utils/github-releases";
   import { githubBranchRef } from "../../constants/site";
   import { DOM_IDS } from "../../constants/dom-ids";
@@ -264,6 +268,12 @@ const displayedNews = newsReleases.slice(0, NEWS_FEED_LIMIT);
     newsModalOverlay?.close();
   }
 
+  function showNewsEmpty() {
+    const container = document.getElementById(DOM_IDS.newsCommitsList);
+    if (!container || !document.getElementById("news-loading")) return;
+    container.innerHTML = `<div class="flex items-center justify-center py-12 text-text-muted text-center px-4">${clientT("news", "empty")}</div>`;
+  }
+
   function renderReleasesNews(releases: ReleaseNewsItem[]) {
     const container = document.getElementById(DOM_IDS.newsCommitsList);
     const totalEl = document.getElementById(DOM_IDS.newsCommitsTotal);
@@ -303,6 +313,8 @@ const displayedNews = newsReleases.slice(0, NEWS_FEED_LIMIT);
   onPageInit(
     () => Boolean(document.getElementById(DOM_IDS.newsCommitsList)),
     (signal) => {
+      hydrateNewsFromClientCache();
+
       const scrim = document.getElementById(DOM_IDS.prModal);
       const panel = document.getElementById(DOM_IDS.prModalContent);
       if (scrim && panel) {
@@ -338,6 +350,12 @@ const displayedNews = newsReleases.slice(0, NEWS_FEED_LIMIT);
             console.error(err);
           }
         },
+        { signal },
+      );
+
+      document.addEventListener(
+        GITHUB_NEWS_SETTLED_EVENT,
+        () => showNewsEmpty(),
         { signal },
       );
 

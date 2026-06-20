@@ -1,6 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 
 import {
   CONTACT_EMAIL,
@@ -27,8 +26,7 @@ import {
 } from "./github-releases";
 import { tLang } from "./i18n";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
-const CACHE_PATH = join(ROOT, ".cache/github-snapshot.json");
+const CACHE_PATH = join(process.cwd(), ".cache/github-snapshot.json");
 const BUILD_CACHE_TTL_MS = 60 * 60 * 1000;
 
 /** Build-time cache written by the GitHub integration; client refresh updates DOM live. */
@@ -175,6 +173,8 @@ export async function syncGitHubCache(force = false): Promise<GitHubSnapshot> {
 export function loadGithubSnapshot(): GitHubSnapshot {
   const cached = readCache();
   if (cached) return cached;
+  const stale = readCache(true);
+  if (stale) return stale;
   return {
     fetchedAt: new Date(0).toISOString(),
     profile: fallbackProfile(),

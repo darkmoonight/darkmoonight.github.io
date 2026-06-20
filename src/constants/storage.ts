@@ -2,6 +2,7 @@ export const STORAGE_KEYS = {
   bugsSquashed: "bugs_squashed_total",
   arcadeHighscore: "arcade_snake_highscore",
   githubApiRemaining: "github_api_remaining",
+  githubApiReset: "github_api_reset",
   githubClientCacheV: "github_client_cache_v",
   githubReleasesNews: "github_releases_news",
   githubReleasesNewsTime: "github_releases_news_time",

@@ -23,8 +23,13 @@ export function githubApiHeaders(options?: {
 /** Persist anonymous rate-limit quota for the sys-monitor easter egg. */
 export function persistGithubRateLimit(response: Response): void {
   const remaining = response.headers.get("X-RateLimit-Remaining");
-  if (!remaining) return;
+  const reset = response.headers.get("X-RateLimit-Reset");
   try {
-    localStorage.setItem(STORAGE_KEYS.githubApiRemaining, remaining);
+    if (remaining != null) {
+      localStorage.setItem(STORAGE_KEYS.githubApiRemaining, remaining);
+    }
+    if (reset != null) {
+      localStorage.setItem(STORAGE_KEYS.githubApiReset, reset);
+    }
   } catch {}
 }

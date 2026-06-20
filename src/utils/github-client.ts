@@ -46,6 +46,7 @@ let refreshInFlight: Promise<void> | null = null;
 let clientRateLimitBlocked = false;
 
 export const GITHUB_NEWS_UPDATED_EVENT = "github-news-updated";
+export const GITHUB_NEWS_SETTLED_EVENT = "github-news-settled";
 
 export type GitHubOrgLive = MappedOrgProfile;
 
@@ -81,17 +82,45 @@ function readClientRateLimitRemaining(): number | null {
   }
 }
 
-function blockClientGithubRequests(): void {
-  // After 403/429, stop hammering the API until the page reloads.
-  clientRateLimitBlocked = true;
+function readClientRateLimitReset(): number | null {
   try {
-    localStorage.setItem(STORAGE_KEYS.githubApiRemaining, "0");
-  } catch {}
+    const raw = localStorage.getItem(STORAGE_KEYS.githubApiReset);
+    if (raw == null) return null;
+    const n = parseInt(raw, 10);
+    return Number.isFinite(n) ? n : null;
+  } catch {
+    return null;
+  }
+}
+
+function isClientRateLimitWindowActive(): boolean {
+  const remaining = readClientRateLimitRemaining();
+  if (remaining === null || remaining > 0) return false;
+
+  const reset = readClientRateLimitReset();
+  if (!reset) return true;
+
+  return Date.now() / 1000 < reset;
+}
+
+function blockClientGithubRequests(response?: Response): void {
+  // After 403/429, stop hammering the API until the quota resets.
+  clientRateLimitBlocked = true;
+  if (response) persistGithubRateLimit(response);
 }
 
 function githubLiveFetch(path: string): Promise<Response> {
-  if (clientRateLimitBlocked || readClientRateLimitRemaining() === 0) {
-    clientRateLimitBlocked = true;
+  if (clientRateLimitBlocked) {
+    if (!isClientRateLimitWindowActive()) {
+      clientRateLimitBlocked = false;
+    } else {
+      return Promise.resolve(
+        new Response(null, { status: 403, statusText: "Rate limit exceeded" }),
+      );
+    }
+  }
+
+  if (isClientRateLimitWindowActive()) {
     return Promise.resolve(
       new Response(null, { status: 403, statusText: "Rate limit exceeded" }),
     );
@@ -103,7 +132,7 @@ function githubLiveFetch(path: string): Promise<Response> {
   }).then((res) => {
     persistGithubRateLimit(res);
     if (res.status === 403 || res.status === 429) {
-      blockClientGithubRequests();
+      blockClientGithubRequests(res);
     }
     return res;
   });
@@ -297,11 +326,27 @@ export function readCachedStats(): RepoStats | null {
   );
 }
 
-function readCachedReleases(): ReleaseNewsItem[] | null {
+function readCachedReleases(allowStale = false): ReleaseNewsItem[] | null {
   return readJsonCache<ReleaseNewsItem[]>(
     STORAGE_KEYS.githubReleasesNews,
     STORAGE_KEYS.githubReleasesNewsTime,
+    allowStale,
   );
+}
+
+function dispatchNewsUpdated(releases: ReleaseNewsItem[]): void {
+  document.dispatchEvent(
+    new CustomEvent(GITHUB_NEWS_UPDATED_EVENT, { detail: releases }),
+  );
+}
+
+/** Show cached releases immediately when SSR had nothing to render. */
+export function hydrateNewsFromClientCache(): boolean {
+  const cached = readCachedReleases(true);
+  if (!cached?.length) return false;
+  if (!document.getElementById("news-loading")) return false;
+  dispatchNewsUpdated(cached);
+  return true;
 }
 
 async function fetchGitHubReleases(): Promise<ReleaseNewsItem[] | null> {
@@ -511,13 +556,20 @@ async function fetchGitHubOrgLive(): Promise<GitHubOrgLive | null> {
 }
 
 async function refreshGitHubNews(): Promise<ReleaseNewsItem[] | null> {
-  const releases = await fetchGitHubReleases();
+  hydrateNewsFromClientCache();
+
+  const live = await fetchGitHubReleases();
+  const releases = live?.length
+    ? live
+    : (readCachedReleases(true) ?? readCachedReleases());
+
   if (releases?.length) {
-    document.dispatchEvent(
-      new CustomEvent(GITHUB_NEWS_UPDATED_EVENT, { detail: releases }),
-    );
+    dispatchNewsUpdated(releases);
+    return releases;
   }
-  return releases;
+
+  document.dispatchEvent(new CustomEvent(GITHUB_NEWS_SETTLED_EVENT));
+  return null;
 }
 
 export function refreshGitHubLiveData(): Promise<void> {

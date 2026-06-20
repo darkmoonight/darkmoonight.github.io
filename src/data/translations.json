@@ -633,6 +633,10 @@
       "en": "Fetching releases from GitHub...",
       "ru": "Загрузка релизов с GitHub..."
     },
+    "empty": {
+      "en": "No releases loaded. Check your connection or try again later.",
+      "ru": "Релизы не загрузились. Проверьте соединение или попробуйте позже."
+    },
     "closePr": {
       "en": "Close File",
       "ru": "Закрыть файл"

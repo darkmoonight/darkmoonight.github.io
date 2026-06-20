@@ -37,6 +37,9 @@
     "typescript": "^6.0.3"
   },
   "overrides": {
-    "yaml": "^2.8.3"
+    "yaml": "^2.8.3",
+    "astro": {
+      "esbuild": "0.28.1"
+    }
   }
 }
