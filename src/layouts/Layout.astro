@@ -9,7 +9,6 @@ import {
   getLangFromUrl,
   useTranslations,
   pickSection,
-  LANGUAGES,
   LANGUAGE_STORAGE_KEY,
 } from "../utils/i18n";
 import "../styles/global.css";
@@ -24,7 +23,6 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const otherLang = lang === "en" ? "ru" : "en";
 
-const langRedirectScript = `(function(){var STORAGE_KEY=${JSON.stringify(LANGUAGE_STORAGE_KEY)};var SUPPORTED=${JSON.stringify(LANGUAGES)};try{var stored=localStorage.getItem(STORAGE_KEY);if(!stored||!SUPPORTED.includes(stored))return;var parts=window.location.pathname.split("/").filter(Boolean);var pathLang=parts[0];if(pathLang===stored)return;if(SUPPORTED.includes(pathLang)){parts[0]=stored;window.location.replace("/"+parts.join("/")+window.location.search);}}catch(e){}})();`;
 const langSyncScript = `(function(){try{localStorage.setItem(${JSON.stringify(LANGUAGE_STORAGE_KEY)},${JSON.stringify(lang)});}catch(e){}})();`;
 
 const { title = t("meta.siteTitle"), description = t("meta.siteDescription") } =
@@ -74,7 +72,6 @@ const faviconBase = import.meta.env.BASE_URL;
       href={`${siteOrigin}/${otherLang}/`}
     />
     <link rel="alternate" hreflang="x-default" href={`${siteOrigin}/en/`} />
-    <script is:inline set:html={langRedirectScript} />
     <ThemeScript />
     <ClientRouter />
   </head>
@@ -201,6 +198,10 @@ const faviconBase = import.meta.env.BASE_URL;
       import { initKonamiArcade } from "../utils/arcade";
       import { initBugsCounter } from "../utils/bugs-storage";
       import { refreshGitHubLiveData } from "../utils/github-client";
+      import {
+        bindLangSwitchLinks,
+        restoreScrollAfterLangSwitch,
+      } from "../utils/lang-switch";
       import { bindPageBlockingUiReset } from "../utils/page-blocking-ui";
       import { initScreensaver } from "../utils/screensaver";
       import { initSysMonitor } from "../utils/sys-monitor";
@@ -214,9 +215,16 @@ const faviconBase = import.meta.env.BASE_URL;
 
       onPageInit(
         () => true,
-        () => {
+        (signal) => {
+          bindLangSwitchLinks(signal);
+          restoreScrollAfterLangSwitch();
           void refreshGitHubLiveData();
         },
+      );
+
+      document.addEventListener(
+        "astro:page-load",
+        restoreScrollAfterLangSwitch,
       );
     </script>
   </body>

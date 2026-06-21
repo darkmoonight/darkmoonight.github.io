@@ -104,6 +104,7 @@ const langSwitchUrl = getLangSwitchUrl(Astro.url.pathname, otherLang);
         <a
           href={langSwitchUrl}
           id="lang-target-switcher"
+          data-lang-switch
           class="header-tool-btn header-tool-btn--wide"
           title={t("header.langSwitchTitle")}
         >
@@ -239,7 +240,7 @@ const langSwitchUrl = getLangSwitchUrl(Astro.url.pathname, otherLang);
         >
           {t("header.themeTitle")}
         </button>
-        <a href={langSwitchUrl} class="mobile-drawer-tool">
+        <a href={langSwitchUrl} data-lang-switch class="mobile-drawer-tool">
           {lang} / {otherLang}
         </a>
       </div>
@@ -330,6 +331,7 @@ const langSwitchUrl = getLangSwitchUrl(Astro.url.pathname, otherLang);
     unlockBodyScrollIfIdle,
   } from "../utils/overlay-modal";
   import { bindOverlayPanel } from "../utils/overlay-panel";
+  import { navigateLangSwitch } from "../utils/lang-switch";
 
   document.body.style.overflow = "";
 
@@ -701,7 +703,15 @@ const langSwitchUrl = getLangSwitchUrl(Astro.url.pathname, otherLang);
       desc: clientT("header", "paletteLangDesc"),
       icon: paletteIconGlobe,
       action: () => {
-        window.location.href = switchLangUrl;
+        const url =
+          document
+            .getElementById("lang-target-switcher")
+            ?.getAttribute("href") || switchLangUrl;
+        navigateLangSwitch(
+          url.startsWith("http")
+            ? url
+            : new URL(url, window.location.origin).href,
+        );
       },
     });
 
