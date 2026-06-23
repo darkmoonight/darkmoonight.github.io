@@ -17,16 +17,20 @@ import "../styles/mobile.css";
 interface Props {
   title?: string;
   description?: string;
+  centerMain?: boolean;
 }
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const otherLang = lang === "en" ? "ru" : "en";
 
-const langSyncScript = `(function(){try{localStorage.setItem(${JSON.stringify(LANGUAGE_STORAGE_KEY)},${JSON.stringify(lang)});}catch(e){}})();`;
+const {
+  title = t("meta.siteTitle"),
+  description = t("meta.siteDescription"),
+  centerMain = false,
+} = Astro.props;
 
-const { title = t("meta.siteTitle"), description = t("meta.siteDescription") } =
-  Astro.props;
+const langSyncScript = `(function(){try{localStorage.setItem(${JSON.stringify(LANGUAGE_STORAGE_KEY)},${JSON.stringify(lang)});}catch(e){}})();`;
 
 const siteOrigin = (Astro.site ?? Astro.url).origin;
 const faviconBase = import.meta.env.BASE_URL;
@@ -108,7 +112,10 @@ const faviconBase = import.meta.env.BASE_URL;
     <Header />
     <main
       id="main-content"
-      class="page-main page-main--workspace flex-1 w-full max-w-7xl mx-auto md:pt-14 md:pb-6 flex flex-col md:gap-16"
+      class:list={[
+        "page-main page-main--workspace flex-1 w-full max-w-7xl mx-auto md:pt-14 md:pb-6 flex flex-col md:gap-16",
+        centerMain && "page-main--centered",
+      ]}
     >
       <slot />
     </main>

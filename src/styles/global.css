@@ -347,6 +347,10 @@
     padding-right: var(--page-gutter);
   }
 
+  .page-main--centered {
+    justify-content: center;
+  }
+
   .sr-only {
     position: absolute;
     width: 1px;

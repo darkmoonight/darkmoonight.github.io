@@ -1,7 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import translations from "../data/translations.json";
 import {
+  DEFAULT_LANGUAGE,
   getLangFromUrl,
+  type Language,
   useTranslations,
   useLocalizedPath,
 } from "../utils/i18n";
@@ -9,26 +12,49 @@ import {
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const l = useLocalizedPath(lang);
+
+function error404Copy(targetLang: Language) {
+  const section = translations.error404;
+  return Object.fromEntries(
+    Object.entries(section).map(([key, value]) => [
+      key,
+      value[targetLang] ?? value[DEFAULT_LANGUAGE],
+    ]),
+  );
+}
+
+const error404I18n = {
+  en: error404Copy("en"),
+  ru: error404Copy("ru"),
+};
 ---
 
-<Layout title={t("error404.title")} description={t("error404.description")}>
-  <section class="max-w-lg mx-auto font-mono">
+<Layout
+  title={t("error404.title")}
+  description={t("error404.description")}
+  centerMain
+>
+  <section class="w-full max-w-lg mx-auto font-mono px-2">
     <div class="md3-panel text-center overflow-hidden">
       <div class="md3-panel-bar justify-center">
-        <span class="text-accent font-bold">{t("error404.stderrLabel")}</span>
-        <span class="text-text-muted text-[10px]">{t("error404.exitCode")}</span
-        >
+        <span class="text-accent font-bold" id="error404-stderr">
+          {t("error404.stderrLabel")}
+        </span>
+        <span class="text-text-muted text-[10px]" id="error404-exit-code">
+          {t("error404.exitCode")}
+        </span>
       </div>
       <div class="md3-panel-body space-y-4 py-10">
-        <div class="text-6xl font-bold text-accent">404</div>
-        <h1 class="text-xl text-text-primary font-bold">
+        <div class="text-6xl font-bold text-accent" aria-hidden="true">404</div>
+        <h1 class="text-xl text-text-primary font-bold" id="error404-heading">
           {t("error404.heading")}
         </h1>
-        <p class="prose-content text-sm max-w-md mx-auto">
+        <p class="prose-content text-sm max-w-md mx-auto" id="error404-body">
           {t("error404.body")}
         </p>
         <a
           href={l("/")}
+          id="error404-home"
           class="md3-btn-tonal inline-flex px-5 py-2 normal-case tracking-normal"
         >
           {t("error404.backHome")}
@@ -36,4 +62,52 @@ const l = useLocalizedPath(lang);
       </div>
     </div>
   </section>
+
+  <script is:inline define:vars={{ error404I18n }}>
+    (function () {
+      function resolveLang() {
+        var parts = location.pathname.split("/").filter(Boolean);
+        var pathLang = parts[0];
+        if (pathLang === "ru" || pathLang === "en") return pathLang;
+        try {
+          var stored = localStorage.getItem("dn_lang");
+          if (stored === "ru" || stored === "en") return stored;
+        } catch (e) {}
+        return "en";
+      }
+
+      function apply() {
+        var lang = resolveLang();
+        var copy = error404I18n[lang] || error404I18n.en;
+        document.documentElement.lang = lang;
+
+        var title = copy.title;
+        if (title) document.title = title;
+
+        var meta = document.querySelector('meta[name="description"]');
+        if (meta && copy.description)
+          meta.setAttribute("content", copy.description);
+
+        var stderr = document.getElementById("error404-stderr");
+        if (stderr && copy.stderrLabel) stderr.textContent = copy.stderrLabel;
+
+        var exitCode = document.getElementById("error404-exit-code");
+        if (exitCode && copy.exitCode) exitCode.textContent = copy.exitCode;
+
+        var heading = document.getElementById("error404-heading");
+        if (heading && copy.heading) heading.textContent = copy.heading;
+
+        var body = document.getElementById("error404-body");
+        if (body && copy.body) body.textContent = copy.body;
+
+        var home = document.getElementById("error404-home");
+        if (home) {
+          if (copy.backHome) home.textContent = copy.backHome;
+          home.setAttribute("href", "/" + lang + "/");
+        }
+      }
+
+      apply();
+    })();
+  </script>
 </Layout>
