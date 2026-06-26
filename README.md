@@ -22,7 +22,7 @@ Copy `.env.example` → `.env`.
 
 | Variable | Purpose |
 |----------|---------|
-| `GITHUB_TOKEN` | GitHub API access (recommended for builds and live stats) |
+| `REPO_API_TOKEN` | REST API access for builds and live stats (recommended) |
 | `PUBLIC_WEB3FORMS_ACCESS_KEY` | Contact form ([Web3Forms](https://web3forms.com)); omitted in dev = mock submit |
 | `FORCE_GITHUB_SYNC` | `1` — bypass snapshot cache TTL |
 | `ASTRO_SITE` / `ASTRO_BASE` | Site URL and path prefix (CI sets these for Pages) |
@@ -54,7 +54,7 @@ Routes: `/en/` and `/ru/` (`/` → `/en/`). UI strings: `src/data/translations.j
 
 1. **Settings → Pages → Source:** GitHub Actions
 2. Optional repo secrets: `PUBLIC_WEB3FORMS_ACCESS_KEY`
-3. `GITHUB_TOKEN` is provided in Actions automatically
+3. CI maps the built-in Actions token into `REPO_API_TOKEN` automatically
 
 Local Pages smoke: `npm run build:pages`.
 

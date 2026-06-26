@@ -38,7 +38,7 @@ jobs:
         env:
           ASTRO_SITE: https://darkmoonight.github.io
           ASTRO_BASE: /
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLIC_WEB3FORMS_ACCESS_KEY: ${{ secrets.PUBLIC_WEB3FORMS_ACCESS_KEY }}
           FORCE_GITHUB_SYNC: "1"
 

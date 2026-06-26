@@ -56,7 +56,7 @@ function logRateLimitHint(res: Response, path: string): void {
   if (!hasGitHubToken()) {
     console.warn(
       `[github-api] HTTP ${res.status} on ${path} — unauthenticated limit (~60 req/h per IP). ` +
-        `Add GITHUB_TOKEN to .env (see .env.example). Limit resets about ${resetAt}.`,
+        `Add REPO_API_TOKEN to .env (see .env.example). Limit resets about ${resetAt}.`,
     );
   } else {
     console.warn(

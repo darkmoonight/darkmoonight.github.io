@@ -126,7 +126,7 @@ export async function buildGitHubSnapshot(): Promise<GitHubSnapshot> {
 
   if (!hasGitHubToken()) {
     console.warn(
-      "[github-api] GITHUB_TOKEN is not set — using anonymous API (easy to hit HTTP 403). Copy .env.example → .env",
+      "[github-api] REPO_API_TOKEN is not set — using anonymous API (easy to hit HTTP 403). Copy .env.example → .env",
     );
   }
 
